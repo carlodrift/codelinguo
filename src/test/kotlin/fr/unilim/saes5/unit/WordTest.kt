@@ -1,9 +1,11 @@
 package fr.unilim.saes5.unit
 
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.model.context.PrimaryContext
 import org.assertj.core.api.Assertions.*
-import org.assertj.core.api.WithAssertions
 import org.junit.jupiter.api.Test
+import fr.unilim.saes5.model.context.SecondaryContext
+import fr.unilim.saes5.model.context.Context
 
 class WordTest {
     @Test
@@ -49,8 +51,7 @@ class WordTest {
         val word = Word()
         val primaryContext: Context = PrimaryContext(Word("testContext"))
         val secondaryContext: Context = SecondaryContext(Word("testContext"))
-        assertThat(primaryContext.getPriority()).isEqualTo(2.0f) // l'importante pour contexte principal
-        assertThat(secondaryContext.getPriority()).isEqualTo(1.0f)
-        // TODO finir le test
+        assertThat(primaryContext.priority).isEqualTo(2.0f) // l'importante pour contexte principal
+        assertThat(secondaryContext.priority).isEqualTo(1.0f)
     }
 }
