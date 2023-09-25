@@ -2,16 +2,17 @@ package fr.unilim.saes5.unit;
 
 import fr.unilim.saes5.interfaces.IAnalyzable;
 import fr.unilim.saes5.model.Word;
+import fr.unilim.saes5.model.WordAnalytics;
 import fr.unilim.saes5.model.reader.TestReader;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-import static org.assertj.core.api.AbstractAssert.throwUnsupportedExceptionOnEquals;
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class WordAnalyticsTest {
 
@@ -19,9 +20,8 @@ public class WordAnalyticsTest {
 
     @BeforeEach
     void init() {
-        analytics = new WordAnalytics();
+        WordAnalyticsTest.wordAnalytics = new WordAnalytics();
     }
-
 
 
     @Test
@@ -31,13 +31,13 @@ public class WordAnalyticsTest {
         words.add(new Word("Plateau"));
         words.add(new Word("Grille"));
 
-        assertThat(wordAnalytics.isWordPresent(words)).isEqualTo(true);
+        assertThat(WordAnalyticsTest.wordAnalytics.isWordPresent(words)).isTrue();
     }
 
     @Test
     void testWordRatio() {
         IAnalyzable reader = new TestReader(Arrays.asList(new Word("Robot"), new Word("Joueur")));
-        assertThat(wordAnalytics.wordRatio(new Word("Robot"), reader.read())).isEqualTo(50.00f); // tester avec une liste de mot qui contient juste Robot
+        assertThat(WordAnalyticsTest.wordAnalytics.wordRatio(new Word("Robot"), reader.read())).isEqualTo(50.00f); // tester avec une liste de mot qui contient juste Robot
     }
 
     @Test
@@ -46,7 +46,7 @@ public class WordAnalyticsTest {
         HashMap<Word, Integer> expected = new HashMap<Word, Integer>();
         expected.put(new Word("Robot"), 2);
         expected.put(new Word("Joueur"), 1);
-        
-        assertThat(wordAnalytics.wordRank(reader.read())).isEqualTo(expected);
+
+        assertThat(WordAnalyticsTest.wordAnalytics.wordRank(reader.read())).isEqualTo(expected);
     }
 }

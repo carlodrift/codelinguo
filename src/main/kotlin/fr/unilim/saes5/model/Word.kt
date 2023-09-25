@@ -9,4 +9,17 @@ class Word(var token: String?) {
     var context: Context? = null
 
     constructor() : this(null)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as Word
+
+        return token == other.token
+    }
+
+    override fun hashCode(): Int {
+        return token?.hashCode() ?: 0
+    }
 }

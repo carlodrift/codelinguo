@@ -1,11 +1,11 @@
 package fr.unilim.saes5.unit
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.model.context.PrimaryContext
-import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.Test
-import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.context.Context
+import fr.unilim.saes5.model.context.PrimaryContext
+import fr.unilim.saes5.model.context.SecondaryContext
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 class WordTest {
     @Test
