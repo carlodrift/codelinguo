@@ -2,9 +2,16 @@ package fr.unilim.saes5.model.reader
 
 import fr.unilim.saes5.interfaces.IAnalyze
 import fr.unilim.saes5.model.Word
+import java.io.File
 
-abstract class SingleFileReader : IAnalyze {
-    override fun readOne(): List<Word> {
-        return null
+class SingleFileReader : IAnalyze {
+    override fun read(): List<Word>? {
+        TODO("Not yet implemented")
+    }
+
+    override fun readOne(path:String): List<Word> {
+        val lines = File(path).bufferedReader().readLines();
+
+        return listOf(Word("dummy"));
     }
 }
