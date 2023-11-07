@@ -4,7 +4,7 @@ import fr.unilim.saes5.model.Word;
 
 import java.util.List;
 
-public interface IAnalyzable {
+public interface IAnalyze {
 
     List<Word> read();
 
