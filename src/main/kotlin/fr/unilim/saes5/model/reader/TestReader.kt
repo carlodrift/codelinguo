@@ -7,4 +7,8 @@ class TestReader(var words: List<Word>) : IAnalyze {
     override fun read(): List<Word> {
         return words
     }
+
+    override fun readOne(path: String): List<Word?>? {
+        TODO("Not yet implemented")
+    }
 }
