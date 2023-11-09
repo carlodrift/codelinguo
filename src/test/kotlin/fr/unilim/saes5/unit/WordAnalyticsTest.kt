@@ -1,6 +1,6 @@
 package fr.unilim.saes5.unit
 
-import fr.unilim.saes5.interfaces.IAnalyzable
+import fr.unilim.saes5.interfaces.IAnalyze
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.WordAnalytics
 import fr.unilim.saes5.model.reader.TestReader
@@ -28,14 +28,14 @@ class WordAnalyticsTest {
 
     @Test
     fun testWordRatio() {
-        val reader: IAnalyzable = TestReader(Arrays.asList(Word("Robot"), Word("Joueur")))
+        val reader: IAnalyze = TestReader(Arrays.asList(Word("Robot"), Word("Joueur")))
         Assertions.assertThat(wordAnalytics!!.wordRatio(Word("Robot"), reader.read()))
             .isEqualTo(50.00f) // tester avec une liste de mot qui contient juste Robot
     }
 
     @Test
     fun testWordRank() {
-        val reader: IAnalyzable = TestReader(Arrays.asList(Word("Robot"), Word("Robot"), Word("Joueur")))
+        val reader: IAnalyze = TestReader(Arrays.asList(Word("Robot"), Word("Robot"), Word("Joueur")))
         val expected = HashMap<Word, Int>()
         expected[Word("Robot")] = 2
         expected[Word("Joueur")] = 1
