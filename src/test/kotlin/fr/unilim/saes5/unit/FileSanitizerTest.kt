@@ -1,7 +1,8 @@
 package fr.unilim.saes5.unit
 
-import fr.unilim.saes5.model.FileSanitizer
+import fr.unilim.saes5.model.sanitize.FileSanitizer
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,7 @@ class FileSanitizerTest {
         val lines = listOf("boolean success = board.placeToken(column, activePlayer);",
                             "if (board.checkVictory(column)) {")
 
-        val sanitized : List<Word> = FileSanitizer().sanitizeLines(lines);
+        val sanitized : List<Word> = JavaFileSanitizer().sanitizeLines(lines);
 
         Assertions.assertThat(sanitized).isEqualTo(
             listOf(
@@ -20,7 +21,9 @@ class FileSanitizerTest {
                     Word("placeToken"),
                     Word("column"),
                     Word("activePlayer"),
-                    Word("checkVictory")
+                    Word("board"),
+                    Word("checkVictory"),
+                    Word("column"),
             )
 
         );
