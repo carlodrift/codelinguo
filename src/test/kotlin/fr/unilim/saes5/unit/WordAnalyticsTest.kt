@@ -1,6 +1,6 @@
 package fr.unilim.saes5.unit
 
-import fr.unilim.saes5.interfaces.IAnalyze
+import fr.unilim.saes5.model.interfaces.IAnalyze
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.WordAnalytics
 import fr.unilim.saes5.model.reader.TestReader

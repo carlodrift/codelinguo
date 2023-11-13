@@ -4,16 +4,18 @@ import fr.unilim.saes5.model.Word
 
 class JavaFileSanitizer : FileSanitizer() {
 
-    val JAVA_RESERVED_KEYWORDS = listOf(
+    private val JAVA_RESERVED_KEYWORDS = listOf(
     "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
     "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
     "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
     "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
     "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while"
     )
+
+    private val REGEX_WORD_SEPARATION = "[a-zA-Z]+"
     override fun sanitizeLines(lines: List<String>): List<Word> {
         val words = mutableListOf<Word>()
-        val regex = Regex("[a-zA-Z]+")
+        val regex = Regex(REGEX_WORD_SEPARATION)
 
         for (line in lines) {
             val matches = regex.findAll(line)

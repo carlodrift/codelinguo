@@ -1,8 +1,10 @@
-package fr.unilim.saes5;
+package fr.unilim.saes5.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CompletionService {
@@ -10,22 +12,23 @@ public class CompletionService {
     private final List<String> completions = new ArrayList<>();
 
     public void addCompletion(String completion) {
-        Objects.requireNonNull(completion, "Completion cannot be null");
-        this.completions.add(completion);
+        if (completion != null) {
+            this.completions.add(completion.trim());
+        }
     }
 
-    public List<String> suggestCompletions(String input) {
+    public Set<String> suggestCompletions(String input) {
         if (input == null) {
-            return List.of();
+            return Set.of();
         }
 
         if (input.isEmpty()) {
-            return new ArrayList<>(this.completions);
+            return new HashSet<>(this.completions);
         }
 
         String inputLower = input.toLowerCase();
         return this.completions.stream()
                 .filter(completion -> completion.toLowerCase().contains(inputLower))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }
