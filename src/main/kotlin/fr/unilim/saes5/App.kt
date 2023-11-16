@@ -4,12 +4,22 @@ import tornadofx.*
 
 class MyApp: App(HelloWorldView::class)
 class GlossaryEntry(val mot: String, val definition: String, val primaryContext: String, val secondaryContext: String, val synonym: String, val antonym: String)
+{
+    override fun toString(): String {
+        return "GlossaryEntry(mot='$mot', definition='$definition', primaryContext='$primaryContext', secondaryContext='$secondaryContext', synonym='$synonym', antonym='$antonym')"
+    }
+}
 
 class HelloWorldView : View() {
 
-    private val glossaryEntries = listOf(
-        GlossaryEntry("mot1", "definition1", "context1", "context2", "synonym1", "antonym1"),
-    ).observable()
+    private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
+
+    private val motInput = textfield { promptText = "Joyeux" }
+    private val synonymeInput = textfield { promptText = "Heureux" }
+    private val definitionInput = textarea { promptText = "Qui éprouve de la joie." }
+    private val primaryContextInput = textfield { promptText = "Joueur" }
+    private val antonymeInput = textfield { promptText = "Aigri" }
+    private val secondaryContextInput = textfield { promptText = "Psychologie" }
 
     override val root = vbox(10.0) {
         paddingAll = 20.0
@@ -22,23 +32,23 @@ class HelloWorldView : View() {
             readonlyColumn("Contexte Secondaire", GlossaryEntry::secondaryContext)
             readonlyColumn("Synonyme", GlossaryEntry::synonym)
             readonlyColumn("Antonyme", GlossaryEntry::antonym)
-            prefHeight = 200.0 // Réglez cela comme vous le souhaitez
+            prefHeight = 200.0
         }
         form {
             fieldset {
-                field("Mot") { textfield{promptText="Joyeux"} }
-                field("Synonyme") { textfield{promptText="Heureux"} }
-                field("Définition") { textarea{promptText="Qui éprouve de la joie."} }
-                field("Contexte Principal") { textfield{promptText="Joueur"} }
-                field("Antonyme") { textfield{promptText="Aigri"} }
-                field("Contexte Secondaire") { textfield{promptText="Psycologie"} }
+                field("Mot") { this += motInput }
+                field("Synonyme") { this += synonymeInput }
+                field("Définition") { this += definitionInput }
+                field("Contexte Principal") { this += primaryContextInput }
+                field("Antonyme") { this += antonymeInput }
+                field("Contexte Secondaire") { this += secondaryContextInput }
             }
         }
 
         hbox(20.0) {
             button("Aide") {
                 action {
-                    println("Aide")
+                    println("Télécharger")
                 }
                 style {
                     fontSize = 18.px
@@ -54,7 +64,23 @@ class HelloWorldView : View() {
             }
             button("Ajouter") {
                 action {
-                    println("Ajouter")
+                    val newEntry = GlossaryEntry(
+                        motInput.text,
+                        definitionInput.text,
+                        primaryContextInput.text,
+                        secondaryContextInput.text,
+                        synonymeInput.text,
+                        antonymeInput.text
+                    )
+                    glossaryEntries.add(newEntry)
+
+                    // Réinitialise les champs de texte
+                    motInput.clear()
+                    synonymeInput.clear()
+                    definitionInput.clear()
+                    primaryContextInput.clear()
+                    antonymeInput.clear()
+                    secondaryContextInput.clear()
                 }
                 style {
                     fontSize = 18.px
@@ -63,7 +89,6 @@ class HelloWorldView : View() {
         }
     }
 }
-
 
 
 fun main(args: Array<String>) {
