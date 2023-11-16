@@ -1,6 +1,8 @@
 package fr.unilim.saes5
 
+import fr.unilim.saes5.model.Project
 import fr.unilim.saes5.model.reader.JavaFileReader
+import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
 
 fun main(args: Array<String>) {
@@ -18,5 +20,7 @@ fun main(args: Array<String>) {
         println("$word  $count")
     }
 
-
+    val projectDao = JsonProjectDao("projects.json")
+    val project = Project(words.map { it }.toList())
+    projectDao.saveProject(project)
 }
