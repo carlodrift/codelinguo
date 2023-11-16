@@ -2,7 +2,7 @@ package fr.unilim.saes5.unit
 
 import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.model.WordAnalytics
+import fr.unilim.saes5.fr.unilim.saes5.service.WordAnalyticsService
 import fr.unilim.saes5.model.reader.DummyReader
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -12,7 +12,7 @@ import java.util.*
 class WordAnalyticsTest {
     @BeforeEach
     fun init() {
-        wordAnalytics = WordAnalytics()
+        wordAnalyticsService = WordAnalyticsService()
     }
 
     @Test
@@ -22,14 +22,14 @@ class WordAnalyticsTest {
         words.add(Word("Plateau"))
         words.add(Word("Grille"))
         for (word in words) {
-            Assertions.assertThat(wordAnalytics!!.isWordPresent(words, word)).isTrue()
+            Assertions.assertThat(wordAnalyticsService!!.isWordPresent(words, word)).isTrue()
         }
     }
 
     @Test
     fun testWordRatio() {
         val reader: IRead = DummyReader(listOf(Word("Robot"), Word("Joueur")))
-        Assertions.assertThat(wordAnalytics!!.wordRatio(Word("Robot"), reader.read("")))
+        Assertions.assertThat(wordAnalyticsService!!.wordRatio(Word("Robot"), reader.read("")))
             .isEqualTo(50.00f) // tester avec une liste de mot qui contient juste Robot
     }
 
@@ -39,10 +39,10 @@ class WordAnalyticsTest {
         val expected = HashMap<Word, Int>()
         expected[Word("Robot")] = 2
         expected[Word("Joueur")] = 1
-        Assertions.assertThat(wordAnalytics!!.wordRank(reader.read(""))).isEqualTo(expected)
+        Assertions.assertThat(wordAnalyticsService!!.wordRank(reader.read(""))).isEqualTo(expected)
     }
 
     companion object {
-        private var wordAnalytics: WordAnalytics? = null
+        private var wordAnalyticsService: WordAnalyticsService? = null
     }
 }

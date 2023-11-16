@@ -1,7 +1,7 @@
 package fr.unilim.saes5
 
-import fr.unilim.saes5.model.WordAnalytics
 import fr.unilim.saes5.model.reader.JavaFileReader
+import fr.unilim.saes5.service.WordAnalyticsService
 
 fun main(args: Array<String>) {
     val exampleFilePath = "example/Gameplay.java"
@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
 
     println("---------------------------------------------")
 
-    val analytics = WordAnalytics()
+    val analytics = WordAnalyticsService()
     val wordRank = analytics.wordRank(words)
 
     println("Voici la liste des mots trouvés par occurence")

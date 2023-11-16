@@ -1,15 +1,17 @@
-package fr.unilim.saes5.model
+package fr.unilim.saes5.service
 
-class WordAnalytics {
+import fr.unilim.saes5.model.Word
+
+class WordAnalyticsService {
     fun isWordPresent(words: List<Word?>?, word: Word?): Boolean {
-        return words!!.contains(word);
+        return words!!.contains(word)
     }
 
     fun wordRatio(word: Word?, words: List<Word>?): Float {
         if (words.isNullOrEmpty()) {
             return 0.0f
         }
-        val count = words.stream().filter { w: Word -> w.equals(word) }.count()
+        val count = words.stream().filter { w: Word -> w == word }.count()
         return count.toFloat() / words.size * 100
     }
 
@@ -20,6 +22,6 @@ class WordAnalytics {
                 wordCount[word] = wordCount.getOrDefault(word, 0) + 1
             }
         }
-        return wordCount
+        return wordCount.entries.sortedByDescending { it.value }.associate { it.toPair() }
     }
 }
