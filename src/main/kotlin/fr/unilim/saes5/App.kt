@@ -1,15 +1,27 @@
 package fr.unilim.saes5
 
+import com.sun.javafx.binding.BidirectionalBinding.bind
+import javafx.scene.control.Alert
 import tornadofx.*
 
 class MyApp: App(HelloWorldView::class)
 class GlossaryEntry(val mot: String, val definition: String, val primaryContext: String, val secondaryContext: String, val synonym: String, val antonym: String)
+{
+    override fun toString(): String {
+        return "GlossaryEntry(mot='$mot', definition='$definition', primaryContext='$primaryContext', secondaryContext='$secondaryContext', synonym='$synonym', antonym='$antonym')"
+    }
+}
 
 class HelloWorldView : View() {
 
-    private val glossaryEntries = listOf(
-        GlossaryEntry("mot1", "definition1", "context1", "context2", "synonym1", "antonym1"),
-    ).observable()
+    private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
+
+    private val motInput = textfield { promptText = "Joyeux" }
+    private val synonymeInput = textfield { promptText = "Heureux" }
+    private val definitionInput = textarea { promptText = "Qui éprouve de la joie." }
+    private val primaryContextInput = textfield { promptText = "Joueur" }
+    private val antonymeInput = textfield { promptText = "Aigri" }
+    private val secondaryContextInput = textfield { promptText = "Psychologie" }
 
     override val root = vbox(10.0) {
         paddingAll = 20.0
@@ -22,23 +34,48 @@ class HelloWorldView : View() {
             readonlyColumn("Contexte Secondaire", GlossaryEntry::secondaryContext)
             readonlyColumn("Synonyme", GlossaryEntry::synonym)
             readonlyColumn("Antonyme", GlossaryEntry::antonym)
-            prefHeight = 200.0 // Réglez cela comme vous le souhaitez
+            prefHeight = 200.0
         }
         form {
             fieldset {
-                field("Mot") { textfield{promptText="Joyeux"} }
-                field("Synonyme") { textfield{promptText="Heureux"} }
-                field("Définition") { textarea{promptText="Qui éprouve de la joie."} }
-                field("Contexte Principal") { textfield{promptText="Joueur"} }
-                field("Antonyme") { textfield{promptText="Aigri"} }
-                field("Contexte Secondaire") { textfield{promptText="Psycologie"} }
+                field("Mot") { this += motInput }
+                field("Synonyme") { this += synonymeInput }
+                field("Définition") { this += definitionInput }
+                field("Contexte Principal") { this += primaryContextInput }
+                field("Antonyme") { this += antonymeInput }
+                field("Contexte Secondaire") { this += secondaryContextInput }
             }
         }
 
         hbox(20.0) {
             button("Aide") {
                 action {
-                    println("Aide")
+                    alert(
+                        Alert.AlertType.INFORMATION, "Aide pour le Glossaire", """
+                        Token
+                        Statut : Obligatoire
+                        Description : Le "token" est le terme principal ou le mot-clé que vous souhaitez ajouter au glossaire. Il sert de référence principale pour l'entrée du glossaire.
+                        
+                        Définition
+                        Statut : Facultatif
+                        Description : Dans ce champ, vous pouvez fournir une définition ou une explication détaillée du "token". Bien que ce champ soit facultatif, il est recommandé de fournir une définition pour clarifier l'usage et la signification du "token".
+                        
+                        Contexte Principal
+                        Statut : Obligatoire
+                        Description : Le "contexte principal" est l'environnement ou la situation dans laquelle le "token" est principalement utilisé. Ce champ est obligatoire pour aider à contextualiser le "token" et à comprendre son application dans un contexte spécifique.
+                        
+                        Contexte 2
+                        Statut : Facultatif
+                        Description : Ce champ vous permet de fournir un contexte supplémentaire ou secondaire dans lequel le "token" peut être utilisé. Cela peut aider à donner une vue plus complète de l'utilisation du "token".
+                        
+                        Synonyme
+                        Statut : Facultatif
+                        Description : Ici, vous pouvez lister tout synonyme du "token". Les synonymes sont des mots qui ont une signification similaire ou identique au "token".
+                        
+                        Antonyme
+                        Statut : Facultatif
+                        Description : Dans ce champ, vous pouvez fournir des mots qui ont une signification opposée au "token". Les antonymes peuvent aider à clarifier la signification du "token" en indiquant ce qu'il n'est pas.
+                    """.trimIndent())
                 }
                 style {
                     fontSize = 18.px
@@ -52,18 +89,43 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
-            button("Ajouter") {
+            val addButton = button("Ajouter") {
                 action {
-                    println("Ajouter")
+                    val newEntry = GlossaryEntry(
+                        mot = motInput.text,
+                        definition = definitionInput.text,
+                        primaryContext = primaryContextInput.text,
+                        secondaryContext = secondaryContextInput.text,
+                        synonym = synonymeInput.text,
+                        antonym = antonymeInput.text
+                    )
+                    glossaryEntries.add(newEntry)
+
+                    // Réinitialiser les champs de texte
+                    motInput.clear()
+                    synonymeInput.clear()
+                    definitionInput.clear()
+                    primaryContextInput.clear()
+                    antonymeInput.clear()
+                    secondaryContextInput.clear()
                 }
                 style {
                     fontSize = 18.px
                 }
             }
+
+            // Lier la propriété 'disable' à la condition de validation
+            addButton.disableProperty().bind(
+                motInput.textProperty().isBlank()
+                    .or(synonymeInput.textProperty().isBlank())
+                    .or(definitionInput.textProperty().isBlank())
+                    .or(primaryContextInput.textProperty().isBlank())
+                    .or(antonymeInput.textProperty().isBlank())
+                    .or(secondaryContextInput.textProperty().isBlank())
+            )
         }
     }
 }
-
 
 
 fun main(args: Array<String>) {
