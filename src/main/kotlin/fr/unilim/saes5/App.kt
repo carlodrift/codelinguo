@@ -2,6 +2,13 @@ package fr.unilim.saes5
 
 import com.sun.javafx.binding.BidirectionalBinding.bind
 import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
+import javafx.scene.control.Dialog
+import javafx.scene.control.Label
+import javafx.scene.text.Text
+import javafx.scene.text.TextFlow
+import javafx.stage.DirectoryChooser
+import javafx.stage.FileChooser
 import tornadofx.*
 
 class MyApp: App(HelloWorldView::class)
@@ -50,40 +57,61 @@ class HelloWorldView : View() {
         hbox(20.0) {
             button("Aide") {
                 action {
-                    alert(
-                        Alert.AlertType.INFORMATION, "Aide pour le Glossaire", """
-                        Token
-                        Statut : Obligatoire
-                        Description : Le "token" est le terme principal ou le mot-clé que vous souhaitez ajouter au glossaire. Il sert de référence principale pour l'entrée du glossaire.
-                        
-                        Définition
-                        Statut : Facultatif
-                        Description : Dans ce champ, vous pouvez fournir une définition ou une explication détaillée du "token". Bien que ce champ soit facultatif, il est recommandé de fournir une définition pour clarifier l'usage et la signification du "token".
-                        
-                        Contexte Principal
-                        Statut : Obligatoire
-                        Description : Le "contexte principal" est l'environnement ou la situation dans laquelle le "token" est principalement utilisé. Ce champ est obligatoire pour aider à contextualiser le "token" et à comprendre son application dans un contexte spécifique.
-                        
-                        Contexte 2
-                        Statut : Facultatif
-                        Description : Ce champ vous permet de fournir un contexte supplémentaire ou secondaire dans lequel le "token" peut être utilisé. Cela peut aider à donner une vue plus complète de l'utilisation du "token".
-                        
-                        Synonyme
-                        Statut : Facultatif
-                        Description : Ici, vous pouvez lister tout synonyme du "token". Les synonymes sont des mots qui ont une signification similaire ou identique au "token".
-                        
-                        Antonyme
-                        Statut : Facultatif
-                        Description : Dans ce champ, vous pouvez fournir des mots qui ont une signification opposée au "token". Les antonymes peuvent aider à clarifier la signification du "token" en indiquant ce qu'il n'est pas.
-                    """.trimIndent())
+                    val dialog = Dialog<ButtonType>().apply {
+                        initOwner(this@HelloWorldView.currentWindow)
+                        title = "Aide pour le Glossaire"
+                        dialogPane.buttonTypes.add(ButtonType.CLOSE)
+
+                        val textFlow = TextFlow(
+                            Text("Token\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Obligatoire\nDescription : Le \"token\" est le terme principal ou le mot-clé que vous souhaitez ajouter au glossaire. Il sert de référence principale pour l'entrée du glossaire.\n\n"),
+                            Text("Définition\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Facultatif\nDescription : Dans ce champ, vous pouvez fournir une définition ou une explication détaillée du \"token\". Bien que ce champ soit facultatif, il est recommandé de fournir une définition pour clarifier l'usage et la signification du \"token\".\n\n"),
+                            Text("Contexte Principal\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Obligatoire\nDescription : Le \"contexte principal\" est l'environnement ou la situation dans laquelle le \"token\" est principalement utilisé. Ce champ est obligatoire pour aider à contextualiser le \"token\" et à comprendre son application dans un contexte spécifique.\n\n"),
+                            Text("Contexte 2\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Facultatif\nDescription : Ce champ vous permet de fournir un contexte supplémentaire ou secondaire dans lequel le \"token\" peut être utilisé. Cela peut aider à donner une vue plus complète de l'utilisation du \"token\".\n\n"),
+                            Text("Synonyme\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Facultatif\nDescription : Ici, vous pouvez lister tout synonyme du \"token\". Les synonymes sont des mots qui ont une signification similaire ou identique au \"token\".\n\n"),
+                            Text("Antonyme\n").apply { style = "-fx-font-weight: bold" },
+                            Text("Statut : Facultatif\nDescription : Dans ce champ, vous pouvez fournir des mots qui ont une signification opposée au \"token\". Les antonymes peuvent aider à clarifier la signification du \"token\" en indiquant ce qu'il n'est pas.\n\n")
+                        )
+
+                        dialogPane.content = textFlow
+                        dialogPane.setPrefSize(600.0, 350.0) // Ajustez ces valeurs selon vos besoins
+                    }
+                    dialog.showAndWait()
                 }
                 style {
                     fontSize = 18.px
                 }
             }
-            button("Télécharger") {
+            button("Télécharger un fichier") {
                 action {
-                    println("Télécharger")
+                    val fileChooser = FileChooser().apply {
+                        title = "Choisir un fichier"
+                        extensionFilters.addAll(
+                            FileChooser.ExtensionFilter("Tous les Fichiers", "*.*"),
+                        )
+                    }
+                    val selectedFile = fileChooser.showOpenDialog(currentWindow)
+                    if (selectedFile != null) {
+                        println(selectedFile)
+                    }
+                }
+                style {
+                    fontSize = 18.px
+                }
+            }
+            button("Télécharger un dossier") {
+                action {
+                    val directoryChooser = DirectoryChooser().apply {
+                        title = "Choisir un dossier"
+                    }
+                    val selectedDirectory = directoryChooser.showDialog(currentWindow)
+                    if (selectedDirectory != null) {
+                        println(selectedDirectory)
+                    }
                 }
                 style {
                     fontSize = 18.px
