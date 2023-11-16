@@ -5,7 +5,7 @@ import fr.unilim.saes5.model.Word
 class JavaFileSanitizer : FileSanitizer() {
 
     private val JAVA_RESERVED_KEYWORDS = listOf(
-    "string", "int", "abstract", "true", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
+    "string", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
     "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
     "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
     "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
