@@ -1,6 +1,7 @@
 package fr.unilim.saes5
 
 import com.sun.javafx.binding.BidirectionalBinding.bind
+import javafx.scene.control.Alert
 import tornadofx.*
 
 class MyApp: App(HelloWorldView::class)
@@ -49,7 +50,32 @@ class HelloWorldView : View() {
         hbox(20.0) {
             button("Aide") {
                 action {
-                    println("Télécharger")
+                    alert(
+                        Alert.AlertType.INFORMATION, "Aide pour le Glossaire", """
+                        Token
+                        Statut : Obligatoire
+                        Description : Le "token" est le terme principal ou le mot-clé que vous souhaitez ajouter au glossaire. Il sert de référence principale pour l'entrée du glossaire.
+                        
+                        Définition
+                        Statut : Facultatif
+                        Description : Dans ce champ, vous pouvez fournir une définition ou une explication détaillée du "token". Bien que ce champ soit facultatif, il est recommandé de fournir une définition pour clarifier l'usage et la signification du "token".
+                        
+                        Contexte Principal
+                        Statut : Obligatoire
+                        Description : Le "contexte principal" est l'environnement ou la situation dans laquelle le "token" est principalement utilisé. Ce champ est obligatoire pour aider à contextualiser le "token" et à comprendre son application dans un contexte spécifique.
+                        
+                        Contexte 2
+                        Statut : Facultatif
+                        Description : Ce champ vous permet de fournir un contexte supplémentaire ou secondaire dans lequel le "token" peut être utilisé. Cela peut aider à donner une vue plus complète de l'utilisation du "token".
+                        
+                        Synonyme
+                        Statut : Facultatif
+                        Description : Ici, vous pouvez lister tout synonyme du "token". Les synonymes sont des mots qui ont une signification similaire ou identique au "token".
+                        
+                        Antonyme
+                        Statut : Facultatif
+                        Description : Dans ce champ, vous pouvez fournir des mots qui ont une signification opposée au "token". Les antonymes peuvent aider à clarifier la signification du "token" en indiquant ce qu'il n'est pas.
+                    """.trimIndent())
                 }
                 style {
                     fontSize = 18.px
