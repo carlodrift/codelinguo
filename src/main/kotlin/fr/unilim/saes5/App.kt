@@ -1,5 +1,6 @@
 package fr.unilim.saes5
 
+import com.sun.javafx.binding.BidirectionalBinding.bind
 import tornadofx.*
 
 class MyApp: App(HelloWorldView::class)
@@ -62,19 +63,19 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
-            button("Ajouter") {
+            val addButton = button("Ajouter") {
                 action {
                     val newEntry = GlossaryEntry(
-                        motInput.text,
-                        definitionInput.text,
-                        primaryContextInput.text,
-                        secondaryContextInput.text,
-                        synonymeInput.text,
-                        antonymeInput.text
+                        mot = motInput.text,
+                        definition = definitionInput.text,
+                        primaryContext = primaryContextInput.text,
+                        secondaryContext = secondaryContextInput.text,
+                        synonym = synonymeInput.text,
+                        antonym = antonymeInput.text
                     )
                     glossaryEntries.add(newEntry)
 
-                    // Réinitialise les champs de texte
+                    // Réinitialiser les champs de texte
                     motInput.clear()
                     synonymeInput.clear()
                     definitionInput.clear()
@@ -86,6 +87,16 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
+
+            // Lier la propriété 'disable' à la condition de validation
+            addButton.disableProperty().bind(
+                motInput.textProperty().isBlank()
+                    .or(synonymeInput.textProperty().isBlank())
+                    .or(definitionInput.textProperty().isBlank())
+                    .or(primaryContextInput.textProperty().isBlank())
+                    .or(antonymeInput.textProperty().isBlank())
+                    .or(secondaryContextInput.textProperty().isBlank())
+            )
         }
     }
 }
