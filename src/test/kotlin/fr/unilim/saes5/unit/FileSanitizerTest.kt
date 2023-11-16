@@ -18,12 +18,13 @@ class FileSanitizerTest {
             listOf(
                     Word("success"),
                     Word("board"),
-                    Word("placeToken"),
+                    Word("place"),
+                    Word("token"),
                     Word("column"),
-                    Word("activePlayer"),
-                    Word("board"),
-                    Word("checkVictory"),
-                    Word("column"),
+                    Word("active"),
+                    Word("player"),
+                    Word("check"),
+                    Word("victory"),
             )
 
         );

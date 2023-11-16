@@ -2,8 +2,8 @@ package fr.unilim.saes5.unit
 
 import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.fr.unilim.saes5.service.WordAnalyticsService
 import fr.unilim.saes5.model.reader.DummyReader
+import fr.unilim.saes5.service.WordAnalyticsService
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
