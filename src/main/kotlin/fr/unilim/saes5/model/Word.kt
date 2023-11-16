@@ -29,7 +29,16 @@ class Word(var token: String?) {
 
 
     override fun toString(): String {
-        return "Word(token=$token)"
+        return "$token"
+    }
+
+    override fun hashCode(): Int {
+        var result = token?.hashCode() ?: 0
+        result = 31 * result + (synonyms?.hashCode() ?: 0)
+        result = 31 * result + (related?.hashCode() ?: 0)
+        result = 31 * result + (antonyms?.hashCode() ?: 0)
+        result = 31 * result + (context?.hashCode() ?: 0)
+        return result
     }
 
 }
