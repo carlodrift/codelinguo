@@ -14,8 +14,8 @@ class FileSanitizerTest {
 
         val sanitized : List<Word> = JavaFileSanitizer().sanitizeLines(lines);
 
-        Assertions.assertThat(sanitized).isEqualTo(
-            listOf(
+        Assertions.assertThat(sanitized.toSet()).isEqualTo(
+            setOf(
                     Word("success"),
                     Word("board"),
                     Word("place"),

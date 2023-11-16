@@ -15,7 +15,7 @@ class JavaFileSanitizer : FileSanitizer() {
     private val REGEX_WORD_SEPARATION = "[a-zA-Z]+"
     private val REGEX_JAVA_STRING =  "\".*\""
     override fun sanitizeLines(lines: List<String>): List<Word> {
-        val words = mutableSetOf<Word>()
+        val words = mutableListOf<Word>()
         var inBlockComment = false
 
         lines.forEach { line ->
@@ -60,7 +60,7 @@ class JavaFileSanitizer : FileSanitizer() {
             }
         }
 
-        return words.toList()
+        return words
     }
 
     private fun splitCamelCase(word: String): List<String> {
