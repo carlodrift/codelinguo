@@ -15,7 +15,7 @@ import javafx.stage.FileChooser
 import tornadofx.*
 import java.util.*
 
-class MyApp: App(HelloWorldView::class)
+class MyApp: App(HelloWorldView::class, Styles::class)
 class GlossaryEntry(val mot: String, val definition: String, val primaryContext: String, val secondaryContext: String, val synonym: String, val antonym: String)
 {
     override fun toString(): String {
@@ -61,6 +61,7 @@ class HelloWorldView : View() {
 
         hbox(20.0) {
             button(myBundle.getString("button_help")) {
+                addClass(Styles.helpButton)
                 action {
                     val dialog = Dialog<ButtonType>().apply {
                         initOwner(this@HelloWorldView.currentWindow)
@@ -92,6 +93,7 @@ class HelloWorldView : View() {
                 }
             }
             button(myBundle.getString("button_download_file")) {
+                addClass(Styles.helpButton)
                 action {
                     val fileChooser = FileChooser().apply {
                         title = "Choisir un fichier"
@@ -125,6 +127,7 @@ class HelloWorldView : View() {
                 }
             }
             button(myBundle.getString("button_download_folder")) {
+                addClass(Styles.downloadButton)
                 action {
                     val directoryChooser = DirectoryChooser().apply {
                         title = "Choisir un dossier"
@@ -155,6 +158,7 @@ class HelloWorldView : View() {
                 }
             }
             val addButton = button(myBundle.getString("button_add")) {
+                addClass(Styles.addButton)
                 action {
                     val newEntry = GlossaryEntry(
                         mot = motInput.text,
