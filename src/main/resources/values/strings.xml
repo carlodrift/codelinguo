@@ -1,0 +1,17 @@
+<resources>
+    <string name="token_label">Token(mot)</string>
+    <string name="definition_label">Définition</string>
+    <string name="primary_context_label">Contexte Principal</string>
+    <string name="secondary_context_label">Contexte Secondaire</string>
+    <string name="synonym_label">Synonyme</string>
+    <string name="antonym_label">Antonyme</string>
+    <string name="prompt_joyeux">Joyeux</string>
+    <string name="prompt_heureux">Heureux</string>
+    <string name="prompt_definition">Qui éprouve de la joie.</string>
+    <string name="prompt_joueur">Joueur</string>
+    <string name="prompt_aigri">Aigri</string>
+    <string name="prompt_psychologie">Psychologie</string>
+    <string name="button_help">Aide</string>
+    <string name="button_download">Télécharger</string>
+    <string name="button_add">Ajouter</string>
+</resources>

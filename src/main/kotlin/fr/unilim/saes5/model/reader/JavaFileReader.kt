@@ -6,7 +6,7 @@ import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import java.io.File
 
 class JavaFileReader : IRead {
-    override fun read(path:String): List<Word>? {
+    override fun read(path:String): List<Word> {
 
         val words = emptyList<Word>()
 
