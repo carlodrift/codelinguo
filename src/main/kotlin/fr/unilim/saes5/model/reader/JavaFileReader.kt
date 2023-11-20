@@ -4,14 +4,17 @@ import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import java.io.File
+import java.nio.file.Files
 
 class JavaFileReader : IRead {
     override fun read(path:String): List<Word> {
 
-        val words = emptyList<Word>()
+        val words = mutableListOf<Word>()
 
         File(path).walk().forEach {
-            words.plus(readOne(it.path))
+            if (!Files.isDirectory(it.toPath())) {
+                words.addAll(readOne(it.path))
+            }
         }
 
         return words
@@ -19,7 +22,14 @@ class JavaFileReader : IRead {
     }
 
     override fun readOne(path:String): List<Word> {
-        val lines = File(path).bufferedReader().readLines();
-        return JavaFileSanitizer().sanitizeLines(lines);
+        println(path)
+
+        if (path.endsWith(".java")) {
+            val lines = File(path).bufferedReader().readLines();
+            return JavaFileSanitizer().sanitizeLines(lines);
+
+        }
+
+        return emptyList<Word>()
     }
 }

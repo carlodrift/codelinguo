@@ -1,11 +1,12 @@
 package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
+import java.util.*
 
 class JavaFileSanitizer : FileSanitizer() {
 
     private val JAVA_RESERVED_KEYWORDS = listOf(
-    "string", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
+    "String", "i", "j", "null", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
     "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
     "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
     "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
@@ -33,7 +34,6 @@ class JavaFileSanitizer : FileSanitizer() {
             val stringRegex = REGEX_JAVA_STRING.toRegex()
             if (stringRegex.containsMatchIn(processedLine)) {
                 processedLine = processedLine.replace(stringRegex, "")
-
             }
 
 
@@ -64,6 +64,6 @@ class JavaFileSanitizer : FileSanitizer() {
     }
 
     private fun splitCamelCase(word: String): List<String> {
-        return word.split("(?<!^)(?=[A-Z])".toRegex()).map { it.toLowerCase() }
+        return word.split("(?<!^)(?=[A-Z])".toRegex()).map { it.lowercase(Locale.getDefault()) }
     }
 }
