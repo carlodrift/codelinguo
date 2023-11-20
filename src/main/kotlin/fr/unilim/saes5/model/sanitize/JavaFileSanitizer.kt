@@ -5,65 +5,68 @@ import java.util.*
 
 class JavaFileSanitizer : FileSanitizer() {
 
-    private val JAVA_RESERVED_KEYWORDS = listOf(
-    "String", "i", "j", "null", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
-    "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
-    "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
-    "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
-    "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "println"
-    )
+    companion object {
+        private val JAVA_RESERVED_KEYWORDS = setOf(
+            "String", "i", "j", "null", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
+            "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
+            "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
+            "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
+            "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "println"
+        )
 
-    private val REGEX_WORD_SEPARATION = "[a-zA-Z]+"
-    private val REGEX_JAVA_STRING =  "\".*\""
+        private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
+        private val REGEX_JAVA_STRING = "\".*\"".toRegex()
+        private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
+    }
+
+    private var inBlockComment = false
+
     override fun sanitizeLines(lines: List<String>): List<Word> {
         val words = mutableListOf<Word>()
-        var inBlockComment = false
 
         lines.forEach { line ->
-            var processedLine = line
+            var processedLine = processLineForComments(line)
 
-            if (inBlockComment) {
-                if (line.contains("*/")) {
-                    inBlockComment = false
-                    processedLine = line.substringAfter("*/")
-                } else {
-                    return@forEach
-                }
-            }
-
-            val stringRegex = REGEX_JAVA_STRING.toRegex()
-            if (stringRegex.containsMatchIn(processedLine)) {
-                processedLine = processedLine.replace(stringRegex, "")
-            }
-
-
-            if (processedLine.contains("/*")) {
-                inBlockComment = true
-                processedLine = processedLine.substringBefore("/*")
-            }
-
-            if (processedLine.contains("//")) {
-                processedLine = processedLine.substringBefore("//")
-            }
-
-
-
-            REGEX_WORD_SEPARATION.toRegex().findAll(processedLine).forEach { match ->
-                val word = match.value
-
-                if (word !in JAVA_RESERVED_KEYWORDS
-                    && !REGEX_JAVA_STRING.toRegex().containsMatchIn(word)) {
-                    splitCamelCase(word).forEach { splitWord ->
-                        words.add(Word(splitWord))
-                    }
-                }
+            if (processedLine.isNotBlank()) {
+                processedLine = removeStringLiterals(processedLine)
+                extractWords(processedLine, words)
             }
         }
 
         return words
     }
 
-    private fun splitCamelCase(word: String): List<String> {
-        return word.split("(?<!^)(?=[A-Z])".toRegex()).map { it.lowercase(Locale.getDefault()) }
+    private fun processLineForComments(line: String): String {
+        var processedLine = line
+
+        when {
+            inBlockComment && line.contains("*/") -> {
+                inBlockComment = false
+                processedLine = line.substringAfter("*/")
+            }
+            line.contains("/*") -> {
+                inBlockComment = true
+                processedLine = line.substringBefore("/*")
+            }
+            line.contains("//") -> processedLine = line.substringBefore("//")
+        }
+
+        return processedLine
     }
+
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVA_STRING, "")
+
+    private fun extractWords(line: String, words: MutableList<Word>) {
+        REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
+            val word = match.value
+            if (word !in JAVA_RESERVED_KEYWORDS) {
+                splitCamelCase(word).forEach { splitWord ->
+                    words.add(Word(splitWord))
+                }
+            }
+        }
+    }
+
+    private fun splitCamelCase(word: String): List<String> =
+        word.split(REGEX_CAMEL_CASE).map { it.lowercase(Locale.getDefault()) }
 }
