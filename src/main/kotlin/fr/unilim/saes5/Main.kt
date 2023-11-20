@@ -40,12 +40,12 @@ class HelloWorldView : View() {
 
         tableview(glossaryEntries) {
             columnResizePolicy = SmartResize.POLICY
-            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
-            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
-            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext)
-            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
-            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
-            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
+            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot).remainingWidth()
+            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition).remainingWidth()
+            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext).remainingWidth()
+            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext).remainingWidth()
+            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym).remainingWidth()
+            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym).remainingWidth()
             prefHeight = 200.0
         }
         form {
