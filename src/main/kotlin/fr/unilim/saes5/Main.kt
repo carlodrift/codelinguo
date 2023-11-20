@@ -65,22 +65,22 @@ class HelloWorldView : View() {
                 action {
                     val dialog = Dialog<ButtonType>().apply {
                         initOwner(this@HelloWorldView.currentWindow)
-                        title = "Aide pour le Glossaire"
+                        title = myBundle.getString("help_title")
                         dialogPane.buttonTypes.add(ButtonType.CLOSE)
 
                         val textFlow = TextFlow(
-                            Text("Token\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Obligatoire\nDescription : Le \"token\" est le terme principal ou le mot-clé que vous souhaitez ajouter au glossaire. Il sert de référence principale pour l'entrée du glossaire.\n\n"),
-                            Text("Définition\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Facultatif\nDescription : Dans ce champ, vous pouvez fournir une définition ou une explication détaillée du \"token\". Bien que ce champ soit facultatif, il est recommandé de fournir une définition pour clarifier l'usage et la signification du \"token\".\n\n"),
-                            Text("Contexte Principal\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Obligatoire\nDescription : Le \"contexte principal\" est l'environnement ou la situation dans laquelle le \"token\" est principalement utilisé. Ce champ est obligatoire pour aider à contextualiser le \"token\" et à comprendre son application dans un contexte spécifique.\n\n"),
-                            Text("Contexte 2\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Facultatif\nDescription : Ce champ vous permet de fournir un contexte supplémentaire ou secondaire dans lequel le \"token\" peut être utilisé. Cela peut aider à donner une vue plus complète de l'utilisation du \"token\".\n\n"),
-                            Text("Synonyme\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Facultatif\nDescription : Ici, vous pouvez lister tout synonyme du \"token\". Les synonymes sont des mots qui ont une signification similaire ou identique au \"token\".\n\n"),
-                            Text("Antonyme\n").apply { style = "-fx-font-weight: bold" },
-                            Text("Statut : Facultatif\nDescription : Dans ce champ, vous pouvez fournir des mots qui ont une signification opposée au \"token\". Les antonymes peuvent aider à clarifier la signification du \"token\" en indiquant ce qu'il n'est pas.\n\n")
+                            Text(myBundle.getString("token_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_token") + "\n\n"),
+                            Text(myBundle.getString("definition_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_facultative") + "\n " + myBundle.getString("description_definition") + "\n\n"),
+                            Text(myBundle.getString("primary_context_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_primary_context") + "\n\n"),
+                            Text(myBundle.getString("secondary_context_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_secondary_content") + "\n\n"),
+                            Text(myBundle.getString("synonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_facultative") +"\n" + myBundle.getString("description_synonym") + "\n\n"),
+                            Text(myBundle.getString("antonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_antonym") + "\n\n")
                         )
 
                         dialogPane.content = textFlow
