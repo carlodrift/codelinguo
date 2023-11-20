@@ -6,11 +6,14 @@ import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.scene.control.ButtonType
 import javafx.scene.control.Dialog
+import javafx.scene.control.TextArea
+import javafx.scene.control.TextField
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import tornadofx.*
+import java.util.*
 
 class MyApp: App(HelloWorldView::class)
 class GlossaryEntry(val mot: String, val definition: String, val primaryContext: String, val secondaryContext: String, val synonym: String, val antonym: String)
@@ -23,40 +26,41 @@ class GlossaryEntry(val mot: String, val definition: String, val primaryContext:
 class HelloWorldView : View() {
 
     private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
+    private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
-    private val motInput = textfield { promptText = "Joyeux" }
-    private val synonymeInput = textfield { promptText = "Heureux" }
-    private val definitionInput = textarea { promptText = "Qui éprouve de la joie." }
-    private val primaryContextInput = textfield { promptText = "Joueur" }
-    private val antonymeInput = textfield { promptText = "Aigri" }
-    private val secondaryContextInput = textfield { promptText = "Psychologie" }
+    private val motInput: TextField = textfield { promptText = myBundle.getString("prompt_joyeux") }
+    private val synonymeInput: TextField = textfield { promptText = myBundle.getString("prompt_heureux") }
+    private val definitionInput: TextArea = textarea { promptText = myBundle.getString("prompt_definition") }
+    private val primaryContextInput: TextField = textfield { promptText = myBundle.getString("prompt_joueur") }
+    private val antonymeInput: TextField = textfield { promptText = myBundle.getString("prompt_aigri") }
+    private val secondaryContextInput: TextField = textfield { promptText = myBundle.getString("prompt_psychologie") }
 
     override val root = vbox(10.0) {
         paddingAll = 20.0
 
         tableview(glossaryEntries) {
             columnResizePolicy = SmartResize.POLICY
-            readonlyColumn("Mot", GlossaryEntry::mot)
-            readonlyColumn("Définition", GlossaryEntry::definition)
-            readonlyColumn("Contexte Principal", GlossaryEntry::primaryContext)
-            readonlyColumn("Contexte Secondaire", GlossaryEntry::secondaryContext)
-            readonlyColumn("Synonyme", GlossaryEntry::synonym)
-            readonlyColumn("Antonyme", GlossaryEntry::antonym)
+            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
+            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
+            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext)
+            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
+            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
+            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
             prefHeight = 200.0
         }
         form {
             fieldset {
-                field("Mot") { this += motInput }
-                field("Synonyme") { this += synonymeInput }
-                field("Définition") { this += definitionInput }
-                field("Contexte Principal") { this += primaryContextInput }
-                field("Antonyme") { this += antonymeInput }
-                field("Contexte Secondaire") { this += secondaryContextInput }
+                field(myBundle.getString("token_label")) { this += motInput }
+                field(myBundle.getString("synonym_label")) { this += synonymeInput }
+                field(myBundle.getString("definition_label")) { this += definitionInput }
+                field(myBundle.getString("primary_context_label")) { this += primaryContextInput }
+                field(myBundle.getString("antonym_label")) { this += antonymeInput }
+                field(myBundle.getString("secondary_context_label")) { this += secondaryContextInput }
             }
         }
 
         hbox(20.0) {
-            button("Aide") {
+            button(myBundle.getString("button_help")) {
                 action {
                     val dialog = Dialog<ButtonType>().apply {
                         initOwner(this@HelloWorldView.currentWindow)
@@ -87,7 +91,7 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
-            button("Télécharger un fichier") {
+            button(myBundle.getString("button_download_file")) {
                 action {
                     val fileChooser = FileChooser().apply {
                         title = "Choisir un fichier"
@@ -120,7 +124,7 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
-            button("Télécharger un dossier") {
+            button(myBundle.getString("button_download_folder")) {
                 action {
                     val directoryChooser = DirectoryChooser().apply {
                         title = "Choisir un dossier"
@@ -150,7 +154,7 @@ class HelloWorldView : View() {
                     fontSize = 18.px
                 }
             }
-            val addButton = button("Ajouter") {
+            val addButton = button(myBundle.getString("button_add")) {
                 action {
                     val newEntry = GlossaryEntry(
                         mot = motInput.text,
