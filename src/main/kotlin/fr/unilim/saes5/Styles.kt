@@ -18,6 +18,7 @@ class Styles : Stylesheet() {
         }
 
         addButton {
+            fontSize = 18.px
             backgroundColor += c("#90FF8D")
             backgroundRadius += box(10.px)
             borderRadius += box(10.px)
@@ -31,6 +32,7 @@ class Styles : Stylesheet() {
         }
 
         helpButton {
+            fontSize = 18.px
             backgroundColor += c("#EAEAEA")
             backgroundRadius += box(10.px)
             borderRadius += box(10.px)
@@ -44,6 +46,7 @@ class Styles : Stylesheet() {
         }
 
         downloadButton {
+            fontSize = 18.px
             backgroundColor += c("#20D7FF")
             backgroundRadius += box(10.px)
             borderRadius += box(10.px)

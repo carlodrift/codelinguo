@@ -84,12 +84,9 @@ class HelloWorldView : View() {
                         )
 
                         dialogPane.content = textFlow
-                        dialogPane.setPrefSize(600.0, 350.0) // Ajustez ces valeurs selon vos besoins
+                        dialogPane.setPrefSize(600.0, 350.0)
                     }
                     dialog.showAndWait()
-                }
-                style {
-                    fontSize = 18.px
                 }
             }
             button(myBundle.getString("button_download_file")) {
@@ -122,9 +119,6 @@ class HelloWorldView : View() {
                         println(selectedFile)
                     }
                 }
-                style {
-                    fontSize = 18.px
-                }
             }
             button(myBundle.getString("button_download_folder")) {
                 addClass(Styles.downloadButton)
@@ -153,9 +147,6 @@ class HelloWorldView : View() {
                         println(selectedDirectory)
                     }
                 }
-                style {
-                    fontSize = 18.px
-                }
             }
             val addButton = button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
@@ -177,9 +168,6 @@ class HelloWorldView : View() {
                     primaryContextInput.clear()
                     antonymeInput.clear()
                     secondaryContextInput.clear()
-                }
-                style {
-                    fontSize = 18.px
                 }
             }
 
