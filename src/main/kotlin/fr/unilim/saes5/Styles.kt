@@ -18,18 +18,42 @@ class Styles : Stylesheet() {
         }
 
         addButton {
-            fontSize = 18.px
-            backgroundColor += c("#4caf50")
+            backgroundColor += c("#90FF8D")
+            backgroundRadius += box(10.px)
+            borderRadius += box(10.px)
+            borderWidth += box(1.px)
+            borderColor += box(c("#555555"))
+
+            and(hover) {
+                backgroundColor += c("#6DEB67")
+            }
+            // ... autres propriétés
         }
 
         helpButton {
-            fontSize = 16.px
-            backgroundColor += c("#f0ad4e")
+            backgroundColor += c("#EAEAEA")
+            backgroundRadius += box(10.px)
+            borderRadius += box(10.px)
+            borderWidth += box(1.px)
+            borderColor += box(c("#555555"))
+
+            and(hover) {
+                backgroundColor += c("#CFCFCF")
+            }
+            // ... autres propriétés
         }
 
         downloadButton {
-            fontSize = 16.px
-            backgroundColor += c("#337ab7")
+            backgroundColor += c("#20D7FF")
+            backgroundRadius += box(10.px)
+            borderRadius += box(10.px)
+            borderWidth += box(1.px)
+            borderColor += box(c("#555555"))
+
+            and(hover) {
+                backgroundColor += c("#1AB6E8")
+            }
+            // ... autres propriétés
         }
     }
 }

@@ -93,7 +93,7 @@ class HelloWorldView : View() {
                 }
             }
             button(myBundle.getString("button_download_file")) {
-                addClass(Styles.helpButton)
+                addClass(Styles.downloadButton)
                 action {
                     val fileChooser = FileChooser().apply {
                         title = "Choisir un fichier"
