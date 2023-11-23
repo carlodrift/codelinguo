@@ -4,10 +4,8 @@ import fr.unilim.saes5.model.Project
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
-import javafx.scene.control.ButtonType
-import javafx.scene.control.Dialog
-import javafx.scene.control.TextArea
-import javafx.scene.control.TextField
+import javafx.scene.control.*
+import javafx.scene.layout.Priority
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
@@ -39,7 +37,7 @@ class HelloWorldView : View() {
         paddingAll = 20.0
 
         tableview(glossaryEntries) {
-            columnResizePolicy = SmartResize.POLICY
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot).remainingWidth()
             readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition).remainingWidth()
             readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext).remainingWidth()

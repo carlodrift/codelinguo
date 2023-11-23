@@ -1,7 +1,11 @@
 package fr.unilim.saes5
 
+import javafx.scene.effect.BlurType
+import javafx.scene.effect.DropShadow
+import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
+import javafx.scene.Cursor
 
 class Styles : Stylesheet() {
     companion object {
@@ -18,45 +22,49 @@ class Styles : Stylesheet() {
         }
 
         addButton {
-            fontSize = 18.px
-            backgroundColor += c("#90FF8D")
-            backgroundRadius += box(10.px)
-            borderRadius += box(10.px)
-            borderWidth += box(1.px)
-            borderColor += box(c("#555555"))
+            fontSize = 18.px // Taille de police en pixels
+            cursor = Cursor.HAND
+            backgroundColor += c("#84B71A")
+            backgroundRadius += box(15.px)
+            textFill = c("#ffffff")
 
             and(hover) {
-                backgroundColor += c("#6DEB67")
+                backgroundColor += c("#388E3C")
             }
             // ... autres propriétés
         }
 
+
         helpButton {
             fontSize = 18.px
-            backgroundColor += c("#EAEAEA")
-            backgroundRadius += box(10.px)
-            borderRadius += box(10.px)
+            cursor = Cursor.HAND
+            backgroundColor += c("#FFFFFF")
+            backgroundRadius += box(15.px)
+            borderRadius += box(15.px)
             borderWidth += box(1.px)
-            borderColor += box(c("#555555"))
+            borderColor += box(c("#000000"))
 
             and(hover) {
-                backgroundColor += c("#CFCFCF")
+                backgroundColor += c("#D7D7D7")
             }
             // ... autres propriétés
         }
 
         downloadButton {
             fontSize = 18.px
-            backgroundColor += c("#20D7FF")
-            backgroundRadius += box(10.px)
-            borderRadius += box(10.px)
-            borderWidth += box(1.px)
-            borderColor += box(c("#555555"))
+            cursor = Cursor.HAND
+            backgroundColor += c("#000000")
+            backgroundRadius += box(15.px)
+            textFill = c("#ffffff")
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
+
 
             and(hover) {
-                backgroundColor += c("#1AB6E8")
+                backgroundColor += c("#5C5E60")
             }
-            // ... autres propriétés
         }
+
+
+
     }
 }
