@@ -26,24 +26,31 @@ class HelloWorldView : View() {
     private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
-    private val motInput: TextField = textfield { promptText = myBundle.getString("prompt_joyeux") }
-    private val synonymeInput: TextField = textfield { promptText = myBundle.getString("prompt_heureux") }
-    private val definitionInput: TextArea = textarea { promptText = myBundle.getString("prompt_definition") }
-    private val primaryContextInput: TextField = textfield { promptText = myBundle.getString("prompt_joueur") }
-    private val antonymeInput: TextField = textfield { promptText = myBundle.getString("prompt_aigri") }
-    private val secondaryContextInput: TextField = textfield { promptText = myBundle.getString("prompt_psychologie") }
+    private val motInput: TextField = textfield { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_joyeux")}
+    private val synonymeInput: TextField = textfield { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_heureux") }
+    private val definitionInput: TextArea = textarea { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_definition") }
+    private val primaryContextInput: TextField = textfield { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_joueur") }
+    private val antonymeInput: TextField = textfield { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_aigri") }
+    private val secondaryContextInput: TextField = textfield { addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_psychologie") }
 
     override val root = vbox(10.0) {
         paddingAll = 20.0
 
         tableview(glossaryEntries) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
-            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot).remainingWidth()
-            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition).remainingWidth()
-            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext).remainingWidth()
-            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext).remainingWidth()
-            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym).remainingWidth()
-            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym).remainingWidth()
+            addClass(Styles.customTableView)
+            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
+            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
+            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext)
+            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
+            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
+            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
             prefHeight = 200.0
         }
         form {
