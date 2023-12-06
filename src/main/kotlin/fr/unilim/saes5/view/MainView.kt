@@ -4,7 +4,6 @@ import fr.unilim.saes5.model.Project
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
-import fr.unilim.saes5.view.Styles
 import javafx.scene.control.*
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
@@ -18,18 +17,30 @@ class MainView : View() {
     private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
-    private val motInput: TextField = textfield { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_joyeux")}
-    private val synonymeInput: TextField = textfield { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_heureux") }
-    private val definitionInput: TextArea = textarea { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_definition") }
-    private val primaryContextInput: TextField = textfield { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_joueur") }
-    private val antonymeInput: TextField = textfield { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_aigri") }
-    private val secondaryContextInput: TextField = textfield { addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_psychologie") }
+    private val motInput: TextField = textfield {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_joyeux")
+    }
+    private val synonymeInput: TextField = textfield {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_heureux")
+    }
+    private val definitionInput: TextArea = textarea {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_definition")
+    }
+    private val primaryContextInput: TextField = textfield {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_joueur")
+    }
+    private val antonymeInput: TextField = textfield {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_aigri")
+    }
+    private val secondaryContextInput: TextField = textfield {
+        addClass(Styles.customTextField)
+        promptText = myBundle.getString("prompt_psychologie")
+    }
 
     override val root = vbox(10.0) {
         paddingAll = 20.0
@@ -68,14 +79,20 @@ class MainView : View() {
                         val textFlow = TextFlow(
                             Text(myBundle.getString("token_label") + "\n").apply { style = "-fx-font-weight: bold" },
                             Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_token") + "\n\n"),
-                            Text(myBundle.getString("definition_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("definition_label") + "\n").apply {
+                                style = "-fx-font-weight: bold"
+                            },
                             Text(myBundle.getString("statute_facultative") + "\n " + myBundle.getString("description_definition") + "\n\n"),
-                            Text(myBundle.getString("primary_context_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("primary_context_label") + "\n").apply {
+                                style = "-fx-font-weight: bold"
+                            },
                             Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_primary_context") + "\n\n"),
-                            Text(myBundle.getString("secondary_context_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                            Text(myBundle.getString("secondary_context_label") + "\n").apply {
+                                style = "-fx-font-weight: bold"
+                            },
                             Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_secondary_content") + "\n\n"),
                             Text(myBundle.getString("synonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
-                            Text(myBundle.getString("statute_facultative") +"\n" + myBundle.getString("description_synonym") + "\n\n"),
+                            Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_synonym") + "\n\n"),
                             Text(myBundle.getString("antonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
                             Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_antonym") + "\n\n")
                         )

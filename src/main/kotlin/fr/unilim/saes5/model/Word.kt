@@ -9,7 +9,6 @@ class Word(var token: String?) {
     var context: Context? = null
 
 
-
     constructor() : this(null)
 
     override fun equals(other: Any?): Boolean {

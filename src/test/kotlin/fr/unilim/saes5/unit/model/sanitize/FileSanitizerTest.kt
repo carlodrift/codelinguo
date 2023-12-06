@@ -8,22 +8,24 @@ import org.junit.jupiter.api.Test
 class FileSanitizerTest {
     @Test
     fun testSanitizeSingleFile(): Unit {
-        val lines = listOf("boolean success = board.placeToken(column, activePlayer);",
-                            "if (board.checkVictory(column)) {")
+        val lines = listOf(
+            "boolean success = board.placeToken(column, activePlayer);",
+            "if (board.checkVictory(column)) {"
+        )
 
-        val sanitized : List<Word> = JavaFileSanitizer().sanitizeLines(lines);
+        val sanitized: List<Word> = JavaFileSanitizer().sanitizeLines(lines);
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
-                    Word("success"),
-                    Word("board"),
-                    Word("place"),
-                    Word("token"),
-                    Word("column"),
-                    Word("active"),
-                    Word("player"),
-                    Word("check"),
-                    Word("victory"),
+                Word("success"),
+                Word("board"),
+                Word("place"),
+                Word("token"),
+                Word("column"),
+                Word("active"),
+                Word("player"),
+                Word("check"),
+                Word("victory"),
             )
 
         );

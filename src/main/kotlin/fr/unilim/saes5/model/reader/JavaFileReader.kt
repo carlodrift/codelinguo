@@ -1,13 +1,13 @@
 package fr.unilim.saes5.model.reader
 
-import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import java.io.File
 import java.nio.file.Files
 
 class JavaFileReader : IRead {
-    override fun read(path:String): List<Word> {
+    override fun read(path: String): List<Word> {
 
         val words = mutableListOf<Word>()
 
@@ -21,7 +21,7 @@ class JavaFileReader : IRead {
 
     }
 
-    override fun readOne(path:String): List<Word> {
+    override fun readOne(path: String): List<Word> {
         println(path)
 
         if (path.endsWith(".java")) {

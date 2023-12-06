@@ -1,8 +1,8 @@
 package fr.unilim.saes5.view
 
+import javafx.scene.Cursor
 import javafx.scene.text.FontWeight
 import tornadofx.*
-import javafx.scene.Cursor
 
 class Styles : Stylesheet() {
     companion object {
@@ -75,7 +75,7 @@ class Styles : Stylesheet() {
             tabMaxWidth = 200.px
         }
 
-        customTableHeader{
+        customTableHeader {
             textFill = c("#FFFFFF")
             backgroundColor += c("#736C6C")
         }
