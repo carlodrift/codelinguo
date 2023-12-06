@@ -82,12 +82,12 @@ public class CompletionServiceTest {
     @Test
     public void testSuggestCompletionsWithMultipleMatches() {
         this.completionService.addCompletion("multi");
-        this.completionService.addCompletion("multiplication");
+        this.completionService.addCompletion("multiplication and division");
         this.completionService.addCompletion("multiverse");
         this.completionService.addCompletion("museum");
         Set<String> completions = this.completionService.suggestCompletions("multi");
         assertEquals(3, completions.size());
-        assertTrue(completions.containsAll(List.of("multi", "multiplication", "multiverse")));
+        assertTrue(completions.containsAll(List.of("multi", "multiplication and division", "multiverse")));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class CompletionServiceTest {
 
     @Test
     public void testSuggestCompletionsWithWhitespaceInput() {
-        this.completionService.addCompletion("whitespace");
+        this.completionService.addCompletion("whitespace  ");
         Set<String> completions = this.completionService.suggestCompletions("white");
         assertEquals(1, completions.size());
         assertTrue(completions.contains("whitespace"));
