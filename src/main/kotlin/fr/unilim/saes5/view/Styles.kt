@@ -1,8 +1,5 @@
-package fr.unilim.saes5
+package fr.unilim.saes5.view
 
-import javafx.scene.effect.BlurType
-import javafx.scene.effect.DropShadow
-import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 import javafx.scene.Cursor

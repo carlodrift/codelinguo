@@ -1,6 +1,5 @@
-package fr.unilim.saes5.unit
+package fr.unilim.saes5.unit.model.sanitize
 
-import fr.unilim.saes5.model.sanitize.FileSanitizer
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import org.assertj.core.api.Assertions

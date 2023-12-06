@@ -1,4 +1,4 @@
-package fr.unilim.saes5.unit
+package fr.unilim.saes5.unit.service
 
 import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.Word
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class WordAnalyticsTest {
+class WordAnalyticsServiceTest {
     @BeforeEach
     fun init() {
         wordAnalyticsService = WordAnalyticsService()
