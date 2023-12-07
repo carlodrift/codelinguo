@@ -22,14 +22,12 @@ class JavaFileReader : IRead {
     }
 
     override fun readOne(path: String): List<Word> {
-        println(path)
-
         if (path.endsWith(".java")) {
             val lines = File(path).bufferedReader().readLines();
             return JavaFileSanitizer().sanitizeLines(lines);
 
         }
 
-        return emptyList<Word>()
+        return emptyList()
     }
 }

@@ -10,14 +10,18 @@ import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.geometry.Pos
+import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.layout.VBox
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
+import javafx.stage.Stage
 import javafx.util.Callback
 import tornadofx.*
 import java.util.*
+
 
 class MainView : View() {
 
@@ -232,19 +236,11 @@ class MainView : View() {
                     }
                     val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                     if (selectedFiles != null) {
-                        for (file in selectedFiles) {
+                        selectedFiles?.forEach { file ->
                             val words = JavaFileReader().readOne(file.toString())
-                            println(words.size.toString() + " mots ont été trouvés dans ${file.name}:")
-
-                            println("---------------------------------------------")
-
                             val analytics = WordAnalyticsService()
-                            val wordRank = analytics.wordRank(words)
-
-                            println("Voici la liste des mots trouvés par occurence dans ${file.name}")
-                            for ((word, count) in wordRank) {
-                                println("$word  $count")
-                            }
+                            val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
+                            openWordOccurrenceView(wordRank)
                         }
                     }
                 }
@@ -257,22 +253,16 @@ class MainView : View() {
                     }
                     val selectedDirectory = directoryChooser.showDialog(currentWindow)
                     if (selectedDirectory != null) {
-                        val words = JavaFileReader().read(selectedDirectory.toString())
-                        println(words.size.toString() + " mots ont été trouvés :")
-
-                        println("---------------------------------------------")
-
-                        val analytics = WordAnalyticsService()
-                        val wordRank = analytics.wordRank(words)
-
-                        println("Voici la liste des mots trouvés par occurence")
-                        for ((word, count) in wordRank) {
-                            println("$word  $count")
+                        selectedDirectory?.let {
+                            val words = JavaFileReader().read(it.toString())
+                            val analytics = WordAnalyticsService()
+                            val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
+                            openWordOccurrenceView(wordRank)
                         }
                     }
                 }
             }
-            val addButton = button(myBundle.getString("button_add")) {
+            button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
                 action {
                     if (motInput.text.isBlank() || primaryContextInput.text.isBlank()) {
@@ -322,4 +312,11 @@ class MainView : View() {
         val glossary = Glossary(words.toList())
         projectDao.saveProject(glossary)
     }
+
+
+    private fun openWordOccurrenceView(wordRank: Map<String, Int>) {
+        val view = WordOccurrenceView(wordRank)
+        view.openWindow(owner = null, escapeClosesWindow = true)
+    }
+
 }
