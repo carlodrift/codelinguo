@@ -1,6 +1,9 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Project
+import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.model.context.PrimaryContext
+import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
@@ -16,7 +19,7 @@ import java.util.*
 
 class MainView : View() {
 
-    private val glossaryEntries = mutableListOf<GlossaryEntry>().asObservable()
+    private val words = mutableListOf<Word>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private val motInput: TextField = textfield {
@@ -46,15 +49,24 @@ class MainView : View() {
     }
 
     override val root = vbox(5.0) {
-        tableview(glossaryEntries) {
+        tableview(words) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
-            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
-            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
-            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext)
-            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
-            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
-            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
+            readonlyColumn(myBundle.getString("token_label"), Word::token)
+            readonlyColumn(myBundle.getString("definition_label"), Word::definition)
+
+            column(myBundle.getString("primary_context_label"), Word::context).cellFormat { cell ->
+                text = cell?.filterIsInstance<PrimaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("secondary_context_label"), Word::context).cellFormat { cell ->
+                text = cell?.filterIsInstance<SecondaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("synonym_label"), Word::synonyms).cellFormat { cell ->
+                text = cell?.joinToString { it.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
+                text = cell?.joinToString { it.token ?: "" } ?: ""
+            }
             prefHeight = 350.0
         }
 
@@ -236,16 +248,17 @@ class MainView : View() {
                             content = myBundle.getString("missing_fields_content")
                         )
                     } else {
-                        val newEntry = GlossaryEntry(
-                            mot = motInput.text,
-                            definition = definitionInput.text,
-                            primaryContext = primaryContextInput.text,
-                            secondaryContext = secondaryContextInput.text,
-                            synonym = synonymeInput.text,
-                            antonym = antonymeInput.text
-                        )
+                        val newWord = Word(motInput.text).apply {
+                            definition = definitionInput.text
+                            context = listOf(
+                                PrimaryContext(Word(primaryContextInput.text)),
+                                SecondaryContext(Word(secondaryContextInput.text))
+                            )
+                            synonyms = setOf(Word(synonymeInput.text))
+                            antonyms = setOf(Word(antonymeInput.text))
+                        }
 
-                        val duplicate = glossaryEntries.any { it.mot == newEntry.mot }
+                        val duplicate = words.any { it == newWord }
                         if (duplicate) {
                             alert(
                                 type = Alert.AlertType.WARNING,
@@ -253,7 +266,7 @@ class MainView : View() {
                                 content = myBundle.getString("duplicate_content")
                             )
                         } else {
-                            glossaryEntries.add(newEntry)
+                            words.add(newWord)
                             motInput.clear()
                             synonymeInput.clear()
                             definitionInput.clear()
