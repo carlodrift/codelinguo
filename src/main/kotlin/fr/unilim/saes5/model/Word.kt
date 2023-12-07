@@ -6,10 +6,17 @@ class Word(var token: String?) {
     var synonyms: Set<Word>? = HashSet()
     var related: Set<Word>? = HashSet()
     var antonyms: Set<Word>? = HashSet()
-    var context: Context? = null
+    var context: List<Context>? = null
+    var definition: String? = null
 
 
     constructor() : this(null)
+
+
+
+    override fun toString(): String {
+        return "$token"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,13 +29,9 @@ class Word(var token: String?) {
         if (related != other.related) return false
         if (antonyms != other.antonyms) return false
         if (context != other.context) return false
+        if (definition != other.definition) return false
 
         return true
-    }
-
-
-    override fun toString(): String {
-        return "$token"
     }
 
     override fun hashCode(): Int {
@@ -37,7 +40,9 @@ class Word(var token: String?) {
         result = 31 * result + (related?.hashCode() ?: 0)
         result = 31 * result + (antonyms?.hashCode() ?: 0)
         result = 31 * result + (context?.hashCode() ?: 0)
+        result = 31 * result + (definition?.hashCode() ?: 0)
         return result
     }
+
 
 }

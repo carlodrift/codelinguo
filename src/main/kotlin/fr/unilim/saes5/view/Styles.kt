@@ -68,6 +68,8 @@ class Styles : Stylesheet() {
         customTextField {
             borderWidth += box(1.px)
             borderColor += box(c(0, 0, 0, 1.0))
+            backgroundRadius += box(15.px)
+            borderRadius += box(15.px)
         }
 
         customTableView {

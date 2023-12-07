@@ -1,22 +1,31 @@
 package fr.unilim.saes5.view
 
-import fr.unilim.saes5.model.Project
+import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.model.context.PrimaryContext
+import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
-import fr.unilim.saes5.persistence.JsonProjectDao
+import fr.unilim.saes5.persistence.JsonGlossaryDao
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
+import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.geometry.Pos
+import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.layout.VBox
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
+import javafx.stage.Stage
+import javafx.util.Callback
 import tornadofx.*
 import java.util.*
 
+
 class MainView : View() {
 
-    private val glossaryEntries = mutableListOf<GlossaryEntry>().asObservable()
+    private val words = mutableListOf<Word>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private val motInput: TextField = textfield {
@@ -45,16 +54,67 @@ class MainView : View() {
         promptText = myBundle.getString("prompt_psychologie")
     }
 
+    init {
+        loadSavedWords()
+    }
+
+    private fun loadSavedWords() {
+        val projectDao = JsonGlossaryDao("glossary.json")
+        val projects = projectDao.allProjects
+
+        projects.forEach { project ->
+            project.words?.forEach { word ->
+                if (!words.contains(word)) {
+                    words.add(word)
+                }
+            }
+        }
+    }
+
     override val root = vbox(5.0) {
-        tableview(glossaryEntries) {
-            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+        tableview(words) {
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
-            readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
-            readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
-            readonlyColumn(myBundle.getString("primary_context_label"), GlossaryEntry::primaryContext)
-            readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
-            readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
-            readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
+            readonlyColumn(myBundle.getString("token_label"), Word::token)
+            readonlyColumn(myBundle.getString("definition_label"), Word::definition)
+
+            column(myBundle.getString("primary_context_label"), Word::context).cellFormat { cell ->
+                text = cell?.filterIsInstance<PrimaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("secondary_context_label"), Word::context).cellFormat { cell ->
+                text = cell?.filterIsInstance<SecondaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("synonym_label"), Word::synonyms).cellFormat { cell ->
+                text = cell?.joinToString { it.token ?: "" } ?: ""
+            }
+            column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
+                text = cell?.joinToString { it.token ?: "" } ?: ""
+            }
+            val removeColumn = TableColumn<Word, Word>(myBundle.getString("actions_label"))
+            removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
+            removeColumn.cellFactory = Callback {
+                object : TableCell<Word, Word>() {
+                    private val button = Button("X").apply {
+                        action {
+                            val item = tableRow.item
+                            item?.let {
+                                words.remove(it)
+                                updateJsonFile()
+                            }
+                        }
+                    }
+
+                    override fun updateItem(item: Word?, empty: Boolean) {
+                        super.updateItem(item, empty)
+                        if (empty) {
+                            graphic = null
+                        } else {
+                            graphic = button
+                        }
+                    }
+                }
+            }
+            columns.add(removeColumn)
             prefHeight = 350.0
         }
 
@@ -85,13 +145,13 @@ class MainView : View() {
                 fieldset {
                     field {
                         vbox {
-                            label(myBundle.getString("synonym_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("synonym_label"))
                             this += synonymeInput
                         }
                     }
                     field {
                         vbox {
-                            label(myBundle.getString("antonym_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("antonym_label"))
                             this += antonymeInput
                         }
                     }
@@ -101,7 +161,7 @@ class MainView : View() {
                 fieldset {
                     field {
                         vbox {
-                            label(myBundle.getString("definition_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("definition_label"))
                             this += definitionInput
                         }
                     }
@@ -144,12 +204,13 @@ class MainView : View() {
                         )
 
                         dialogPane.content = textFlow
-                        dialogPane.setPrefSize(600.0, 350.0)
+                        dialogPane.prefWidth = primaryStage.width * 0.8 // 80% de la largeur de la fenêtre principale
+                        dialogPane.prefHeight = primaryStage.height * 0.5 // 50% de la hauteur de la fenêtre principale
+
                     }
 
                     val owner = this@MainView.currentWindow
 
-                    // Utilise Platform.runLater pour s'assurer que le calcul de la position se fait après le rendu de la boîte de dialogue
                     Platform.runLater {
                         if (owner != null) {
                             val scene = owner.scene
@@ -160,7 +221,7 @@ class MainView : View() {
                         }
                     }
 
-                    // Affiche la boîte de dialogue et attend que l'utilisateur la ferme
+
                     dialog.showAndWait()
                 }
             }
@@ -168,30 +229,19 @@ class MainView : View() {
                 addClass(Styles.downloadButton)
                 action {
                     val fileChooser = FileChooser().apply {
-                        title = "Choisir un fichier"
+                        title = "Choisir des fichiers"
                         extensionFilters.addAll(
-                            FileChooser.ExtensionFilter("Tous les Fichiers", "*.*"),
+                            FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
                         )
                     }
-                    val selectedFile = fileChooser.showOpenDialog(currentWindow)
-                    if (selectedFile != null) {
-                        val words = JavaFileReader().readOne(selectedFile.toString())
-                        println(words.size.toString() + " mots ont été trouvés :")
-
-                        println("---------------------------------------------")
-
-                        val analytics = WordAnalyticsService()
-                        val wordRank = analytics.wordRank(words)
-
-                        println("Voici la liste des mots trouvés par occurence")
-                        for ((word, count) in wordRank) {
-                            println("$word  $count")
+                    val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
+                    if (selectedFiles != null) {
+                        selectedFiles?.forEach { file ->
+                            val words = JavaFileReader().readOne(file.toString())
+                            val analytics = WordAnalyticsService()
+                            val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
+                            openWordOccurrenceView(wordRank)
                         }
-
-                        val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
-                        println(selectedFile)
                     }
                 }
             }
@@ -203,54 +253,70 @@ class MainView : View() {
                     }
                     val selectedDirectory = directoryChooser.showDialog(currentWindow)
                     if (selectedDirectory != null) {
-                        val words = JavaFileReader().read(selectedDirectory.toString())
-                        println(words.size.toString() + " mots ont été trouvés :")
-
-                        println("---------------------------------------------")
-
-                        val analytics = WordAnalyticsService()
-                        val wordRank = analytics.wordRank(words)
-
-                        println("Voici la liste des mots trouvés par occurence")
-                        for ((word, count) in wordRank) {
-                            println("$word  $count")
+                        selectedDirectory?.let {
+                            val words = JavaFileReader().read(it.toString())
+                            val analytics = WordAnalyticsService()
+                            val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
+                            openWordOccurrenceView(wordRank)
                         }
-
-                        val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
-                        println(selectedDirectory)
                     }
                 }
             }
-            val addButton = button(myBundle.getString("button_add")) {
+            button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
                 action {
-                    val newEntry = GlossaryEntry(
-                        mot = motInput.text,
-                        definition = definitionInput.text,
-                        primaryContext = primaryContextInput.text,
-                        secondaryContext = secondaryContextInput.text,
-                        synonym = synonymeInput.text,
-                        antonym = antonymeInput.text
-                    )
-                    glossaryEntries.add(newEntry)
+                    if (motInput.text.isBlank() || primaryContextInput.text.isBlank()) {
+                        alert(
+                            type = Alert.AlertType.WARNING,
+                            header = myBundle.getString("missing_fields_header"),
+                            content = myBundle.getString("missing_fields_content")
+                        )
+                    } else {
+                        val newWord = Word(motInput.text).apply {
+                            definition = definitionInput.text
+                            context = listOf(
+                                PrimaryContext(Word(primaryContextInput.text)),
+                                SecondaryContext(Word(secondaryContextInput.text))
+                            )
+                            synonyms = setOf(Word(synonymeInput.text))
+                            antonyms = setOf(Word(antonymeInput.text))
+                        }
 
-                    // Réinitialiser les champs de texte
-                    motInput.clear()
-                    synonymeInput.clear()
-                    definitionInput.clear()
-                    primaryContextInput.clear()
-                    antonymeInput.clear()
-                    secondaryContextInput.clear()
+                        val duplicate = words.any { it == newWord }
+                        if (duplicate) {
+                            alert(
+                                type = Alert.AlertType.WARNING,
+                                header = myBundle.getString("duplicate_header"),
+                                content = myBundle.getString("duplicate_content")
+                            )
+                        } else {
+                            words.add(newWord)
+                            motInput.clear()
+                            synonymeInput.clear()
+                            definitionInput.clear()
+                            primaryContextInput.clear()
+                            antonymeInput.clear()
+                            secondaryContextInput.clear()
+
+                            updateJsonFile()
+                        }
+                    }
                 }
-            }
 
-            // Lier la propriété 'disable' à la condition de validation
-            addButton.disableProperty().bind(
-                motInput.textProperty().isBlank()
-                    .or(primaryContextInput.textProperty().isBlank())
-            )
+            }
         }
     }
+
+    private fun updateJsonFile() {
+        val projectDao = JsonGlossaryDao("glossary.json")
+        val glossary = Glossary(words.toList())
+        projectDao.saveProject(glossary)
+    }
+
+
+    private fun openWordOccurrenceView(wordRank: Map<String, Int>) {
+        val view = WordOccurrenceView(wordRank)
+        view.openWindow(owner = null, escapeClosesWindow = true)
+    }
+
 }
