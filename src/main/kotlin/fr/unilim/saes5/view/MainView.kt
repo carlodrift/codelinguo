@@ -4,6 +4,8 @@ import fr.unilim.saes5.model.Project
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
+import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
@@ -14,7 +16,7 @@ import java.util.*
 
 class MainView : View() {
 
-    private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
+    private val glossaryEntries = mutableListOf<GlossaryEntry>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private val motInput: TextField = textfield {
@@ -28,6 +30,7 @@ class MainView : View() {
     private val definitionInput: TextArea = textarea {
         addClass(Styles.customTextField)
         promptText = myBundle.getString("prompt_definition")
+        prefHeight = 145.0
     }
     private val primaryContextInput: TextField = textfield {
         addClass(Styles.customTextField)
@@ -42,9 +45,7 @@ class MainView : View() {
         promptText = myBundle.getString("prompt_psychologie")
     }
 
-    override val root = vbox(10.0) {
-        paddingAll = 20.0
-
+    override val root = vbox(5.0) {
         tableview(glossaryEntries) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             addClass(Styles.customTableView)
@@ -54,20 +55,65 @@ class MainView : View() {
             readonlyColumn(myBundle.getString("secondary_context_label"), GlossaryEntry::secondaryContext)
             readonlyColumn(myBundle.getString("synonym_label"), GlossaryEntry::synonym)
             readonlyColumn(myBundle.getString("antonym_label"), GlossaryEntry::antonym)
-            prefHeight = 200.0
+            prefHeight = 350.0
         }
-        form {
-            fieldset {
-                field(myBundle.getString("token_label")) { this += motInput }
-                field(myBundle.getString("synonym_label")) { this += synonymeInput }
-                field(myBundle.getString("definition_label")) { this += definitionInput }
-                field(myBundle.getString("primary_context_label")) { this += primaryContextInput }
-                field(myBundle.getString("antonym_label")) { this += antonymeInput }
-                field(myBundle.getString("secondary_context_label")) { this += secondaryContextInput }
+
+        hbox(10.0) {
+            form {
+                fieldset {
+                    field {
+                        vbox {
+                            label(myBundle.getString("token_label") + myBundle.getString("required_field"))
+                            this += motInput
+                        }
+                    }
+                    field {
+                        vbox {
+                            label(myBundle.getString("primary_context_label") + myBundle.getString("required_field"))
+                            this += primaryContextInput
+                        }
+                    }
+                    field {
+                        vbox {
+                            label(myBundle.getString("secondary_context_label"))
+                            this += secondaryContextInput
+                        }
+                    }
+                }
+            }
+            form {
+                fieldset {
+                    field {
+                        vbox {
+                            label(myBundle.getString("synonym_label") + myBundle.getString("required_field"))
+                            this += synonymeInput
+                        }
+                    }
+                    field {
+                        vbox {
+                            label(myBundle.getString("antonym_label") + myBundle.getString("required_field"))
+                            this += antonymeInput
+                        }
+                    }
+                }
+            }
+            form {
+                fieldset {
+                    field {
+                        vbox {
+                            label(myBundle.getString("definition_label") + myBundle.getString("required_field"))
+                            this += definitionInput
+                        }
+                    }
+                }
             }
         }
 
         hbox(20.0) {
+            paddingBottom = 20.0
+            paddingHorizontal = 20.0
+            alignment = Pos.BASELINE_RIGHT
+
             button(myBundle.getString("button_help")) {
                 addClass(Styles.helpButton)
                 action {
@@ -100,6 +146,21 @@ class MainView : View() {
                         dialogPane.content = textFlow
                         dialogPane.setPrefSize(600.0, 350.0)
                     }
+
+                    val owner = this@MainView.currentWindow
+
+                    // Utilise Platform.runLater pour s'assurer que le calcul de la position se fait après le rendu de la boîte de dialogue
+                    Platform.runLater {
+                        if (owner != null) {
+                            val scene = owner.scene
+                            val x = owner.x + scene.x + (scene.width - dialog.dialogPane.width) / 2
+                            val y = owner.y + scene.y + (scene.height - dialog.dialogPane.height) / 2
+                            dialog.x = x
+                            dialog.y = y
+                        }
+                    }
+
+                    // Affiche la boîte de dialogue et attend que l'utilisateur la ferme
                     dialog.showAndWait()
                 }
             }
@@ -188,11 +249,7 @@ class MainView : View() {
             // Lier la propriété 'disable' à la condition de validation
             addButton.disableProperty().bind(
                 motInput.textProperty().isBlank()
-                    .or(synonymeInput.textProperty().isBlank())
-                    .or(definitionInput.textProperty().isBlank())
                     .or(primaryContextInput.textProperty().isBlank())
-                    .or(antonymeInput.textProperty().isBlank())
-                    .or(secondaryContextInput.textProperty().isBlank())
             )
         }
     }
