@@ -2,7 +2,7 @@ package fr.unilim.saes5.model.context
 
 import fr.unilim.saes5.model.Word
 
-abstract class Context protected constructor(val word: Word, val priority: Float) {
+open class Context protected constructor(val word: Word, val priority: Float) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

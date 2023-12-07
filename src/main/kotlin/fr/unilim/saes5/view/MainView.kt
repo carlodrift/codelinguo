@@ -48,6 +48,23 @@ class MainView : View() {
         promptText = myBundle.getString("prompt_psychologie")
     }
 
+    init {
+        loadSavedWords()
+    }
+
+    private fun loadSavedWords() {
+        val projectDao = JsonProjectDao("glossary.json")
+        val projects = projectDao.allProjects
+
+        projects.forEach { project ->
+            project.words?.forEach { word ->
+                if (!words.contains(word)) {
+                    words.add(word)
+                }
+            }
+        }
+    }
+
     override val root = vbox(5.0) {
         tableview(words) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
@@ -273,6 +290,10 @@ class MainView : View() {
                             primaryContextInput.clear()
                             antonymeInput.clear()
                             secondaryContextInput.clear()
+
+                            val projectDao = JsonProjectDao("glossary.json")
+                            val project = Project(words.toList())
+                            projectDao.saveProject(project)
                         }
                     }
                 }
