@@ -75,12 +75,12 @@ class CompletionServiceTest {
     @Test
     fun testSuggestCompletionsWithMultipleMatches() {
         completionService!!.addCompletion("multi")
-        completionService!!.addCompletion("multiplication and division")
-        completionService!!.addCompletion("multiverse")
-        completionService!!.addCompletion("museum")
+        completionService!!.addCompletion("division et multiplication")
+        completionService!!.addCompletion("le multiverse")
+        completionService!!.addCompletion("musée")
         val completions = completionService!!.suggestCompletions("multi")
         Assertions.assertEquals(3, completions.size)
-        Assertions.assertTrue(completions.containsAll(listOf("multi", "multiplication and division", "multiverse")))
+        Assertions.assertTrue(completions.containsAll(listOf("multi", "division et multiplication", "le multiverse")))
     }
 
     @Test
