@@ -1,7 +1,7 @@
 package fr.unilim.saes5.unit.service
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.model.interfaces.IRead
+import fr.unilim.saes5.model.reader.IRead
 import fr.unilim.saes5.model.reader.DummyReader
 import fr.unilim.saes5.service.WordAnalyticsService
 import org.assertj.core.api.Assertions

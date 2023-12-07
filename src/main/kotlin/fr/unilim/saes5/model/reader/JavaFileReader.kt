@@ -1,7 +1,6 @@
 package fr.unilim.saes5.model.reader
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.model.interfaces.IRead
 import fr.unilim.saes5.model.sanitize.JavaFileSanitizer
 import java.io.File
 import java.nio.file.Files

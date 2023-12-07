@@ -1,4 +1,4 @@
-package fr.unilim.saes5.model.interfaces
+package fr.unilim.saes5.model.reader
 
 import fr.unilim.saes5.model.Word
 
