@@ -326,6 +326,10 @@ class MainView : View() {
 
     private fun updateAutoCompletion(textField: TextField) {
         val suggestions = completionService.suggestCompletions(textField.text)
+        if (textField.text.isBlank()) {
+            activeContextMenus[textField]?.hide()
+            return
+        }
         showSuggestions(textField, suggestions)
     }
 
