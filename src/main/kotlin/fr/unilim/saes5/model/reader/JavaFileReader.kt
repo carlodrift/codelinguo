@@ -27,9 +27,9 @@ class JavaFileReader : IRead {
         if (path.endsWith(".java")) {
             val lines = File(path).bufferedReader().readLines();
             return JavaFileSanitizer().sanitizeLines(lines);
-
         }
 
+        println("Mauvais format de fichier !")
         return emptyList<Word>()
     }
 }
