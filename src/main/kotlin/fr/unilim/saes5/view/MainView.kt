@@ -85,13 +85,13 @@ class MainView : View() {
                 fieldset {
                     field {
                         vbox {
-                            label(myBundle.getString("synonym_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("synonym_label"))
                             this += synonymeInput
                         }
                     }
                     field {
                         vbox {
-                            label(myBundle.getString("antonym_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("antonym_label"))
                             this += antonymeInput
                         }
                     }
@@ -101,7 +101,7 @@ class MainView : View() {
                 fieldset {
                     field {
                         vbox {
-                            label(myBundle.getString("definition_label") + myBundle.getString("required_field"))
+                            label(myBundle.getString("definition_label"))
                             this += definitionInput
                         }
                     }
