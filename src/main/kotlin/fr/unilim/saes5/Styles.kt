@@ -27,6 +27,7 @@ class Styles : Stylesheet() {
             backgroundColor += c("#84B71A")
             backgroundRadius += box(15.px)
             textFill = c("#ffffff")
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
             and(hover) {
                 backgroundColor += c("#388E3C")
@@ -43,6 +44,7 @@ class Styles : Stylesheet() {
             borderRadius += box(15.px)
             borderWidth += box(1.px)
             borderColor += box(c("#000000"))
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
             and(hover) {
                 backgroundColor += c("#D7D7D7")
