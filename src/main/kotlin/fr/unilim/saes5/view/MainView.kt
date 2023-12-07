@@ -58,10 +58,10 @@ class MainView : View() {
         }
         form {
             fieldset {
-                field(myBundle.getString("token_label")) { this += motInput }
+                field(myBundle.getString("token_label") + myBundle.getString("required_field")) { this += motInput }
                 field(myBundle.getString("synonym_label")) { this += synonymeInput }
                 field(myBundle.getString("definition_label")) { this += definitionInput }
-                field(myBundle.getString("primary_context_label")) { this += primaryContextInput }
+                field(myBundle.getString("primary_context_label") + myBundle.getString("required_field")) { this += primaryContextInput }
                 field(myBundle.getString("antonym_label")) { this += antonymeInput }
                 field(myBundle.getString("secondary_context_label")) { this += secondaryContextInput }
             }
