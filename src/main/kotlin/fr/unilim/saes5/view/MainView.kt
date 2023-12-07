@@ -6,24 +6,25 @@ import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonGlossaryDao
+import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.geometry.Pos
-import javafx.scene.Scene
+import javafx.geometry.Side
 import javafx.scene.control.*
-import javafx.scene.layout.VBox
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
-import javafx.stage.Stage
 import javafx.util.Callback
 import tornadofx.*
 import java.util.*
 
 
 class MainView : View() {
+    private val completionService = CompletionService()
+    private val activeContextMenus = mutableMapOf<TextField, ContextMenu>()
 
     private val words = mutableListOf<Word>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
@@ -64,6 +65,9 @@ class MainView : View() {
 
         projects.forEach { project ->
             project.words?.forEach { word ->
+                word.context?.forEach { context ->
+                    completionService.addCompletion(context.word.token ?: "")
+                }
                 if (!words.contains(word)) {
                     words.add(word)
                 }
@@ -72,6 +76,12 @@ class MainView : View() {
     }
 
     override val root = vbox(5.0) {
+        primaryContextInput.textProperty().addListener { _, _, _ ->
+            updateAutoCompletion(primaryContextInput)
+        }
+        secondaryContextInput.textProperty().addListener { _, _, _ ->
+            updateAutoCompletion(secondaryContextInput)
+        }
         tableview(words) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
@@ -236,7 +246,7 @@ class MainView : View() {
                     }
                     val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                     if (selectedFiles != null) {
-                        selectedFiles?.forEach { file ->
+                        selectedFiles.forEach { file ->
                             val words = JavaFileReader().readOne(file.toString())
                             val analytics = WordAnalyticsService()
                             val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
@@ -253,7 +263,7 @@ class MainView : View() {
                     }
                     val selectedDirectory = directoryChooser.showDialog(currentWindow)
                     if (selectedDirectory != null) {
-                        selectedDirectory?.let {
+                        selectedDirectory.let {
                             val words = JavaFileReader().read(it.toString())
                             val analytics = WordAnalyticsService()
                             val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
@@ -291,19 +301,14 @@ class MainView : View() {
                             )
                         } else {
                             words.add(newWord)
-                            motInput.clear()
-                            synonymeInput.clear()
-                            definitionInput.clear()
-                            primaryContextInput.clear()
-                            antonymeInput.clear()
-                            secondaryContextInput.clear()
-
+                            updateCompletionService(newWord)
+                            clearInputFields()
                             updateJsonFile()
                         }
                     }
                 }
-
             }
+
         }
     }
 
@@ -319,4 +324,52 @@ class MainView : View() {
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
 
+    private fun updateAutoCompletion(textField: TextField) {
+        val suggestions = completionService.suggestCompletions(textField.text)
+        showSuggestions(textField, suggestions)
+    }
+
+
+    private fun showSuggestions(textField: TextField, suggestions: Set<String>) {
+        var contextMenu = activeContextMenus[textField]
+
+        if (contextMenu == null) {
+            contextMenu = ContextMenu()
+            activeContextMenus[textField] = contextMenu
+        } else {
+            contextMenu.items.clear()
+        }
+
+        suggestions.forEach { suggestion ->
+            val menuItem = MenuItem(suggestion)
+            menuItem.setOnAction {
+                textField.text = suggestion
+                contextMenu.hide()
+            }
+            contextMenu.items.add(menuItem)
+        }
+
+        if (contextMenu.items.isNotEmpty()) {
+            if (!contextMenu.isShowing) {
+                contextMenu.show(textField, Side.BOTTOM, 0.0, 0.0)
+            }
+        } else {
+            contextMenu.hide()
+        }
+    }
+
+    private fun updateCompletionService(word: Word) {
+        word.context?.forEach { context ->
+            completionService.addCompletion(context.word.token ?: "")
+        }
+    }
+
+    private fun clearInputFields() {
+        motInput.clear()
+        synonymeInput.clear()
+        definitionInput.clear()
+        primaryContextInput.clear()
+        antonymeInput.clear()
+        secondaryContextInput.clear()
+    }
 }
