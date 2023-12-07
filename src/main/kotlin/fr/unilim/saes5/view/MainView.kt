@@ -47,7 +47,7 @@ class MainView : View() {
 
     override val root = vbox(5.0) {
         tableview(glossaryEntries) {
-            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
             readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
             readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
@@ -169,30 +169,32 @@ class MainView : View() {
                 addClass(Styles.downloadButton)
                 action {
                     val fileChooser = FileChooser().apply {
-                        title = "Choisir un fichier"
+                        title = "Choisir des fichiers"
                         extensionFilters.addAll(
                             FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
                         )
                     }
-                    val selectedFile = fileChooser.showOpenDialog(currentWindow)
-                    if (selectedFile != null) {
-                        val words = JavaFileReader().readOne(selectedFile.toString())
-                        println(words.size.toString() + " mots ont été trouvés :")
+                    val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
+                    if (selectedFiles != null) {
+                        for (file in selectedFiles) {
+                            val words = JavaFileReader().readOne(file.toString())
+                            println(words.size.toString() + " mots ont été trouvés dans ${file.name}:")
 
-                        println("---------------------------------------------")
+                            println("---------------------------------------------")
 
-                        val analytics = WordAnalyticsService()
-                        val wordRank = analytics.wordRank(words)
+                            val analytics = WordAnalyticsService()
+                            val wordRank = analytics.wordRank(words)
 
-                        println("Voici la liste des mots trouvés par occurence")
-                        for ((word, count) in wordRank) {
-                            println("$word  $count")
+                            println("Voici la liste des mots trouvés par occurence dans ${file.name}")
+                            for ((word, count) in wordRank) {
+                                println("$word  $count")
+                            }
+
+                            val projectDao = JsonProjectDao("projects.json")
+                            val project = Project(words.map { it }.toList())
+                            projectDao.saveProject(project)
+                            println(file)
                         }
-
-                        val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
-                        println(selectedFile)
                     }
                 }
             }
@@ -227,31 +229,42 @@ class MainView : View() {
             val addButton = button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
                 action {
-                    val newEntry = GlossaryEntry(
-                        mot = motInput.text,
-                        definition = definitionInput.text,
-                        primaryContext = primaryContextInput.text,
-                        secondaryContext = secondaryContextInput.text,
-                        synonym = synonymeInput.text,
-                        antonym = antonymeInput.text
-                    )
-                    glossaryEntries.add(newEntry)
+                    if (motInput.text.isBlank() || primaryContextInput.text.isBlank()) {
+                        alert(
+                            type = Alert.AlertType.WARNING,
+                            header = myBundle.getString("missing_fields_header"),
+                            content = myBundle.getString("missing_fields_content")
+                        )
+                    } else {
+                        val newEntry = GlossaryEntry(
+                            mot = motInput.text,
+                            definition = definitionInput.text,
+                            primaryContext = primaryContextInput.text,
+                            secondaryContext = secondaryContextInput.text,
+                            synonym = synonymeInput.text,
+                            antonym = antonymeInput.text
+                        )
 
-                    // Réinitialiser les champs de texte
-                    motInput.clear()
-                    synonymeInput.clear()
-                    definitionInput.clear()
-                    primaryContextInput.clear()
-                    antonymeInput.clear()
-                    secondaryContextInput.clear()
+                        val duplicate = glossaryEntries.any { it.mot == newEntry.mot }
+                        if (duplicate) {
+                            alert(
+                                type = Alert.AlertType.WARNING,
+                                header = myBundle.getString("duplicate_header"),
+                                content = myBundle.getString("duplicate_content")
+                            )
+                        } else {
+                            glossaryEntries.add(newEntry)
+                            motInput.clear()
+                            synonymeInput.clear()
+                            definitionInput.clear()
+                            primaryContextInput.clear()
+                            antonymeInput.clear()
+                            secondaryContextInput.clear()
+                        }
+                    }
                 }
-            }
 
-            // Lier la propriété 'disable' à la condition de validation
-            addButton.disableProperty().bind(
-                motInput.textProperty().isBlank()
-                    .or(primaryContextInput.textProperty().isBlank())
-            )
+            }
         }
     }
 }
