@@ -59,10 +59,10 @@ class MainView : View() {
         }
         form {
             fieldset {
-                field(myBundle.getString("token_label")) { this += motInput }
+                field(myBundle.getString("token_label") + myBundle.getString("required_field")) { this += motInput }
                 field(myBundle.getString("synonym_label")) { this += synonymeInput }
                 field(myBundle.getString("definition_label")) { this += definitionInput }
-                field(myBundle.getString("primary_context_label")) { this += primaryContextInput }
+                field(myBundle.getString("primary_context_label") + myBundle.getString("required_field")) { this += primaryContextInput }
                 field(myBundle.getString("antonym_label")) { this += antonymeInput }
                 field(myBundle.getString("secondary_context_label")) { this += secondaryContextInput }
             }
@@ -204,11 +204,7 @@ class MainView : View() {
             // Lier la propriété 'disable' à la condition de validation
             addButton.disableProperty().bind(
                 motInput.textProperty().isBlank()
-                    .or(synonymeInput.textProperty().isBlank())
-                    .or(definitionInput.textProperty().isBlank())
                     .or(primaryContextInput.textProperty().isBlank())
-                    .or(antonymeInput.textProperty().isBlank())
-                    .or(secondaryContextInput.textProperty().isBlank())
             )
         }
     }
