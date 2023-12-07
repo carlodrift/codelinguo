@@ -1,12 +1,12 @@
 package fr.unilim.saes5.persistence;
 
-import fr.unilim.saes5.model.Project;
+import fr.unilim.saes5.model.Glossary;
 
 import java.util.List;
 
 public interface ProjectDao {
 
-    void saveProject(Project project);
+    void saveProject(Glossary project);
 
-    List<Project> getAllProjects();
+    List<Glossary> getAllProjects();
 }

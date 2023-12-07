@@ -1,6 +1,6 @@
 package fr.unilim.saes5.view
 
-import fr.unilim.saes5.model.Project
+import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
@@ -189,8 +189,8 @@ class MainView : View() {
                         }
 
                         val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
+                        val glossary = Glossary(words.map { it }.toList())
+                        projectDao.saveProject(glossary)
                         println(selectedFile)
                     }
                 }
@@ -217,8 +217,8 @@ class MainView : View() {
                         }
 
                         val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
+                        val glossary = Glossary(words.map { it }.toList())
+                        projectDao.saveProject(glossary)
                         println(selectedDirectory)
                     }
                 }
