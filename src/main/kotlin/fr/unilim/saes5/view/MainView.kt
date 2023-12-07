@@ -188,11 +188,7 @@ class MainView : View() {
             // Lier la propriété 'disable' à la condition de validation
             addButton.disableProperty().bind(
                 motInput.textProperty().isBlank()
-                    .or(synonymeInput.textProperty().isBlank())
-                    .or(definitionInput.textProperty().isBlank())
                     .or(primaryContextInput.textProperty().isBlank())
-                    .or(antonymeInput.textProperty().isBlank())
-                    .or(secondaryContextInput.textProperty().isBlank())
             )
         }
     }
