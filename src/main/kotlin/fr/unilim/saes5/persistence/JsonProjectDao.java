@@ -1,8 +1,10 @@
 package fr.unilim.saes5.persistence;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import fr.unilim.saes5.model.Project;
+import fr.unilim.saes5.model.context.Context;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,7 +23,9 @@ public class JsonProjectDao implements ProjectDao {
 
     public JsonProjectDao(String filePath) {
         this.jsonFile = new File(filePath);
-        this.gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Context.class, new ContextDeserializer());
+        this.gson = gsonBuilder.create();
         if (!this.jsonFile.exists()) {
             try {
                 this.jsonFile.createNewFile();
