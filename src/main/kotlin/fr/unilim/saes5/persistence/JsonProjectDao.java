@@ -2,7 +2,7 @@ package fr.unilim.saes5.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import fr.unilim.saes5.model.Glossary;
+import fr.unilim.saes5.model.Project;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,16 +33,16 @@ public class JsonProjectDao implements ProjectDao {
     }
 
     @Override
-    public void saveProject(Glossary project) {
-        List<Glossary> projects = this.getAllProjects();
+    public void saveProject(Project project) {
+        List<Project> projects = this.getAllProjects();
         projects.add(project);
         this.writeListToFile(projects);
     }
 
     @Override
-    public List<Glossary> getAllProjects() {
+    public List<Project> getAllProjects() {
         try (Reader reader = new FileReader(this.jsonFile)) {
-            Type listType = new TypeToken<ArrayList<Glossary>>() {
+            Type listType = new TypeToken<ArrayList<Project>>() {
             }.getType();
             return this.gson.fromJson(reader, listType);
         } catch (IOException e) {
@@ -51,7 +51,7 @@ public class JsonProjectDao implements ProjectDao {
         }
     }
 
-    private void writeListToFile(List<Glossary> projects) {
+    private void writeListToFile(List<Project> projects) {
         try (Writer writer = new FileWriter(this.jsonFile, false)) {
             this.gson.toJson(projects, writer);
         } catch (IOException e) {
