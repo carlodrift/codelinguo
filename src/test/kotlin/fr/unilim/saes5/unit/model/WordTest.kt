@@ -1,4 +1,4 @@
-package fr.unilim.saes5.unit
+package fr.unilim.saes5.unit.model
 
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.Context

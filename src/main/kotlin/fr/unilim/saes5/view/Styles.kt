@@ -1,11 +1,8 @@
-package fr.unilim.saes5
+package fr.unilim.saes5.view
 
-import javafx.scene.effect.BlurType
-import javafx.scene.effect.DropShadow
-import javafx.scene.paint.Color
+import javafx.scene.Cursor
 import javafx.scene.text.FontWeight
 import tornadofx.*
-import javafx.scene.Cursor
 
 class Styles : Stylesheet() {
     companion object {
@@ -13,6 +10,9 @@ class Styles : Stylesheet() {
         val addButton by cssclass()
         val helpButton by cssclass()
         val downloadButton by cssclass()
+        val customTextField by cssclass()
+        val customTableView by cssclass()
+        val customTableHeader by cssclass()
     }
 
     init {
@@ -34,7 +34,6 @@ class Styles : Stylesheet() {
             }
             // ... autres propriétés
         }
-
 
         helpButton {
             fontSize = 18.px
@@ -66,7 +65,21 @@ class Styles : Stylesheet() {
             }
         }
 
+        customTextField {
+            borderWidth += box(1.px)
+            borderColor += box(c(0, 0, 0, 1.0))
+        }
 
+        customTableView {
+            backgroundColor += c("#E5E5E5")
+            borderWidth += box(1.px)
+            borderColor += box(c("#8C7E7E"))
+            tabMaxWidth = 200.px
+        }
 
+        customTableHeader {
+            textFill = c("#FFFFFF")
+            backgroundColor += c("#736C6C")
+        }
     }
 }
