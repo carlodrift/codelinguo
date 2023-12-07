@@ -47,7 +47,7 @@ class MainView : View() {
 
     override val root = vbox(5.0) {
         tableview(glossaryEntries) {
-            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
             readonlyColumn(myBundle.getString("token_label"), GlossaryEntry::mot)
             readonlyColumn(myBundle.getString("definition_label"), GlossaryEntry::definition)
@@ -236,15 +236,24 @@ class MainView : View() {
                         synonym = synonymeInput.text,
                         antonym = antonymeInput.text
                     )
-                    glossaryEntries.add(newEntry)
 
-                    // Réinitialiser les champs de texte
-                    motInput.clear()
-                    synonymeInput.clear()
-                    definitionInput.clear()
-                    primaryContextInput.clear()
-                    antonymeInput.clear()
-                    secondaryContextInput.clear()
+                    val duplicate = glossaryEntries.any { it.mot == newEntry.mot }
+                    if (duplicate) {
+                        alert(
+                            type = Alert.AlertType.WARNING,
+                            header = myBundle.getString("duplicate_header"),
+                            content = myBundle.getString("duplicate_content")
+                        )
+                    } else {
+                        glossaryEntries.add(newEntry)
+                        
+                        motInput.clear()
+                        synonymeInput.clear()
+                        definitionInput.clear()
+                        primaryContextInput.clear()
+                        antonymeInput.clear()
+                        secondaryContextInput.clear()
+                    }
                 }
             }
 
