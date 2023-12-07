@@ -228,40 +228,42 @@ class MainView : View() {
             val addButton = button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
                 action {
-                    val newEntry = GlossaryEntry(
-                        mot = motInput.text,
-                        definition = definitionInput.text,
-                        primaryContext = primaryContextInput.text,
-                        secondaryContext = secondaryContextInput.text,
-                        synonym = synonymeInput.text,
-                        antonym = antonymeInput.text
-                    )
-
-                    val duplicate = glossaryEntries.any { it.mot == newEntry.mot }
-                    if (duplicate) {
+                    if (motInput.text.isBlank() || primaryContextInput.text.isBlank()) {
                         alert(
                             type = Alert.AlertType.WARNING,
-                            header = myBundle.getString("duplicate_header"),
-                            content = myBundle.getString("duplicate_content")
+                            header = myBundle.getString("missing_fields_header"),
+                            content = myBundle.getString("missing_fields_content")
                         )
                     } else {
-                        glossaryEntries.add(newEntry)
-                        
-                        motInput.clear()
-                        synonymeInput.clear()
-                        definitionInput.clear()
-                        primaryContextInput.clear()
-                        antonymeInput.clear()
-                        secondaryContextInput.clear()
+                        val newEntry = GlossaryEntry(
+                            mot = motInput.text,
+                            definition = definitionInput.text,
+                            primaryContext = primaryContextInput.text,
+                            secondaryContext = secondaryContextInput.text,
+                            synonym = synonymeInput.text,
+                            antonym = antonymeInput.text
+                        )
+
+                        val duplicate = glossaryEntries.any { it.mot == newEntry.mot }
+                        if (duplicate) {
+                            alert(
+                                type = Alert.AlertType.WARNING,
+                                header = myBundle.getString("duplicate_header"),
+                                content = myBundle.getString("duplicate_content")
+                            )
+                        } else {
+                            glossaryEntries.add(newEntry)
+                            motInput.clear()
+                            synonymeInput.clear()
+                            definitionInput.clear()
+                            primaryContextInput.clear()
+                            antonymeInput.clear()
+                            secondaryContextInput.clear()
+                        }
                     }
                 }
-            }
 
-            // Lier la propriété 'disable' à la condition de validation
-            addButton.disableProperty().bind(
-                motInput.textProperty().isBlank()
-                    .or(primaryContextInput.textProperty().isBlank())
-            )
+            }
         }
     }
 }
