@@ -4,6 +4,7 @@ import fr.unilim.saes5.model.Project
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
+import javafx.application.Platform
 import javafx.scene.control.*
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
@@ -100,6 +101,21 @@ class MainView : View() {
                         dialogPane.content = textFlow
                         dialogPane.setPrefSize(600.0, 350.0)
                     }
+
+                    val owner = this@MainView.currentWindow
+
+                    // Utilise Platform.runLater pour s'assurer que le calcul de la position se fait après le rendu de la boîte de dialogue
+                    Platform.runLater {
+                        if (owner != null) {
+                            val scene = owner.scene
+                            val x = owner.x + scene.x + (scene.width - dialog.dialogPane.width) / 2
+                            val y = owner.y + scene.y + (scene.height - dialog.dialogPane.height) / 2
+                            dialog.x = x
+                            dialog.y = y
+                        }
+                    }
+
+                    // Affiche la boîte de dialogue et attend que l'utilisateur la ferme
                     dialog.showAndWait()
                 }
             }
