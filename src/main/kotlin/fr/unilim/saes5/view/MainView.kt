@@ -170,7 +170,7 @@ class MainView : View() {
                     val fileChooser = FileChooser().apply {
                         title = "Choisir un fichier"
                         extensionFilters.addAll(
-                            FileChooser.ExtensionFilter("Tous les Fichiers", "*.*"),
+                            FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
                         )
                     }
                     val selectedFile = fileChooser.showOpenDialog(currentWindow)
