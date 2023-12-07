@@ -8,12 +8,14 @@ import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.JsonProjectDao
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
+import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
+import javafx.util.Callback
 import tornadofx.*
 import java.util.*
 
@@ -84,6 +86,31 @@ class MainView : View() {
             column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
                 text = cell?.joinToString { it.token ?: "" } ?: ""
             }
+            val removeColumn = TableColumn<Word, Word>("Remove")
+            removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
+            removeColumn.cellFactory = Callback {
+                object : TableCell<Word, Word>() {
+                    private val button = Button("X").apply {
+                        action {
+                            val item = tableRow.item
+                            item?.let {
+                                words.remove(it)
+                                updateJsonFile()
+                            }
+                        }
+                    }
+
+                    override fun updateItem(item: Word?, empty: Boolean) {
+                        super.updateItem(item, empty)
+                        if (empty) {
+                            graphic = null
+                        } else {
+                            graphic = button
+                        }
+                    }
+                }
+            }
+            columns.add(removeColumn)
             prefHeight = 350.0
         }
 
@@ -221,7 +248,7 @@ class MainView : View() {
 
                             val projectDao = JsonProjectDao("projects.json")
                             val project = Project(words.map { it }.toList())
-                            projectDao.saveProject(project)
+                            projectDao.saveProject(project, true)
                             println(file)
                         }
                     }
@@ -250,7 +277,7 @@ class MainView : View() {
 
                         val projectDao = JsonProjectDao("projects.json")
                         val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project)
+                        projectDao.saveProject(project, true)
                         println(selectedDirectory)
                     }
                 }
@@ -293,12 +320,18 @@ class MainView : View() {
 
                             val projectDao = JsonProjectDao("glossary.json")
                             val project = Project(words.toList())
-                            projectDao.saveProject(project)
+                            projectDao.saveProject(project, false)
                         }
                     }
                 }
 
             }
         }
+    }
+
+    private fun updateJsonFile() {
+        val projectDao = JsonProjectDao("glossary.json")
+        val project = Project(words.toList())
+        projectDao.saveProject(project, false)
     }
 }

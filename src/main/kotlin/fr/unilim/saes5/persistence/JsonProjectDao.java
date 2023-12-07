@@ -37,10 +37,16 @@ public class JsonProjectDao implements ProjectDao {
     }
 
     @Override
-    public void saveProject(Project project) {
-        List<Project> projects = this.getAllProjects();
-        projects.add(project);
-        this.writeListToFile(projects);
+    public void saveProject(Project project, boolean append) {
+        if (append) {
+            List<Project> projects = this.getAllProjects();
+            projects.add(project);
+            this.writeListToFile(projects);
+            return;
+        }
+        List<Project> singleProjectList = new ArrayList<>();
+        singleProjectList.add(project);
+        this.writeListToFile(singleProjectList);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProjectDao {
 
-    void saveProject(Project project);
+    void saveProject(Project project, boolean append);
 
     List<Project> getAllProjects();
 }
