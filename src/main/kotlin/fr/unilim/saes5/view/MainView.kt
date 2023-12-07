@@ -86,7 +86,7 @@ class MainView : View() {
             column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
                 text = cell?.joinToString { it.token ?: "" } ?: ""
             }
-            val removeColumn = TableColumn<Word, Word>("Remove")
+            val removeColumn = TableColumn<Word, Word>(myBundle.getString("actions_label"))
             removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
             removeColumn.cellFactory = Callback {
                 object : TableCell<Word, Word>() {
