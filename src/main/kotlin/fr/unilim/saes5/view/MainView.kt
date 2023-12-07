@@ -144,12 +144,13 @@ class MainView : View() {
                         )
 
                         dialogPane.content = textFlow
-                        dialogPane.setPrefSize(600.0, 350.0)
+                        dialogPane.prefWidth = primaryStage.width * 0.8 // 80% de la largeur de la fenêtre principale
+                        dialogPane.prefHeight = primaryStage.height * 0.5 // 50% de la hauteur de la fenêtre principale
+
                     }
 
                     val owner = this@MainView.currentWindow
 
-                    // Utilise Platform.runLater pour s'assurer que le calcul de la position se fait après le rendu de la boîte de dialogue
                     Platform.runLater {
                         if (owner != null) {
                             val scene = owner.scene
@@ -160,7 +161,7 @@ class MainView : View() {
                         }
                     }
 
-                    // Affiche la boîte de dialogue et attend que l'utilisateur la ferme
+
                     dialog.showAndWait()
                 }
             }
