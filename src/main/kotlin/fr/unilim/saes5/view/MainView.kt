@@ -1,11 +1,11 @@
 package fr.unilim.saes5.view
 
-import fr.unilim.saes5.model.Project
+import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
-import fr.unilim.saes5.persistence.JsonProjectDao
+import fr.unilim.saes5.persistence.JsonGlossaryDao
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.beans.property.ReadOnlyObjectWrapper
@@ -55,7 +55,7 @@ class MainView : View() {
     }
 
     private fun loadSavedWords() {
-        val projectDao = JsonProjectDao("glossary.json")
+        val projectDao = JsonGlossaryDao("glossary.json")
         val projects = projectDao.allProjects
 
         projects.forEach { project ->
@@ -245,11 +245,6 @@ class MainView : View() {
                             for ((word, count) in wordRank) {
                                 println("$word  $count")
                             }
-
-                            val projectDao = JsonProjectDao("projects.json")
-                            val project = Project(words.map { it }.toList())
-                            projectDao.saveProject(project, true)
-                            println(file)
                         }
                     }
                 }
@@ -274,11 +269,6 @@ class MainView : View() {
                         for ((word, count) in wordRank) {
                             println("$word  $count")
                         }
-
-                        val projectDao = JsonProjectDao("projects.json")
-                        val project = Project(words.map { it }.toList())
-                        projectDao.saveProject(project, true)
-                        println(selectedDirectory)
                     }
                 }
             }
@@ -318,9 +308,7 @@ class MainView : View() {
                             antonymeInput.clear()
                             secondaryContextInput.clear()
 
-                            val projectDao = JsonProjectDao("glossary.json")
-                            val project = Project(words.toList())
-                            projectDao.saveProject(project, false)
+                            updateJsonFile()
                         }
                     }
                 }
@@ -330,8 +318,8 @@ class MainView : View() {
     }
 
     private fun updateJsonFile() {
-        val projectDao = JsonProjectDao("glossary.json")
-        val project = Project(words.toList())
-        projectDao.saveProject(project, false)
+        val projectDao = JsonGlossaryDao("glossary.json")
+        val glossary = Glossary(words.toList())
+        projectDao.saveProject(glossary)
     }
 }

@@ -3,7 +3,7 @@ package fr.unilim.saes5.persistence;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import fr.unilim.saes5.model.Project;
+import fr.unilim.saes5.model.Glossary;
 import fr.unilim.saes5.model.context.Context;
 
 import java.io.File;
@@ -16,12 +16,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonProjectDao implements ProjectDao {
+public class JsonGlossaryDao implements GlossaryDao {
 
     private final File jsonFile;
     private final Gson gson;
 
-    public JsonProjectDao(String filePath) {
+    public JsonGlossaryDao(String filePath) {
         this.jsonFile = new File(filePath);
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Context.class, new ContextDeserializer());
@@ -37,22 +37,16 @@ public class JsonProjectDao implements ProjectDao {
     }
 
     @Override
-    public void saveProject(Project project, boolean append) {
-        if (append) {
-            List<Project> projects = this.getAllProjects();
-            projects.add(project);
-            this.writeListToFile(projects);
-            return;
-        }
-        List<Project> singleProjectList = new ArrayList<>();
+    public void saveProject(Glossary project) {
+        List<Glossary> singleProjectList = new ArrayList<>();
         singleProjectList.add(project);
         this.writeListToFile(singleProjectList);
     }
 
     @Override
-    public List<Project> getAllProjects() {
+    public List<Glossary> getAllProjects() {
         try (Reader reader = new FileReader(this.jsonFile)) {
-            Type listType = new TypeToken<ArrayList<Project>>() {
+            Type listType = new TypeToken<ArrayList<Glossary>>() {
             }.getType();
             return this.gson.fromJson(reader, listType);
         } catch (IOException e) {
@@ -61,7 +55,7 @@ public class JsonProjectDao implements ProjectDao {
         }
     }
 
-    private void writeListToFile(List<Project> projects) {
+    private void writeListToFile(List<Glossary> projects) {
         try (Writer writer = new FileWriter(this.jsonFile, false)) {
             this.gson.toJson(projects, writer);
         } catch (IOException e) {
