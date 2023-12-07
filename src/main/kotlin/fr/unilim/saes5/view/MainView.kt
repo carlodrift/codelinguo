@@ -16,7 +16,7 @@ import java.util.*
 
 class MainView : View() {
 
-    private val glossaryEntries = mutableListOf<GlossaryEntry>().observable()
+    private val glossaryEntries = mutableListOf<GlossaryEntry>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private val motInput: TextField = textfield {
