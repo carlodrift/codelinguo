@@ -186,6 +186,12 @@ class MainView : View() {
             paddingHorizontal = 20.0
             alignment = Pos.BASELINE_RIGHT
 
+            button(myBundle.getString("button_quit")) {
+                addClass(Styles.helpButton)
+                action {
+                    Platform.exit()
+                }
+            }
             button(myBundle.getString("button_help")) {
                 addClass(Styles.helpButton)
                 action {
