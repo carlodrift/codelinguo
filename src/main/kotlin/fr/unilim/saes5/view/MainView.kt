@@ -25,6 +25,7 @@ import java.util.*
 class MainView : View() {
     private val completionService = CompletionService()
     private val activeContextMenus = mutableMapOf<TextField, ContextMenu>()
+    private var wordTableView: TableView<Word> by singleAssign()
 
     private val words = mutableListOf<Word>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
@@ -82,7 +83,7 @@ class MainView : View() {
         secondaryContextInput.textProperty().addListener { _, _, _ ->
             updateAutoCompletion(secondaryContextInput)
         }
-        tableview(words) {
+        wordTableView = tableview(words) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
             addClass(Styles.customTableView)
             readonlyColumn(myBundle.getString("token_label"), Word::token)
@@ -305,6 +306,9 @@ class MainView : View() {
                             updateCompletionService(newWord)
                             clearInputFields()
                             updateJsonFile()
+                            if (wordTableView != null) {
+                                wordTableView.refresh()
+                            }
                         }
                     }
                 }

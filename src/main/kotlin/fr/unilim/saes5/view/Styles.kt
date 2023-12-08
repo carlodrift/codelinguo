@@ -101,8 +101,6 @@ class Styles : Stylesheet() {
             }
         }
 
-
-
         tableCell {
             alignment = Pos.CENTER
         }
