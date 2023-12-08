@@ -1,6 +1,8 @@
 package fr.unilim.saes5.view
 
+import javafx.geometry.Pos
 import javafx.scene.Cursor
+import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
@@ -13,6 +15,7 @@ class Styles : Stylesheet() {
         val customTextField by cssclass()
         val customTableView by cssclass()
         val customTableHeader by cssclass()
+        val removeButton by cssclass()
     }
 
     init {
@@ -83,5 +86,33 @@ class Styles : Stylesheet() {
             textFill = c("#FFFFFF")
             backgroundColor += c("#736C6C")
         }
+
+
+        removeButton {
+            backgroundColor += Color.TRANSPARENT // Fond transparent
+            borderColor += box(Color.TRANSPARENT) // Bordure transparente
+            textFill = Color.RED
+            fontWeight = FontWeight.BOLD
+            padding = box(0.px, 0.px, 0.px, 0.px)
+
+            and(hover) {
+                scaleX = 1.2
+                scaleY = 1.2
+            }
+        }
+
+
+
+        tableCell {
+            alignment = Pos.CENTER
+        }
+
+        columnHeader {
+            label {
+                alignment = Pos.CENTER
+            }
+        }
     }
+
+
 }

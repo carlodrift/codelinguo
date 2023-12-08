@@ -100,11 +100,12 @@ class MainView : View() {
             column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
                 text = cell?.joinToString { it.token ?: "" } ?: ""
             }
-            val removeColumn = TableColumn<Word, Word>(myBundle.getString("actions_label"))
+            val removeColumn = TableColumn<Word, Word>("")
             removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
             removeColumn.cellFactory = Callback {
                 object : TableCell<Word, Word>() {
                     private val button = Button("X").apply {
+                        addClass(Styles.removeButton)
                         action {
                             val item = tableRow.item
                             item?.let {
@@ -214,8 +215,8 @@ class MainView : View() {
                         )
 
                         dialogPane.content = textFlow
-                        dialogPane.prefWidth = primaryStage.width * 0.8 // 80% de la largeur de la fenêtre principale
-                        dialogPane.prefHeight = primaryStage.height * 0.5 // 50% de la hauteur de la fenêtre principale
+                        dialogPane.prefWidth = primaryStage.width * 0.8
+                        dialogPane.prefHeight = primaryStage.height * 0.5
 
                     }
 
