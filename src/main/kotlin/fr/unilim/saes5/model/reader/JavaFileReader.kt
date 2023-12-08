@@ -20,13 +20,21 @@ class JavaFileReader : IRead {
 
     }
 
+    override fun read(paths: List<String>): List<Word?>? {
+        val words = mutableListOf<Word>()
+        for (path in paths) {
+            words.addAll(readOne(path));
+        }
+
+        return words;
+    }
+
     override fun readOne(path: String): List<Word> {
         if (path.endsWith(".java")) {
             val lines = File(path).bufferedReader().readLines();
             return JavaFileSanitizer().sanitizeLines(lines);
         }
 
-        println("Mauvais format de fichier !")
         return emptyList()
     }
 }

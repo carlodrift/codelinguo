@@ -6,5 +6,7 @@ interface IRead {
     fun read(path: String): List<Word>?
     fun readOne(path: String): List<Word?>?
 
+    fun read(paths: List<String>): List<Word?>?
+
 
 }
