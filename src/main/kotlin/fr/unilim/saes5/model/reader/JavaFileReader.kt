@@ -20,7 +20,7 @@ class JavaFileReader : IRead {
 
     }
 
-    override fun read(paths: List<String>): List<Word?>? {
+    override fun read(paths: List<String>): List<Word> {
         val words = mutableListOf<Word>()
         for (path in paths) {
             words.addAll(readOne(path));

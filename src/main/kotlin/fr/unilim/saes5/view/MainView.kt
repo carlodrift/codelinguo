@@ -254,12 +254,11 @@ class MainView : View() {
                     }
                     val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                     if (selectedFiles != null) {
-                        selectedFiles.forEach { file ->
-                            val words = JavaFileReader().readOne(file.toString())
-                            val analytics = WordAnalyticsService()
-                            val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                            openWordOccurrenceView(wordRank)
-                        }
+                        val filePaths = selectedFiles.map { it.path }
+                        val words = JavaFileReader().read(filePaths)
+                        val analytics = WordAnalyticsService()
+                        val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
+                        openWordOccurrenceView(wordRank)
                     }
                 }
             }
