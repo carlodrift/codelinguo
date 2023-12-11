@@ -30,13 +30,13 @@ class MainView : View() {
     private val words = mutableListOf<Word>().asObservable()
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
-    private val motInput: TextField = textfield {
+    private val tokenInput: TextField = textfield {
         addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_joyeux")
+        promptText = myBundle.getString("prompt_token")
     }
-    private val synonymeInput: TextField = textfield {
+    private val synonymInput: TextField = textfield {
         addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_heureux")
+        promptText = myBundle.getString("prompt_synonym")
     }
     private val definitionInput: TextArea = textarea {
         addClass(Styles.customTextField)
@@ -45,15 +45,15 @@ class MainView : View() {
     }
     private val primaryContextInput: TextField = textfield {
         addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_joueur")
+        promptText = myBundle.getString("prompt_primary_context")
     }
-    private val antonymeInput: TextField = textfield {
+    private val antonymInput: TextField = textfield {
         addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_aigri")
+        promptText = myBundle.getString("prompt_antonym")
     }
     private val secondaryContextInput: TextField = textfield {
         addClass(Styles.customTextField)
-        promptText = myBundle.getString("prompt_psychologie")
+        promptText = myBundle.getString("prompt_secondary_context")
     }
 
     init {
@@ -136,7 +136,7 @@ class MainView : View() {
                     field {
                         vbox {
                             label(myBundle.getString("token_label") + myBundle.getString("required_field"))
-                            this += motInput
+                            this += tokenInput
                         }
                     }
                     field {
@@ -158,13 +158,13 @@ class MainView : View() {
                     field {
                         vbox {
                             label(myBundle.getString("synonym_label"))
-                            this += synonymeInput
+                            this += synonymInput
                         }
                     }
                     field {
                         vbox {
                             label(myBundle.getString("antonym_label"))
-                            this += antonymeInput
+                            this += antonymInput
                         }
                     }
                 }
@@ -282,21 +282,21 @@ class MainView : View() {
             button(myBundle.getString("button_add")) {
                 addClass(Styles.addButton)
                 action {
-                    if (motInput.text.isBlank() || primaryContextInput.text.isBlank()) {
+                    if (tokenInput.text.isBlank() || primaryContextInput.text.isBlank()) {
                         alert(
                             type = Alert.AlertType.WARNING,
                             header = myBundle.getString("missing_fields_header"),
                             content = myBundle.getString("missing_fields_content")
                         )
                     } else {
-                        val newWord = Word(motInput.text).apply {
+                        val newWord = Word(tokenInput.text).apply {
                             definition = definitionInput.text
                             context = listOf(
                                 PrimaryContext(Word(primaryContextInput.text)),
                                 SecondaryContext(Word(secondaryContextInput.text))
                             )
-                            synonyms = setOf(Word(synonymeInput.text))
-                            antonyms = setOf(Word(antonymeInput.text))
+                            synonyms = setOf(Word(synonymInput.text))
+                            antonyms = setOf(Word(antonymInput.text))
                         }
 
                         val duplicate = words.any { it == newWord }
@@ -379,11 +379,11 @@ class MainView : View() {
     }
 
     private fun clearInputFields() {
-        motInput.clear()
-        synonymeInput.clear()
+        tokenInput.clear()
+        synonymInput.clear()
         definitionInput.clear()
         primaryContextInput.clear()
-        antonymeInput.clear()
+        antonymInput.clear()
         secondaryContextInput.clear()
     }
 }
