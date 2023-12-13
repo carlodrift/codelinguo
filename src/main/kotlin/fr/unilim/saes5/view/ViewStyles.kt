@@ -6,7 +6,7 @@ import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
-class Styles : Stylesheet() {
+class ViewStyles : Stylesheet() {
     companion object {
         val heading by cssclass()
         val addButton by cssclass()

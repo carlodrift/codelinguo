@@ -1,12 +1,12 @@
 package fr.unilim.saes5
 
 import fr.unilim.saes5.view.MainView
-import fr.unilim.saes5.view.Styles
+import fr.unilim.saes5.view.ViewStyles
 import javafx.stage.Stage
 import tornadofx.App
 import tornadofx.launch
 
-class MainApp : App(MainView::class, Styles::class) {
+class MainApp : App(MainView::class, ViewStyles::class) {
     override fun start(stage: Stage) {
         with(stage) {
             isResizable = false

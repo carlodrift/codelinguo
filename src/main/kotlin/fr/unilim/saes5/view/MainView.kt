@@ -1,17 +1,14 @@
 package fr.unilim.saes5.view
 
-import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
-import fr.unilim.saes5.persistence.JsonGlossaryDao
 import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.geometry.Pos
-import javafx.geometry.Side
 import javafx.scene.control.*
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
@@ -31,61 +28,45 @@ class MainView : View() {
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private val tokenInput: TextField = textfield {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_token")
     }
     private val synonymInput: TextField = textfield {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_synonym")
     }
     private val definitionInput: TextArea = textarea {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_definition")
         prefHeight = 145.0
     }
     private val primaryContextInput: TextField = textfield {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_primary_context")
     }
     private val antonymInput: TextField = textfield {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_antonym")
     }
     private val secondaryContextInput: TextField = textfield {
-        addClass(Styles.customTextField)
+        addClass(ViewStyles.customTextField)
         promptText = myBundle.getString("prompt_secondary_context")
     }
 
     init {
-        loadSavedWords()
-    }
-
-    private fun loadSavedWords() {
-        val projectDao = JsonGlossaryDao("glossary.json")
-        val projects = projectDao.allProjects
-
-        projects.forEach { project ->
-            project.words?.forEach { word ->
-                word.context?.forEach { context ->
-                    completionService.addCompletion(context.word.token ?: "")
-                }
-                if (!words.contains(word)) {
-                    words.add(word)
-                }
-            }
-        }
+        DataLoader.loadSavedWords(words, completionService)
     }
 
     override val root = vbox(5.0) {
         primaryContextInput.textProperty().addListener { _, _, _ ->
-            updateAutoCompletion(primaryContextInput)
+            ViewUtilities.updateAutoCompletion(primaryContextInput, completionService, activeContextMenus)
         }
         secondaryContextInput.textProperty().addListener { _, _, _ ->
-            updateAutoCompletion(secondaryContextInput)
+            ViewUtilities.updateAutoCompletion(secondaryContextInput, completionService, activeContextMenus)
         }
         wordTableView = tableview(words) {
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
-            addClass(Styles.customTableView)
+            addClass(ViewStyles.customTableView)
             readonlyColumn(myBundle.getString("token_label"), Word::token)
             readonlyColumn(myBundle.getString("definition_label"), Word::definition)
 
@@ -106,12 +87,12 @@ class MainView : View() {
             removeColumn.cellFactory = Callback {
                 object : TableCell<Word, Word>() {
                     private val button = Button("X").apply {
-                        addClass(Styles.removeButton)
+                        addClass(ViewStyles.removeButton)
                         action {
                             val item = tableRow.item
                             item?.let {
                                 words.remove(it)
-                                updateJsonFile()
+                                ViewUtilities.updateJsonFile(words)
                             }
                         }
                     }
@@ -187,13 +168,13 @@ class MainView : View() {
             alignment = Pos.BASELINE_RIGHT
 
             button(myBundle.getString("button_quit")) {
-                addClass(Styles.helpButton)
+                addClass(ViewStyles.helpButton)
                 action {
                     Platform.exit()
                 }
             }
             button(myBundle.getString("button_help")) {
-                addClass(Styles.helpButton)
+                addClass(ViewStyles.helpButton)
                 action {
                     val dialog = Dialog<ButtonType>().apply {
                         initOwner(this@MainView.currentWindow)
@@ -244,7 +225,7 @@ class MainView : View() {
                 }
             }
             button(myBundle.getString("button_download_file")) {
-                addClass(Styles.downloadButton)
+                addClass(ViewStyles.downloadButton)
                 action {
                     val fileChooser = FileChooser().apply {
                         title = "Choisir des fichiers"
@@ -258,12 +239,12 @@ class MainView : View() {
                         val words = JavaFileReader().read(filePaths)
                         val analytics = WordAnalyticsService()
                         val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                        openWordOccurrenceView(wordRank)
+                        ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
                     }
                 }
             }
             button(myBundle.getString("button_download_folder")) {
-                addClass(Styles.downloadButton)
+                addClass(ViewStyles.downloadButton)
                 action {
                     val directoryChooser = DirectoryChooser().apply {
                         title = "Choisir un dossier"
@@ -274,13 +255,13 @@ class MainView : View() {
                             val words = JavaFileReader().read(it.toString())
                             val analytics = WordAnalyticsService()
                             val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                            openWordOccurrenceView(wordRank)
+                            ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
                         }
                     }
                 }
             }
             button(myBundle.getString("button_add")) {
-                addClass(Styles.addButton)
+                addClass(ViewStyles.addButton)
                 action {
                     if (tokenInput.text.isBlank() || primaryContextInput.text.isBlank()) {
                         alert(
@@ -308,9 +289,9 @@ class MainView : View() {
                             )
                         } else {
                             words.add(newWord)
-                            updateCompletionService(newWord)
-                            clearInputFields()
-                            updateJsonFile()
+                            ViewUtilities.updateCompletionService(newWord, completionService)
+                            ViewUtilities.clearInputFields()
+                            ViewUtilities.updateJsonFile(words)
                             if (wordTableView != null) {
                                 wordTableView.refresh()
                             }
@@ -322,68 +303,5 @@ class MainView : View() {
         }
     }
 
-    private fun updateJsonFile() {
-        val projectDao = JsonGlossaryDao("glossary.json")
-        val glossary = Glossary(words.toList())
-        projectDao.saveProject(glossary)
-    }
 
-
-    private fun openWordOccurrenceView(wordRank: Map<String, Int>) {
-        val view = WordOccurrenceView(wordRank)
-        view.openWindow(owner = null, escapeClosesWindow = true)
-    }
-
-    private fun updateAutoCompletion(textField: TextField) {
-        val suggestions = completionService.suggestCompletions(textField.text)
-        if (textField.text.isBlank()) {
-            activeContextMenus[textField]?.hide()
-            return
-        }
-        showSuggestions(textField, suggestions)
-    }
-
-
-    private fun showSuggestions(textField: TextField, suggestions: Set<String>) {
-        var contextMenu = activeContextMenus[textField]
-
-        if (contextMenu == null) {
-            contextMenu = ContextMenu()
-            activeContextMenus[textField] = contextMenu
-        } else {
-            contextMenu.items.clear()
-        }
-
-        suggestions.forEach { suggestion ->
-            val menuItem = MenuItem(suggestion)
-            menuItem.setOnAction {
-                textField.text = suggestion
-                contextMenu.hide()
-            }
-            contextMenu.items.add(menuItem)
-        }
-
-        if (contextMenu.items.isNotEmpty()) {
-            if (!contextMenu.isShowing) {
-                contextMenu.show(textField, Side.BOTTOM, 0.0, 0.0)
-            }
-        } else {
-            contextMenu.hide()
-        }
-    }
-
-    private fun updateCompletionService(word: Word) {
-        word.context?.forEach { context ->
-            completionService.addCompletion(context.word.token ?: "")
-        }
-    }
-
-    private fun clearInputFields() {
-        tokenInput.clear()
-        synonymInput.clear()
-        definitionInput.clear()
-        primaryContextInput.clear()
-        antonymInput.clear()
-        secondaryContextInput.clear()
-    }
 }
