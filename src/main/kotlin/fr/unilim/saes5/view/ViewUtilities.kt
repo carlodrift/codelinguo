@@ -9,6 +9,7 @@ import javafx.geometry.Side
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.TextField
+import javafx.scene.control.TextInputControl
 import java.util.*
 
 object ViewUtilities {
@@ -36,7 +37,7 @@ object ViewUtilities {
         showSuggestions(textField, suggestions, activeContextMenus)
     }
 
-    fun showSuggestions(
+    private fun showSuggestions(
         textField: TextField,
         suggestions: Set<String>,
         activeContextMenus: MutableMap<TextField, ContextMenu>
@@ -74,7 +75,7 @@ object ViewUtilities {
         }
     }
 
-    fun clearInputFields(vararg textFields: TextField) {
-        textFields.forEach { it.clear() }
+    fun clearInputFields(vararg inputs: TextInputControl) {
+        inputs.forEach { it.clear() }
     }
 }
