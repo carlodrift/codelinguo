@@ -25,7 +25,7 @@ class ViewStyles : Stylesheet() {
         }
 
         addButton {
-            fontSize = 18.px // Taille de police en pixels
+            fontSize = 18.px
             cursor = Cursor.HAND
             backgroundColor += c("#84B71A")
             backgroundRadius += box(15.px)
@@ -35,7 +35,6 @@ class ViewStyles : Stylesheet() {
             and(hover) {
                 backgroundColor += c("#388E3C")
             }
-            // ... autres propriétés
         }
 
         helpButton {
@@ -51,7 +50,6 @@ class ViewStyles : Stylesheet() {
             and(hover) {
                 backgroundColor += c("#D7D7D7")
             }
-            // ... autres propriétés
         }
 
         downloadButton {
@@ -89,8 +87,8 @@ class ViewStyles : Stylesheet() {
 
 
         removeButton {
-            backgroundColor += Color.TRANSPARENT // Fond transparent
-            borderColor += box(Color.TRANSPARENT) // Bordure transparente
+            backgroundColor += Color.TRANSPARENT
+            borderColor += box(Color.TRANSPARENT)
             textFill = Color.RED
             fontWeight = FontWeight.BOLD
             padding = box(0.px, 0.px, 0.px, 0.px)
