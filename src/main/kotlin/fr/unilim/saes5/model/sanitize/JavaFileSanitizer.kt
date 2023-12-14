@@ -10,7 +10,7 @@ class JavaFileSanitizer : FileSanitizer() {
             "java", "String", "i", "j", "null", "int", "abstract", "true", "false", "equals", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
             "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
-            "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
+            "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "get", "string",
             "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "println"
         )
 
@@ -59,14 +59,17 @@ class JavaFileSanitizer : FileSanitizer() {
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
-            if (word !in JAVA_RESERVED_KEYWORDS) {
-                splitCamelCase(word).forEach { splitWord ->
+            splitCamelCase(word).forEach { splitWord ->
+                if (splitWord !in JAVA_RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }
         }
     }
 
-    private fun splitCamelCase(word: String): List<String> =
-        word.split(REGEX_CAMEL_CASE).map { it.lowercase(Locale.getDefault()) }
+    private fun splitCamelCase(word: String): List<String> {
+        return word.split(REGEX_CAMEL_CASE)
+            .map { it.lowercase(Locale.getDefault()) }
+            .filter { it.length > 2 }
+    }
 }
