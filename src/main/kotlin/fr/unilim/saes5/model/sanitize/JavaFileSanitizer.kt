@@ -43,21 +43,42 @@ class JavaFileSanitizer : FileSanitizer() {
     }
 
     private fun processLineForComments(line: String): String {
-        var processedLine = line
-
-        when {
-            inBlockComment && line.contains("*/") -> {
-                inBlockComment = false
-                processedLine = line.substringAfter("*/")
-            }
-            line.contains("/*") -> {
-                inBlockComment = true
-                processedLine = line.substringBefore("/*")
-            }
-            line.contains("//") -> processedLine = line.substringBefore("//")
+        if (inBlockComment) {
+            return handleBlockCommentEnd(line)
         }
 
-        return processedLine
+        val processedLine = handleBlockCommentStart(line)
+
+        return handleLineComment(processedLine)
+    }
+
+    private fun handleBlockCommentStart(line: String): String {
+        if (line.contains("/*")) {
+            inBlockComment = true
+            val processedLine = line.substringBefore("/*")
+            return if (line.contains("*/")) {
+                inBlockComment = false
+                processedLine + line.substringAfter("*/")
+            } else {
+                processedLine
+            }
+        }
+        return line
+    }
+
+    private fun handleBlockCommentEnd(line: String): String {
+        if (line.contains("*/")) {
+            inBlockComment = false
+            return line.substringAfter("*/")
+        }
+        return ""
+    }
+
+    private fun handleLineComment(line: String): String {
+        if (!inBlockComment && line.contains("//")) {
+            return line.substringBefore("//")
+        }
+        return line
     }
 
     private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVA_STRING, "")
