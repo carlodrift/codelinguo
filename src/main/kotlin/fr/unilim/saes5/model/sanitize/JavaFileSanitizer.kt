@@ -2,9 +2,9 @@ package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
 import java.io.IOException
+import java.nio.charset.MalformedInputException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 
@@ -16,10 +16,15 @@ class JavaFileSanitizer : FileSanitizer() {
 
         private fun loadJavaReservedKeywords(): Set<String> {
             val path = Paths.get(KEYWORDS_FILE_PATH)
-            if (Files.notExists(path)) {
-                Files.createFile(path)
+            try {
+                if (Files.notExists(path)) {
+                    Files.createFile(path)
+                }
+                return Files.readAllLines(path, StandardCharsets.UTF_8).toSet()
+            } catch (_: IOException) {
+            } catch (_: MalformedInputException) {
             }
-            return Files.readAllLines(path, StandardCharsets.UTF_8).toSet()
+            return emptySet()
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
@@ -37,8 +42,8 @@ class JavaFileSanitizer : FileSanitizer() {
         lines.forEach { line ->
             var processedLine = processLineForComments(line)
             if (processedLine.isNotBlank()
-                && !checkPackageDeclaration(processedLine))
-            {
+                && !checkPackageDeclaration(processedLine)
+            ) {
                 processedLine = removeStringLiterals(processedLine)
                 extractWords(processedLine, words)
             }
