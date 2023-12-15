@@ -1,7 +1,7 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.JsonGlossaryDao
+import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
 

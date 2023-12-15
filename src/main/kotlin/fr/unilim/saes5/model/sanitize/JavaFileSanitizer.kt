@@ -1,11 +1,8 @@
 package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
-import java.io.IOException
-import java.nio.charset.MalformedInputException
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
+import fr.unilim.saes5.persistence.keyword.KeywordDao
+import fr.unilim.saes5.persistence.keyword.TxtKeywordDao
 import java.util.*
 
 
@@ -15,23 +12,14 @@ class JavaFileSanitizer : FileSanitizer() {
         private val JAVA_RESERVED_KEYWORDS = loadJavaReservedKeywords()
 
         private fun loadJavaReservedKeywords(): Set<String> {
-            val path = Paths.get(KEYWORDS_FILE_PATH)
-            try {
-                if (Files.notExists(path)) {
-                    Files.createFile(path)
-                }
-                return Files.readAllLines(path, StandardCharsets.UTF_8).toSet()
-            } catch (_: IOException) {
-            } catch (_: MalformedInputException) {
-            }
-            return emptySet()
+            val loader: KeywordDao = TxtKeywordDao()
+            return loader.loadKeywords()
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
         private val REGEX_JAVA_STRING = "\".*\"".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
         private const val JAVA_PACKAGE_DECLARATION = "package "
-        private const val KEYWORDS_FILE_PATH = "java_reserved_keywords.txt"
     }
 
     private var inBlockComment = false

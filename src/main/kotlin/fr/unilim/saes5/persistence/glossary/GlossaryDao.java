@@ -1,4 +1,4 @@
-package fr.unilim.saes5.persistence;
+package fr.unilim.saes5.persistence.glossary;
 
 import fr.unilim.saes5.model.Glossary;
 

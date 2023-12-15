@@ -1,4 +1,4 @@
-package fr.unilim.saes5.persistence;
+package fr.unilim.saes5.persistence.glossary;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
