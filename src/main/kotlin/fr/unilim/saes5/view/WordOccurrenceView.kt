@@ -2,20 +2,43 @@ package fr.unilim.saes5.view
 
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
+import javafx.geometry.Pos
 import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.Node
+import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
 import tornadofx.*
 import java.util.*
 
 class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: ResourceBundle) : Fragment() {
+
+    init {
+        this.whenDocked {
+            currentStage?.isResizable = false
+        }
+    }
+
     private val wordRankList = FXCollections.observableArrayList(wordRank.entries.toList())
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
-        readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<String, Int>::key)
-        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences"), Map.Entry<String, Int>::value)
-        columnResizePolicy = SmartResize.POLICY
+        readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<String, Int>::key) {
+            prefWidth = 300.0
+            cellFormat {
+                text = it
+                style {
+                    alignment = Pos.CENTER_LEFT
+                    textAlignment = javafx.scene.text.TextAlignment.LEFT
+                    padding = box(0.px, 10.px, 0.px, 10.px)
+                }
+            }
+        }
+
+        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences"), Map.Entry<String, Int>::value) {
+            prefWidth = 100.0
+        }
+
+        columnResizePolicy = CONSTRAINED_RESIZE_POLICY
     }
 
     private val detailsView = vbox {
