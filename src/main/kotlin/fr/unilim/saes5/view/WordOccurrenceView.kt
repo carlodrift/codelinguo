@@ -1,7 +1,10 @@
 package fr.unilim.saes5.view
 
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
+import javafx.scene.Node
 import tornadofx.*
 import java.util.*
 
@@ -17,7 +20,29 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
 
     private val detailsView = vbox {
         label("La terminologie du document est la suivante : ")
-        // Ajoutez ici le code pour afficher la phrase et le graphique
+    }
+
+    private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
+
+    private val generalButton = button(myBundle.getString("button_general")) {
+        toggleClass(ViewStyles.downloadButton, true)
+        action {
+            activeViewProperty.value = generalView
+        }
+    }
+
+    private val detailsButton = button(myBundle.getString("button_details")) {
+        toggleClass(ViewStyles.helpButton, true)
+        action {
+            activeViewProperty.value = detailsView
+        }
+    }
+
+    private val closeButton = button(myBundle.getString("button_close")) {
+        addClass(ViewStyles.downloadButton)
+        action {
+            close()
+        }
     }
 
     override val root = borderpane {
@@ -27,30 +52,22 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
         top = hbox {
             paddingAll = 10.0
             spacing = 10.0
-            button(myBundle.getString("button_general")) {
-                addClass(ViewStyles.helpButton)
-                action {
-                    center = generalView
-                }
-            }
-            button(myBundle.getString("button_details")) {
-                addClass(ViewStyles.helpButton)
-                action {
-                    center = detailsView
-                }
-            }
+            add(generalButton)
+            add(detailsButton)
             region {
                 hgrow = Priority.ALWAYS
             }
-            button(myBundle.getString("button_close")) {
-                addClass(ViewStyles.downloadButton)
-                action {
-                    close()
-                }
-            }
+            add(closeButton)
         }
 
-        center = generalView
+        centerProperty().bind(activeViewProperty)
 
+        centerProperty().addListener { _, _, newValue ->
+            generalButton.toggleClass(ViewStyles.downloadButton, newValue == generalView)
+            generalButton.toggleClass(ViewStyles.helpButton, newValue != generalView)
+
+            detailsButton.toggleClass(ViewStyles.downloadButton, newValue == detailsView)
+            detailsButton.toggleClass(ViewStyles.helpButton, newValue != detailsView)
+        }
     }
 }
