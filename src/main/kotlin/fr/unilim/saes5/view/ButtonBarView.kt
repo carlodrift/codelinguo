@@ -86,7 +86,7 @@ class ButtonBarView(
             }
         }
         button(myBundle.getString("button_download_file")) {
-            addClass(ViewStyles.downloadButton)
+            addClass(ViewStyles.downloadButtonHover)
             action {
                 val fileChooser = FileChooser().apply {
                     title = "Choisir des fichiers"
@@ -105,7 +105,7 @@ class ButtonBarView(
             }
         }
         button(myBundle.getString("button_download_folder")) {
-            addClass(ViewStyles.downloadButton)
+            addClass(ViewStyles.downloadButtonHover)
             action {
                 val directoryChooser = DirectoryChooser().apply {
                     title = "Choisir un dossier"

@@ -42,7 +42,7 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
     }
 
     private val detailsView = vbox {
-        label("La terminologie du document est la suivante : ")
+        label("La terminologie de ce projet est respectée à ")
     }
 
     private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
@@ -62,7 +62,7 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
     }
 
     private val closeButton = button(myBundle.getString("button_close")) {
-        addClass(ViewStyles.downloadButton)
+        addClass(ViewStyles.downloadButtonHover)
         action {
             close()
         }

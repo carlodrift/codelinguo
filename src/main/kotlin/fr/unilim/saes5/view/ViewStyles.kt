@@ -12,6 +12,7 @@ class ViewStyles : Stylesheet() {
         val addButton by cssclass()
         val helpButton by cssclass()
         val downloadButton by cssclass()
+        val downloadButtonHover by cssclass()
         val customTextField by cssclass()
         val customTableView by cssclass()
         val customTableHeader by cssclass()
@@ -60,6 +61,16 @@ class ViewStyles : Stylesheet() {
             textFill = c("#ffffff")
             fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
+        }
+
+        downloadButtonHover {
+
+            fontSize = 18.px
+            cursor = Cursor.HAND
+            backgroundColor += c("#000000")
+            backgroundRadius += box(15.px)
+            textFill = c("#ffffff")
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
             and(hover) {
                 backgroundColor += c("#5C5E60")
