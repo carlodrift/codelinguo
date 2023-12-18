@@ -138,7 +138,7 @@ class ButtonBarView(
                         antonyms = setOf(Word(antonymInput.text))
                     }
 
-                    val duplicate = words.any { it == newWord }
+                    val duplicate = words.any { it.token == newWord.token }
                     if (duplicate) {
                         alert(
                             type = Alert.AlertType.WARNING,

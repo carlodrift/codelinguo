@@ -3,10 +3,10 @@ package fr.unilim.saes5.view
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Pos
-import javafx.scene.control.TableView
-import javafx.scene.layout.Priority
 import javafx.scene.Node
 import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
+import javafx.scene.layout.Priority
+import javafx.scene.text.TextAlignment
 import tornadofx.*
 import java.util.*
 
@@ -28,7 +28,7 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
                 text = it
                 style {
                     alignment = Pos.CENTER_LEFT
-                    textAlignment = javafx.scene.text.TextAlignment.LEFT
+                    textAlignment = TextAlignment.LEFT
                     padding = box(0.px, 10.px, 0.px, 10.px)
                 }
             }
