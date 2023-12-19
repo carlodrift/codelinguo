@@ -3,6 +3,7 @@ package fr.unilim.saes5.model
 import fr.unilim.saes5.model.context.Context
 
 class Word(var token: String?) {
+    var fileName: String? = null
     var synonyms: Set<Word>? = HashSet()
     var related: Set<Word>? = HashSet()
     var antonyms: Set<Word>? = HashSet()
