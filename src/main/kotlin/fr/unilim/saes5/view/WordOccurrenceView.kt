@@ -2,18 +2,54 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.Node
+import javafx.scene.Scene
+import javafx.scene.control.TableColumn
+import javafx.scene.control.TableView
 import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.text.TextAlignment
+import javafx.stage.Stage
+import javafx.util.Callback
 import tornadofx.*
 import java.util.*
 
-class WordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, private val myBundle: ResourceBundle) : Fragment() {
+class WordOccurrenceView(
+    wordRank: Map<Word, Int>,
+    wordsInListNotInGlossary: List<Word>,
+    glossaryRatio: Float,
+    private val myBundle: ResourceBundle
+) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
+
+    private fun showFileNamesWindow(word: Word) {
+        val fileNames = word.fileName?.split("\n") ?: listOf("Inconnu")
+        val fileNamesList = FXCollections.observableArrayList(fileNames)
+
+        val stage = Stage()
+        stage.title = "${word.token}"
+
+        val tableView = TableView<String>().apply {
+            items = fileNamesList
+
+            columnResizePolicy = CONSTRAINED_RESIZE_POLICY
+            columns.clear()
+
+            val fileNameColumn = TableColumn<String, String>("Fichiers")
+            fileNameColumn.cellValueFactory = Callback { SimpleStringProperty(it.value) }
+            columns.add(fileNameColumn)
+        }
+
+        val scene = Scene(VBox(tableView), 300.0, 200.0)
+
+        stage.scene = scene
+        stage.show()
+    }
 
     private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
         aggregatedWordMap.map { (token, fileNames) ->
@@ -47,15 +83,19 @@ class WordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: Lis
         addClass(ViewStyles.customTableView)
         readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
-            cellFormat {
-                text = it.token
-                tooltip(it.fileName)
+            cellFormat { wordEntry ->
+                text = wordEntry.token
                 style {
                     alignment = Pos.CENTER_LEFT
                     textAlignment = TextAlignment.LEFT
                     padding = box(0.px, 10.px, 0.px, 10.px)
-                    if (!wordsInListNotInGlossary.any { word -> word.token == it.token }) {
+                    if (!wordsInListNotInGlossary.any { word -> word.token == wordEntry.token }) {
                         textFill = c("green")
+                    }
+                }
+                setOnMouseClicked {
+                    if (it.clickCount == 2) {
+                        showFileNamesWindow(wordEntry)
                     }
                 }
             }
@@ -69,7 +109,7 @@ class WordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: Lis
     }
 
     private val detailsView = vbox {
-        label("La terminologie de ce projet est respectée à " + String.format("%.2f", glossaryRatio * 100) + "%")
+        label("La terminologie de ce projet est respectée à " + String.format("%.2f", glossaryRatio * 100) + "%.")
     }
 
     private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
