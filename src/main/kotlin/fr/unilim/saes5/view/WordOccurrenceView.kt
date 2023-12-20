@@ -11,7 +11,7 @@ import javafx.scene.text.TextAlignment
 import tornadofx.*
 import java.util.*
 
-class WordOccurrenceView(wordRank: Map<String, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, private val myBundle: ResourceBundle) : Fragment() {
+class WordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, private val myBundle: ResourceBundle) : Fragment() {
 
     init {
         this.whenDocked {
@@ -23,22 +23,23 @@ class WordOccurrenceView(wordRank: Map<String, Int>, wordsInListNotInGlossary: L
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
-        readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<String, Int>::key) {
+        readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat {
-                text = it
+                text = it.token
+                tooltip(it.fileName)
                 style {
                     alignment = Pos.CENTER_LEFT
                     textAlignment = TextAlignment.LEFT
                     padding = box(0.px, 10.px, 0.px, 10.px)
-                    if (!wordsInListNotInGlossary.any { word -> word.token == it }) {
+                    if (!wordsInListNotInGlossary.any { word -> word.token == it.token }) {
                         textFill = c("green")
                     }
                 }
             }
         }
 
-        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences"), Map.Entry<String, Int>::value) {
+        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences"), Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
         }
 

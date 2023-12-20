@@ -100,8 +100,8 @@ class ButtonBarView(
                     val filePaths = selectedFiles.map { it.path }
                     val analysisWords = JavaFileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(analysisWords).mapKeys { it.key.token ?: "" }
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { Word(it) }, Glossary(words))
+                    val wordRank = analytics.wordRank(analysisWords)
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
@@ -116,8 +116,8 @@ class ButtonBarView(
                 directoryChooser.showDialog(currentWindow)?.let { file ->
                     val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(analysisWords).mapKeys { it.key.token ?: "" }
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { Word(it) }, Glossary(words))
+                    val wordRank = analytics.wordRank(analysisWords)
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
