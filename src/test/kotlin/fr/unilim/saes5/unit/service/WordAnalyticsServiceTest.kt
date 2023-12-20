@@ -17,6 +17,31 @@ class WordAnalyticsServiceTest {
         wordAnalyticsService = WordAnalyticsService()
     }
 
+    private val service = WordAnalyticsService()
+
+    @Test
+    fun testWordsInGlossaryNotInList() {
+        val words = listOf(Word("word1"), Word("word2"))
+        val glossary = Glossary(listOf(Word("word1"), Word("word3")))
+
+        val result = service.wordsInGlossaryNotInList(words, glossary)
+
+        assertEquals(1, result.size)
+        assertEquals("word3", result[0].token)
+    }
+
+    @Test
+    fun testWordsInListNotInGlossary() {
+        val words = listOf(Word("word1"), Word("word2"), Word("word3"))
+        val glossary = Glossary(listOf(Word("word1"), Word("word2")))
+
+        val result = service.wordsInListNotInGlossary(words, glossary)
+
+        assertEquals(1, result.size)
+        assertEquals("word3", result[0].token)
+    }
+
+
     @Test
     fun testGlossaryRatio() {
 

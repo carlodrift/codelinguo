@@ -1,5 +1,6 @@
 package fr.unilim.saes5.view
 
+import fr.unilim.saes5.model.Word
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Pos
@@ -10,7 +11,7 @@ import javafx.scene.text.TextAlignment
 import tornadofx.*
 import java.util.*
 
-class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: ResourceBundle) : Fragment() {
+class WordOccurrenceView(wordRank: Map<String, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, private val myBundle: ResourceBundle) : Fragment() {
 
     init {
         this.whenDocked {
@@ -30,6 +31,9 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
                     alignment = Pos.CENTER_LEFT
                     textAlignment = TextAlignment.LEFT
                     padding = box(0.px, 10.px, 0.px, 10.px)
+                    if (!wordsInListNotInGlossary.any { word -> word.token == it }) {
+                        textFill = c("green")
+                    }
                 }
             }
         }
@@ -42,7 +46,7 @@ class WordOccurrenceView(wordRank: Map<String, Int>, private val myBundle: Resou
     }
 
     private val detailsView = vbox {
-        label("La terminologie de ce projet est respectée à ")
+        label("La terminologie de ce projet est respectée à " + String.format("%.2f", glossaryRatio * 100) + "%")
     }
 
     private val activeViewProperty = SimpleObjectProperty<Node>(generalView)

@@ -1,5 +1,6 @@
 package fr.unilim.saes5.view
 
+import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
@@ -97,10 +98,12 @@ class ButtonBarView(
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                 if (selectedFiles != null) {
                     val filePaths = selectedFiles.map { it.path }
-                    val words = JavaFileReader().read(filePaths)
+                    val analysisWords = JavaFileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                    ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
+                    val wordRank = analytics.wordRank(analysisWords).mapKeys { it.key.token ?: "" }
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { Word(it) }, Glossary(words))
+                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
             }
         }
@@ -111,10 +114,12 @@ class ButtonBarView(
                     title = "Choisir un dossier"
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
-                    val words = JavaFileReader().read(file.toString())
+                    val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                    ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
+                    val wordRank = analytics.wordRank(analysisWords).mapKeys { it.key.token ?: "" }
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { Word(it) }, Glossary(words))
+                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
             }
         }
