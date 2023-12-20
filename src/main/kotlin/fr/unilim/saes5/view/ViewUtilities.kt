@@ -19,8 +19,8 @@ object ViewUtilities {
         projectDao.saveProject(glossary)
     }
 
-    fun openWordOccurrenceView(wordRank: Map<String, Int>, myBundle: ResourceBundle) {
-        val view = WordOccurrenceView(wordRank, myBundle)
+    fun openWordOccurrenceView(wordRank: Map<String, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, myBundle: ResourceBundle) {
+        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
 

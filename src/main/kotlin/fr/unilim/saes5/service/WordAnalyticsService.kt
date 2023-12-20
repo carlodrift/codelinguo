@@ -36,13 +36,13 @@ class WordAnalyticsService {
     }
 
     fun wordsInGlossaryNotInList(words: List<Word?>, glossary: Glossary): List<Word> {
-        val glossaryWords = glossary.words.toSet()
-        return glossaryWords.filter { it !in words }.toList()
+        val wordTokens = words.mapNotNull { it?.token }.toSet()
+        return glossary.words.filter { it.token !in wordTokens }
     }
 
     fun wordsInListNotInGlossary(words: List<Word?>, glossary: Glossary): List<Word> {
-        val glossaryWords = glossary.words.toSet()
-        return words.filter { it !in glossaryWords }.mapNotNull { it }
+        val glossaryWordTokens = glossary.words.map { it.token }.toSet()
+        return words.filterNotNull().filter { it.token !in glossaryWordTokens }
     }
 
 }
