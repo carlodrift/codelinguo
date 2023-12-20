@@ -69,10 +69,8 @@ object ViewUtilities {
         }
     }
 
-    fun updateCompletionService(word: Word, completionService: CompletionService) {
-        word.context?.forEach { context ->
-            completionService.addCompletion(context.word.token ?: "")
-        }
+    fun updateCompletionService() {
+        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.synonymCompletionService ,MainView.antonymCompletionService)
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

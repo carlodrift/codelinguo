@@ -152,7 +152,6 @@ class ButtonBarView(
                         )
                     } else {
                         words.add(newWord)
-                        ViewUtilities.updateCompletionService(newWord, completionService)
                         ViewUtilities.clearInputFields(
                             tokenInput,
                             primaryContextInput,
@@ -162,6 +161,7 @@ class ButtonBarView(
                             definitionInput
                         )
                         ViewUtilities.updateJsonFile(words)
+                        ViewUtilities.updateCompletionService()
                         wordTableView?.refresh()
                     }
                 }

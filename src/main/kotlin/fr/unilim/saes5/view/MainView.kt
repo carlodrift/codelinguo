@@ -8,10 +8,12 @@ import java.util.*
 
 
 class MainView : View() {
-    private val contextCompletionService = CompletionService()
-    private val synonymCompletionService = CompletionService()
-    private val antonymCompletionService = CompletionService()
-    private val words = mutableListOf<Word>().asObservable()
+    companion object {
+        val contextCompletionService = CompletionService()
+        val synonymCompletionService = CompletionService()
+        val antonymCompletionService = CompletionService()
+        val words = mutableListOf<Word>().asObservable()
+    }
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private var wordTableView: TableView<Word> by singleAssign()

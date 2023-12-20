@@ -49,6 +49,7 @@ class WordTableView(
                         item?.let {
                             words.remove(it)
                             ViewUtilities.updateJsonFile(words)
+                            ViewUtilities.updateCompletionService()
                         }
                     }
                 }

@@ -10,6 +10,10 @@ object DataLoader {
         val projectDao = JsonGlossaryDao("glossary.json")
         val projects = projectDao.allProjects
 
+        contextCompletionService.clearCompletions()
+        synonymCompletionService.clearCompletions()
+        antonymCompletionService.clearCompletions()
+
         projects.forEach { project ->
             project.words?.forEach { word ->
                 word.context?.forEach { context ->
