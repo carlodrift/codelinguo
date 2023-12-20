@@ -91,6 +91,7 @@ class WordOccurrenceView(
                     padding = box(0.px, 10.px, 0.px, 10.px)
                     if (!wordsInListNotInGlossary.any { word -> word.token == wordEntry.token }) {
                         textFill = c("green")
+                        text = "\u2713 $text"
                     }
                 }
                 setOnMouseClicked {
