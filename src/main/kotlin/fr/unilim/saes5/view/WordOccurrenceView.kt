@@ -13,13 +13,35 @@ import java.util.*
 
 class WordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, private val myBundle: ResourceBundle) : Fragment() {
 
+    private val aggregatedWordMap = aggregateWords(wordRank.keys)
+
+    private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
+        aggregatedWordMap.map { (token, fileNames) ->
+            val word = Word(token).apply { fileName = fileNames }
+            val count = wordRank.filterKeys { it.token == token }.values.sum()
+            object : Map.Entry<Word, Int> {
+                override val key: Word = word
+                override val value: Int = count
+            }
+        }.sortedByDescending { it.value }
+    )
+
+    private fun aggregateWords(words: Set<Word>): Map<String, String> {
+        val wordToFileNames = mutableMapOf<String, MutableList<String>>()
+
+        for (word in words) {
+            wordToFileNames.getOrPut(word.token ?: "") { mutableListOf() }.add(word.fileName ?: "Unknown")
+        }
+
+        return wordToFileNames.mapValues { (_, fileNames) -> fileNames.distinct().joinToString("\n") }
+    }
+
+
     init {
         this.whenDocked {
             currentStage?.isResizable = false
         }
     }
-
-    private val wordRankList = FXCollections.observableArrayList(wordRank.entries.toList())
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)

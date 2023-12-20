@@ -26,6 +26,7 @@ class Word(var token: String?) {
         other as Word
 
         if (token != other.token) return false
+        if (fileName != other.fileName) return false
         if (synonyms != other.synonyms) return false
         if (related != other.related) return false
         if (antonyms != other.antonyms) return false
@@ -37,6 +38,7 @@ class Word(var token: String?) {
 
     override fun hashCode(): Int {
         var result = token?.hashCode() ?: 0
+        result = 31 * result + (fileName?.hashCode() ?: 0)
         result = 31 * result + (synonyms?.hashCode() ?: 0)
         result = 31 * result + (related?.hashCode() ?: 0)
         result = 31 * result + (antonyms?.hashCode() ?: 0)
