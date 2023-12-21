@@ -90,7 +90,7 @@ class WordOccurrenceView(
                     textAlignment = TextAlignment.LEFT
                     padding = box(0.px, 10.px, 0.px, 10.px)
                     if (!wordsInListNotInGlossary.any { word -> word.token == wordEntry.token }) {
-                        textFill = c("green")
+                        backgroundColor += c("#A1F9B4")
                         text = "\u2713 $text"
                     }
                 }
