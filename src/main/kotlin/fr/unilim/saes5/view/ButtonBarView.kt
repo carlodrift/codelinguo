@@ -117,11 +117,9 @@ class ButtonBarView(
             action {
                 val directoryChooser = DirectoryChooser().apply {
                     title = "Choisir un dossier"
-
-                    initialDirectory = lastOpenedDirectory?.parentFile?.takeIf { it.exists() } ?: defaultDirectory
+                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
-                    // Enregistrez le chemin du dossier sélectionné
                     lastOpenedDirectory = file
 
                     val analysisWords = JavaFileReader().read(file.toString())
