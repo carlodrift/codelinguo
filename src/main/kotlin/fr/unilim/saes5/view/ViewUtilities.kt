@@ -70,7 +70,7 @@ object ViewUtilities {
     }
 
     fun updateCompletionService() {
-        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.synonymCompletionService ,MainView.antonymCompletionService)
+        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService)
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

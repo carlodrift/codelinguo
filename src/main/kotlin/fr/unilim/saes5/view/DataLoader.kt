@@ -6,13 +6,13 @@ import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
 
 object DataLoader {
-    fun loadSavedWords(words: ObservableList<Word>, contextCompletionService: CompletionService, synonymCompletionService: CompletionService, antonymCompletionService: CompletionService) {
+    fun loadSavedWords(words: ObservableList<Word>, contextCompletionService: CompletionService, lexicoCompletionService: CompletionService, tokenCompletionService: CompletionService) {
         val projectDao = JsonGlossaryDao("glossary.json")
         val projects = projectDao.allProjects
 
         contextCompletionService.clearCompletions()
-        synonymCompletionService.clearCompletions()
-        antonymCompletionService.clearCompletions()
+        lexicoCompletionService.clearCompletions()
+        tokenCompletionService.clearCompletions()
 
         projects.forEach { project ->
             project.words?.forEach { word ->
@@ -20,11 +20,14 @@ object DataLoader {
                     contextCompletionService.addCompletion(context.word.token ?: "")
                 }
                 word.synonyms?.forEach { synonym ->
-                    synonymCompletionService.addCompletion(synonym.token ?: "")
+                    lexicoCompletionService.addCompletion(synonym.token ?: "")
+                    tokenCompletionService.addCompletion(synonym.token ?: "")
                 }
                 word.antonyms?.forEach { antonym ->
-                    antonymCompletionService.addCompletion(antonym.token ?: "")
+                    lexicoCompletionService.addCompletion(antonym.token ?: "")
+                    tokenCompletionService.addCompletion(antonym.token ?: "")
                 }
+                lexicoCompletionService.addCompletion(word.token ?: "")
                 if (!words.contains(word)) {
                     words.add(word)
                 }

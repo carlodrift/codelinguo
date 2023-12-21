@@ -9,8 +9,8 @@ import java.util.*
 
 class InputFormView(
     private val contextCompletionService: CompletionService,
-    private val synonymCompletionService: CompletionService,
-    private val antonymCompletionService: CompletionService,
+    private val lexicoCompletionService: CompletionService,
+    private val tokenCompletionService: CompletionService,
     private val myBundle: ResourceBundle,
     private val activeContextMenus: MutableMap<TextField, ContextMenu> = mutableMapOf()
 ) : View() {
@@ -49,10 +49,13 @@ class InputFormView(
             ViewUtilities.updateAutoCompletion(secondaryContextInput, contextCompletionService, activeContextMenus)
         }
         synonymInput.textProperty().addListener { _, _, _ ->
-            ViewUtilities.updateAutoCompletion(synonymInput, synonymCompletionService, activeContextMenus)
+            ViewUtilities.updateAutoCompletion(synonymInput, lexicoCompletionService, activeContextMenus)
         }
         antonymInput.textProperty().addListener { _, _, _ ->
-            ViewUtilities.updateAutoCompletion(antonymInput, antonymCompletionService, activeContextMenus)
+            ViewUtilities.updateAutoCompletion(antonymInput, lexicoCompletionService, activeContextMenus)
+        }
+        tokenInput.textProperty().addListener { _, _, _ ->
+            ViewUtilities.updateAutoCompletion(tokenInput, tokenCompletionService, activeContextMenus)
         }
     }
 
