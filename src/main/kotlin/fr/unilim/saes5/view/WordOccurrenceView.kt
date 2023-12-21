@@ -40,7 +40,7 @@ class WordOccurrenceView(
             columnResizePolicy = CONSTRAINED_RESIZE_POLICY
             columns.clear()
 
-            val fileNameColumn = TableColumn<String, String>("Fichiers")
+            val fileNameColumn = TableColumn<String, String>("Fichiers" + " ⇅")
             fileNameColumn.cellValueFactory = Callback { SimpleStringProperty(it.value) }
             columns.add(fileNameColumn)
         }
@@ -81,7 +81,7 @@ class WordOccurrenceView(
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
-        readonlyColumn(myBundle.getString("wordoccurrenceview_word"), Map.Entry<Word, Int>::key) {
+        readonlyColumn(myBundle.getString("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
                 text = wordEntry.token
@@ -102,7 +102,7 @@ class WordOccurrenceView(
             }
         }
 
-        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences"), Map.Entry<Word, Int>::value) {
+        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
         }
 
