@@ -16,6 +16,7 @@ import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import tornadofx.*
+import java.io.File
 import java.util.*
 
 class ButtonBarView(
@@ -30,6 +31,10 @@ class ButtonBarView(
     private val definitionInput: TextArea,
     private val wordTableView: TableView<Word>? = null
 ) : View() {
+
+    private var lastOpenedDirectory: File? = null
+
+    private val defaultDirectory: File = File(System.getProperty("user.home"))
 
     override val root = hbox(20.0) {
         paddingBottom = 20.0
@@ -112,12 +117,17 @@ class ButtonBarView(
             action {
                 val directoryChooser = DirectoryChooser().apply {
                     title = "Choisir un dossier"
+
+                    initialDirectory = lastOpenedDirectory?.parentFile?.takeIf { it.exists() } ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
+                    // Enregistrez le chemin du dossier sélectionné
+                    lastOpenedDirectory = file
+
                     val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { it }, Glossary(words))
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
