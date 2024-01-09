@@ -22,10 +22,18 @@ public class JsonGlossaryDao implements GlossaryDao {
     private final Gson gson;
 
     public JsonGlossaryDao(String filePath) {
-        this.jsonFile = new File(filePath);
+        String userHome = System.getProperty("user.home");
+        String directoryName = ".saes5";
+        File directory = new File(userHome, directoryName);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        this.jsonFile = new File(directory, filePath);
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Context.class, new ContextDeserializer());
         this.gson = gsonBuilder.create();
+
         if (!this.jsonFile.exists()) {
             try {
                 this.jsonFile.createNewFile();
