@@ -110,7 +110,7 @@ class WordOccurrenceView(
     }
 
     private val detailsView = vbox {
-        label( String.format("%.2f", glossaryRatio * 100) + "% des mots trouvés sont aussi dans le glossaire..")
+        label( String.format("%.2f", glossaryRatio * 100) + myBundle.getString("glossary_ratio"))
     }
 
     private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
