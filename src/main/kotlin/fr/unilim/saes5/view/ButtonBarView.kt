@@ -99,14 +99,17 @@ class ButtonBarView(
                     extensionFilters.addAll(
                         FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
                     )
+                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                 if (selectedFiles != null) {
+                    lastOpenedDirectory = selectedFiles.first().parentFile
+
                     val filePaths = selectedFiles.map { it.path }
                     val analysisWords = JavaFileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary( wordRank.keys.toList().map { it }, Glossary(words))
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
