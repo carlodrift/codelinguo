@@ -17,12 +17,24 @@ class ViewStyles : Stylesheet() {
         val customTableView by cssclass()
         val customTableHeader by cssclass()
         val removeButton by cssclass()
+        val projectButton by cssclass()
     }
 
     init {
         heading {
             fontSize = 20.px
             fontWeight = FontWeight.BOLD
+        }
+
+        projectButton {
+            fontSize = 18.px
+            cursor = Cursor.HAND
+            backgroundRadius += box(15.px)
+            backgroundColor += c("#ffffff")
+            borderColor += box(c("#000000"))
+            borderRadius += box(15.px)
+
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
         }
 
         addButton {
