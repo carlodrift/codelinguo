@@ -8,6 +8,7 @@ import tornadofx.*
 
 class ViewStyles : Stylesheet() {
     companion object {
+        val test by cssclass()
         val heading by cssclass()
         val addButton by cssclass()
         val helpButton by cssclass()
@@ -26,6 +27,10 @@ class ViewStyles : Stylesheet() {
             fontWeight = FontWeight.BOLD
         }
 
+        test {
+            backgroundColor += c("#f70505")
+        }
+
         projectButton {
             fontSize = 18.px
             cursor = Cursor.HAND
@@ -33,8 +38,11 @@ class ViewStyles : Stylesheet() {
             backgroundColor += c("#ffffff")
             borderColor += box(c("#000000"))
             borderRadius += box(15.px)
-
             fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
+
+
+            and(hover) {
+            }
         }
 
         addButton {

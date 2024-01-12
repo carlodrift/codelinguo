@@ -3,6 +3,7 @@ package fr.unilim.saes5.view
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
+import javax.swing.GroupLayout.Alignment
 
 class ProjectView : View() {
     init {
@@ -10,18 +11,22 @@ class ProjectView : View() {
     }
 
     override val root = vbox(5.0) {
-        primaryStage.width = 800.0
-        primaryStage.height = 600.0
+        primaryStage.width = 850.0
+        primaryStage.height = 610.0
         hbox (5.0){
             vbox {
                 label("Projets récents") {
+                    paddingLeft = 5.0
                     addClass(ViewStyles.heading)
                 }
 
 
             }
 
-            vbox {
+            vbox(10.0) {
+                addClass(ViewStyles.test)
+                alignment = Pos.CENTER_LEFT
+
                 button("Nouveau projet").apply {
                     addClass(ViewStyles.projectButton)
                     graphic = javafx.scene.image.ImageView(Image("/plus.png"))
@@ -33,7 +38,7 @@ class ProjectView : View() {
                     graphic = javafx.scene.image.ImageView(Image("/downloads.png"))
                     action { }
                 }
-            }.alignment = Pos.TOP_RIGHT
+            }
 
 
         }
