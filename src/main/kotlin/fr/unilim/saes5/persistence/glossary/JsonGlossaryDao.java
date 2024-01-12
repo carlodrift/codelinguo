@@ -23,7 +23,7 @@ public class JsonGlossaryDao implements GlossaryDao {
 
     public JsonGlossaryDao(String filePath) {
         String userHome = System.getProperty("user.home");
-        String directoryName = ".saes5";
+        String directoryName = ".codelinguo";
         File directory = new File(userHome, directoryName);
         if (!directory.exists()) {
             directory.mkdirs();
