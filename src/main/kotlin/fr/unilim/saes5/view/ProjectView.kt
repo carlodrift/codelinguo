@@ -24,19 +24,21 @@ class ProjectView : View() {
             }
 
             vbox(10.0) {
-                addClass(ViewStyles.test)
                 alignment = Pos.CENTER_LEFT
 
                 button("Nouveau projet").apply {
                     addClass(ViewStyles.projectButton)
                     graphic = javafx.scene.image.ImageView(Image("/plus.png"))
-                    action { }
+                    action {
+                        find(CreateProjectView::class).openWindow()
+                    }
                 }
 
                 button("Ouvrir un projet").apply {
                     addClass(ViewStyles.projectButton)
                     graphic = javafx.scene.image.ImageView(Image("/downloads.png"))
-                    action { }
+                    action {
+                    }
                 }
             }
 
