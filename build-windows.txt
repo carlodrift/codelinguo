@@ -1,0 +1,1 @@
+jpackage --input target/ --name CodeLinguo --main-jar codelinguo-1.0.jar --main-class fr.unilim.saes5.MainKt --type msi --win-shortcut --win-menu --win-menu-group CodeLinguo
