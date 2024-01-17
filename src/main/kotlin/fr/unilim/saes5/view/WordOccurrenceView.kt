@@ -2,51 +2,64 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
 import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
+import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
+import javafx.scene.chart.PieChart
+import javafx.scene.control.*
 import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
+import javafx.scene.text.FontWeight
+import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
-import javafx.util.Callback
 import tornadofx.*
 import java.util.*
 
+
 class WordOccurrenceView(
-    wordRank: Map<Word, Int>,
+    private val wordRank: Map<Word, Int>,
     wordsInListNotInGlossary: List<Word>,
-    glossaryRatio: Float,
+    private val glossaryRatio: Float,
     private val myBundle: ResourceBundle
 ) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
-    private fun showFileNamesWindow(word: Word) {
-        val fileNames = word.fileName?.split("\n") ?: listOf("Inconnu")
-        val fileNamesList = FXCollections.observableArrayList(fileNames)
+    private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>) {
+        val fileOccurrencesMap = wordRank.filterKeys { it.token == word.token }
+        val totalOccurrences = fileOccurrencesMap.values.sum()
+
+        val topFileOccurrences = fileOccurrencesMap.entries
+            .sortedByDescending { it.value }
+            .take(10)
+
+        val pieChartData = topFileOccurrences.map { (word, count) ->
+            val percentage = if (totalOccurrences > 0) count.toDouble() / totalOccurrences * 100 else 0.0
+            val fileName = word.fileName?.substringAfterLast("\\")?.substringAfterLast("/") ?: "Inconnu"
+            PieChart.Data("$fileName (${String.format("%.2f%%", percentage)})", count.toDouble())
+        }.let { FXCollections.observableArrayList(it) }
+
+        val pieChart = PieChart(pieChartData).apply {
+            isClockwise = true
+            labelsVisible = true
+            startAngle = 180.0
+        }
 
         val stage = Stage()
         stage.title = "${word.token}"
+        stage.isResizable = false
 
-        val tableView = TableView<String>().apply {
-            items = fileNamesList
-
-            columnResizePolicy = CONSTRAINED_RESIZE_POLICY
-            columns.clear()
-
-            val fileNameColumn = TableColumn<String, String>("Fichiers" + " ⇅")
-            fileNameColumn.cellValueFactory = Callback { SimpleStringProperty(it.value) }
-            columns.add(fileNameColumn)
+        val vBox = VBox(10.0).apply {
+            alignment = Pos.CENTER
+            padding = Insets(10.0)
+            children.add(pieChart)
         }
 
-        val scene = Scene(VBox(tableView), 300.0, 200.0)
-
+        val scene = Scene(vBox, 400.0, 400.0)
         stage.scene = scene
         stage.show()
     }
@@ -96,7 +109,7 @@ class WordOccurrenceView(
                 }
                 setOnMouseClicked {
                     if (it.clickCount == 2) {
-                        showFileNamesWindow(wordEntry)
+                        showFileNamesWindow(wordEntry, wordRank)
                     }
                 }
             }
@@ -110,7 +123,13 @@ class WordOccurrenceView(
     }
 
     private val detailsView = vbox {
-        label( String.format("%.2f", glossaryRatio * 100) + myBundle.getString("glossary_ratio"))
+        label {
+            val boldText = Text(String.format("%.2f%%", glossaryRatio * 100)).apply {
+                style { fontWeight = FontWeight.BOLD }
+            }
+            graphic = boldText
+            text = " " + myBundle.getString("glossary_ratio")
+        }
     }
 
     private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
