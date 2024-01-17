@@ -69,8 +69,8 @@ object ViewUtilities {
         }
     }
 
-    fun updateCompletionService() {
-        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService)
+    fun updateCompletionService(projectName: String) {
+        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService, projectName)
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

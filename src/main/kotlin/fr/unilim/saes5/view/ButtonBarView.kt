@@ -173,7 +173,7 @@ class ButtonBarView(
                             definitionInput
                         )
                         ViewUtilities.updateJsonFile(words, name)
-                        ViewUtilities.updateCompletionService()
+                        ViewUtilities.updateCompletionService(name)
                         wordTableView?.refresh()
                     }
                 }

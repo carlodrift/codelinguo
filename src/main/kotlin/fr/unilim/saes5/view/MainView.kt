@@ -21,7 +21,7 @@ class MainView() : View() {
     private var wordTableView: TableView<Word> by singleAssign()
 
     init {
-        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService)
+        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService, projectName)
     }
 
     override val root = vbox(5.0) {

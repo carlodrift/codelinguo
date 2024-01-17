@@ -35,7 +35,7 @@ public class JsonGlossaryDao implements GlossaryDao {
 
     @Override
     public void saveProject(Glossary project, String name) {
-        File jsonFile = new File(this.directory, name);
+        File jsonFile = new File(this.directory, name + ".json");
         if (!jsonFile.exists()) {
             try {
                 jsonFile.createNewFile();
