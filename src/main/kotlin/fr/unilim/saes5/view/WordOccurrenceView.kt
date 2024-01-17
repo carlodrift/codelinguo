@@ -51,7 +51,7 @@ class WordOccurrenceView(
 
         val stage = Stage()
         stage.title = "${word.token}"
-        stage.isResizable = false
+        stage.isResizable = true
 
         val vBox = VBox(10.0).apply {
             alignment = Pos.CENTER
@@ -59,7 +59,7 @@ class WordOccurrenceView(
             children.add(pieChart)
         }
 
-        val scene = Scene(vBox, 400.0, 400.0)
+        val scene = Scene(vBox, 1000.0, 600.0)
         stage.scene = scene
         stage.show()
     }
