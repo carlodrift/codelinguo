@@ -7,7 +7,7 @@ import tornadofx.*
 import java.util.*
 
 
-class MainView : View() {
+class MainView(val projectName: String) : View() {
     companion object {
         val contextCompletionService = CompletionService()
         val lexicoCompletionService = CompletionService()
