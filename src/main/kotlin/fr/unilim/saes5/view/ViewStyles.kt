@@ -19,6 +19,7 @@ class ViewStyles : Stylesheet() {
         val customTableHeader by cssclass()
         val removeButton by cssclass()
         val projectButton by cssclass()
+        val separator by cssclass()
     }
 
     init {
@@ -138,6 +139,10 @@ class ViewStyles : Stylesheet() {
             label {
                 alignment = Pos.CENTER
             }
+        }
+
+        separator {
+            backgroundColor += c("#000000")
         }
     }
 
