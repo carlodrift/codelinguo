@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GlossaryDao {
 
-    void saveProject(Glossary project);
+    void saveProject(Glossary project, String name);
 
     List<Glossary> getAllProjects();
 }

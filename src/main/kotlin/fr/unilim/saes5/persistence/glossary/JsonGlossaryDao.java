@@ -18,56 +18,68 @@ import java.util.List;
 
 public class JsonGlossaryDao implements GlossaryDao {
 
-    private final File jsonFile;
+    private static final String CODELINGUO_PROJECTS = ".codelinguo/projects";
     private final Gson gson;
 
-    public JsonGlossaryDao(String filePath) {
+    private File directory;
+
+    public JsonGlossaryDao() {
         String userHome = System.getProperty("user.home");
-        String directoryName = ".codelinguo";
-        File directory = new File(userHome, directoryName);
+        this.directory = new File(userHome, CODELINGUO_PROJECTS);
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        this.jsonFile = new File(directory, filePath);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Context.class, new ContextDeserializer());
         this.gson = gsonBuilder.create();
+    }
 
-        if (!this.jsonFile.exists()) {
+    @Override
+    public void saveProject(Glossary project, String name) {
+        File jsonFile = new File(directory, name);
+        if (!jsonFile.exists()) {
             try {
-                this.jsonFile.createNewFile();
+                jsonFile.createNewFile();
                 this.writeListToFile(new ArrayList<>());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void saveProject(Glossary project) {
+        project.setName(name);
         List<Glossary> singleProjectList = new ArrayList<>();
         singleProjectList.add(project);
         this.writeListToFile(singleProjectList);
     }
 
-    @Override
     public List<Glossary> getAllProjects() {
-        try (Reader reader = new FileReader(this.jsonFile)) {
-            Type listType = new TypeToken<ArrayList<Glossary>>() {
-            }.getType();
-            return this.gson.fromJson(reader, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+        List<Glossary> allGlossaries = new ArrayList<>();
+
+        File[] listOfFiles = this.directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                try (Reader reader = new FileReader(file)) {
+                    Type listType = new TypeToken<ArrayList<Glossary>>() {}.getType();
+                    List<Glossary> glossaries = this.gson.fromJson(reader, listType);
+                    allGlossaries.addAll(glossaries);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
+        return allGlossaries;
     }
 
     private void writeListToFile(List<Glossary> projects) {
-        try (Writer writer = new FileWriter(this.jsonFile, false)) {
-            this.gson.toJson(projects, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (Glossary project : projects) {
+            String fileName = project.getName();
+            try (Writer writer = new FileWriter(new File(this.directory, fileName), false)) {
+                this.gson.toJson(project, writer);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
