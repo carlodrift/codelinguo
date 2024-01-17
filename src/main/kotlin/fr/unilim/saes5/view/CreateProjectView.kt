@@ -28,6 +28,7 @@ class CreateProjectView : View() {
             addClass(ViewStyles.projectButton)
 
             action {
+                primaryStage.close()
                 find(MainView::class, mapOf(MainView::projectName to projectNameTextField.text)).openWindow()
 
             }

@@ -52,6 +52,7 @@ class ProjectView : View() {
 
                                 setOnMouseClicked {
                                     if (it.clickCount == 2) {
+                                        primaryStage.close()
                                         find(MainView::class, mapOf(MainView::projectName to project.name)).openWindow()
                                     }
                                 }
