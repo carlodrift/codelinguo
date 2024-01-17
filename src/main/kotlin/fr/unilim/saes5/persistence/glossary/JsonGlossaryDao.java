@@ -54,15 +54,15 @@ public class JsonGlossaryDao implements GlossaryDao {
 
     public List<Glossary> getAllProjects() {
         List<Glossary> allGlossaries = new ArrayList<>();
+        File folder = this.directory;
 
-        File[] listOfFiles = this.directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
 
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 try (Reader reader = new FileReader(file)) {
-                    Type listType = new TypeToken<ArrayList<Glossary>>() {}.getType();
-                    List<Glossary> glossaries = this.gson.fromJson(reader, listType);
-                    allGlossaries.addAll(glossaries);
+                    Glossary glossary = this.gson.fromJson(reader, Glossary.class);
+                    allGlossaries.add(glossary);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -75,7 +75,7 @@ public class JsonGlossaryDao implements GlossaryDao {
     private void writeListToFile(List<Glossary> projects) {
         for (Glossary project : projects) {
             String fileName = project.getName();
-            try (Writer writer = new FileWriter(new File(this.directory, fileName), false)) {
+            try (Writer writer = new FileWriter(new File(this.directory, fileName + ".json"), false)) {
                 this.gson.toJson(project, writer);
             } catch (IOException e) {
                 e.printStackTrace();
