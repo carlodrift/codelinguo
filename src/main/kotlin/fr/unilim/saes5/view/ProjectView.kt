@@ -1,13 +1,23 @@
 package fr.unilim.saes5.view
 
+import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
 import javax.swing.GroupLayout.Alignment
 
 class ProjectView : View() {
-    init {
+    private val glossaryDao = JsonGlossaryDao() // Instance of JsonGlossaryDao
+    private var projectsList = mutableListOf<Glossary>().observable()
 
+    init {
+        loadProjects()
+    }
+
+    private fun loadProjects() {
+        projectsList.clear()
+        projectsList.addAll(glossaryDao.getAllProjects())
     }
 
     override val root = vbox(5.0) {
@@ -33,6 +43,20 @@ class ProjectView : View() {
                 }
                 separator { addClass(ViewStyles.separator) }
 
+                scrollpane(fitToWidth = true) {
+                    isFitToHeight = true
+
+                    listview(projectsList) {
+                        cellFormat { project ->
+                            graphic = hbox {
+                                label(project.name)
+                            }
+                        }
+                        prefHeight = 90.0
+                        maxHeight = 180.0
+                    }
+                }
+
             }
 
             vbox(10.0) {
@@ -46,7 +70,6 @@ class ProjectView : View() {
                     }
                 }
             }
-
 
         }.alignment = Pos.CENTER
 
