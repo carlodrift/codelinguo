@@ -13,10 +13,10 @@ import javafx.scene.control.TextInputControl
 import java.util.*
 
 object ViewUtilities {
-    fun updateJsonFile(words: ObservableList<Word>) {
-        val projectDao = JsonGlossaryDao("glossary.json")
+    fun updateJsonFile(words: ObservableList<Word>, name: String) {
+        val projectDao = JsonGlossaryDao()
         val glossary = Glossary(words.toList())
-        projectDao.saveProject(glossary)
+        projectDao.saveProject(glossary, name)
     }
 
     fun openWordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, myBundle: ResourceBundle) {
@@ -69,8 +69,8 @@ object ViewUtilities {
         }
     }
 
-    fun updateCompletionService() {
-        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService)
+    fun updateCompletionService(projectName: String) {
+        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService, projectName)
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

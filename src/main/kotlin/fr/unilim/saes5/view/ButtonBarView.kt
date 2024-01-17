@@ -29,7 +29,8 @@ class ButtonBarView(
     private val synonymInput: TextField,
     private val antonymInput: TextField,
     private val definitionInput: TextArea,
-    private val wordTableView: TableView<Word>? = null
+    private val wordTableView: TableView<Word>? = null,
+    name: String
 ) : View() {
 
     private var lastOpenedDirectory: File? = null
@@ -171,8 +172,8 @@ class ButtonBarView(
                             antonymInput,
                             definitionInput
                         )
-                        ViewUtilities.updateJsonFile(words)
-                        ViewUtilities.updateCompletionService()
+                        ViewUtilities.updateJsonFile(words, name)
+                        ViewUtilities.updateCompletionService(name)
                         wordTableView?.refresh()
                     }
                 }

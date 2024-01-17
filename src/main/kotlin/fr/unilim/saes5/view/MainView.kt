@@ -7,7 +7,9 @@ import tornadofx.*
 import java.util.*
 
 
-class MainView : View() {
+class MainView() : View() {
+    val projectName: String by param()
+
     companion object {
         val contextCompletionService = CompletionService()
         val lexicoCompletionService = CompletionService()
@@ -19,12 +21,12 @@ class MainView : View() {
     private var wordTableView: TableView<Word> by singleAssign()
 
     init {
-        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService)
+        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService, projectName)
     }
 
     override val root = vbox(5.0) {
 
-        val wordTableViewComponent = WordTableView(words, myBundle)
+        val wordTableViewComponent = WordTableView(words, myBundle, projectName)
         wordTableView = wordTableViewComponent.wordTableView
         this += wordTableViewComponent
 
@@ -34,7 +36,7 @@ class MainView : View() {
         val buttonBarView = ButtonBarView(
             myBundle, words, contextCompletionService, inputFormView.tokenInput,
             inputFormView.primaryContextInput, inputFormView.secondaryContextInput, inputFormView.synonymInput,
-            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView
+            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView, projectName
         )
         this += buttonBarView
     }

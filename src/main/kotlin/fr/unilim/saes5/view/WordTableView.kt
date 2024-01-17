@@ -15,7 +15,8 @@ import java.util.*
 
 class WordTableView(
     private val words: ObservableList<Word>,
-    private val myBundle: ResourceBundle
+    private val myBundle: ResourceBundle,
+    name: String
 ) : View() {
     var wordTableView: TableView<Word> by singleAssign()
 
@@ -48,8 +49,8 @@ class WordTableView(
                         val item = tableRow.item
                         item?.let {
                             words.remove(it)
-                            ViewUtilities.updateJsonFile(words)
-                            ViewUtilities.updateCompletionService()
+                            ViewUtilities.updateJsonFile(words, name)
+                            ViewUtilities.updateCompletionService(name)
                         }
                     }
                 }
