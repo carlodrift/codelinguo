@@ -10,8 +10,9 @@ import javafx.scene.Scene
 import javafx.scene.chart.PieChart
 import javafx.scene.control.*
 import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
+import javafx.scene.layout.BorderPane
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
 import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
@@ -43,26 +44,39 @@ class WordOccurrenceView(
             PieChart.Data("$fileName (${String.format("%.2f%%", percentage)})", count.toDouble())
         }.let { FXCollections.observableArrayList(it) }
 
+        val newCloseButton = button(myBundle.getString("button_close")) {
+            addClass(ViewStyles.downloadButtonHover)
+            action {
+                val stage = this@button.scene.window as Stage
+                stage.close()
+            }
+        }
+
         val pieChart = PieChart(pieChartData).apply {
             isClockwise = true
             labelsVisible = true
             startAngle = 180.0
         }
 
-        val stage = Stage()
-        stage.title = "${word.token}"
-        stage.isResizable = true
-
-        val vBox = VBox(10.0).apply {
-            alignment = Pos.CENTER
+        val closeButtonHBox = HBox().apply {
+            alignment = Pos.TOP_RIGHT
+            children.add(newCloseButton)
             padding = Insets(10.0)
-            children.add(pieChart)
         }
 
-        val scene = Scene(vBox, 1000.0, 600.0)
-        stage.scene = scene
+        val borderPane = BorderPane().apply {
+            top = closeButtonHBox
+            center = pieChart
+        }
+
+        val stage = Stage().apply {
+            title = "${word.token}"
+            isResizable = false
+            scene = Scene(borderPane, 500.0, 500.0)
+        }
         stage.show()
     }
+
 
     private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
         aggregatedWordMap.map { (token, fileNames) ->
