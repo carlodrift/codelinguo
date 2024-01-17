@@ -19,13 +19,14 @@ class ProjectView : View() {
         projectsList.addAll(glossaryDao.getAllProjects())
     }
 
+
     override val root = vbox(5.0) {
         primaryStage.width = 550.0
         primaryStage.height = 310.0
 
         vbox {
             paddingAll = 10.0
-            button("Fermer X").apply {
+            button("Quitter X").apply {
                 addClass(ViewStyles.downloadButtonHover)
                 action { primaryStage.close() }
             }
