@@ -13,10 +13,10 @@ import javafx.scene.control.TextInputControl
 import java.util.*
 
 object ViewUtilities {
-    fun updateJsonFile(words: ObservableList<Word>) {
+    fun updateJsonFile(words: ObservableList<Word>, name: String) {
         val projectDao = JsonGlossaryDao()
         val glossary = Glossary(words.toList())
-        projectDao.saveProject(glossary, "glossary")
+        projectDao.saveProject(glossary, name)
     }
 
     fun openWordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, myBundle: ResourceBundle) {

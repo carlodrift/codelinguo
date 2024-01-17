@@ -24,7 +24,7 @@ class MainView(val projectName: String) : View() {
 
     override val root = vbox(5.0) {
 
-        val wordTableViewComponent = WordTableView(words, myBundle)
+        val wordTableViewComponent = WordTableView(words, myBundle, projectName)
         wordTableView = wordTableViewComponent.wordTableView
         this += wordTableViewComponent
 
@@ -34,7 +34,7 @@ class MainView(val projectName: String) : View() {
         val buttonBarView = ButtonBarView(
             myBundle, words, contextCompletionService, inputFormView.tokenInput,
             inputFormView.primaryContextInput, inputFormView.secondaryContextInput, inputFormView.synonymInput,
-            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView
+            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView, projectName
         )
         this += buttonBarView
     }
