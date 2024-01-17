@@ -8,7 +8,9 @@ import tornadofx.*
 import java.util.*
 
 class InputFormView(
-    private val completionService: CompletionService,
+    private val contextCompletionService: CompletionService,
+    private val lexicoCompletionService: CompletionService,
+    private val tokenCompletionService: CompletionService,
     private val myBundle: ResourceBundle,
     private val activeContextMenus: MutableMap<TextField, ContextMenu> = mutableMapOf()
 ) : View() {
@@ -41,10 +43,19 @@ class InputFormView(
 
     init {
         primaryContextInput.textProperty().addListener { _, _, _ ->
-            ViewUtilities.updateAutoCompletion(primaryContextInput, completionService, activeContextMenus)
+            ViewUtilities.updateAutoCompletion(primaryContextInput, contextCompletionService, activeContextMenus)
         }
         secondaryContextInput.textProperty().addListener { _, _, _ ->
-            ViewUtilities.updateAutoCompletion(secondaryContextInput, completionService, activeContextMenus)
+            ViewUtilities.updateAutoCompletion(secondaryContextInput, contextCompletionService, activeContextMenus)
+        }
+        synonymInput.textProperty().addListener { _, _, _ ->
+            ViewUtilities.updateAutoCompletion(synonymInput, lexicoCompletionService, activeContextMenus)
+        }
+        antonymInput.textProperty().addListener { _, _, _ ->
+            ViewUtilities.updateAutoCompletion(antonymInput, lexicoCompletionService, activeContextMenus)
+        }
+        tokenInput.textProperty().addListener { _, _, _ ->
+            ViewUtilities.updateAutoCompletion(tokenInput, tokenCompletionService, activeContextMenus)
         }
     }
 

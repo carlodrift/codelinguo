@@ -8,14 +8,18 @@ import java.util.*
 
 
 class MainView : View() {
-    private val completionService = CompletionService()
-    private val words = mutableListOf<Word>().asObservable()
+    companion object {
+        val contextCompletionService = CompletionService()
+        val lexicoCompletionService = CompletionService()
+        val tokenCompletionService = CompletionService()
+        val words = mutableListOf<Word>().asObservable()
+    }
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private var wordTableView: TableView<Word> by singleAssign()
 
     init {
-        DataLoader.loadSavedWords(words, completionService)
+        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService)
     }
 
     override val root = vbox(5.0) {
@@ -24,11 +28,11 @@ class MainView : View() {
         wordTableView = wordTableViewComponent.wordTableView
         this += wordTableViewComponent
 
-        val inputFormView = InputFormView(completionService, myBundle)
+        val inputFormView = InputFormView(contextCompletionService, lexicoCompletionService, tokenCompletionService, myBundle)
         this += inputFormView
 
         val buttonBarView = ButtonBarView(
-            myBundle, words, completionService, inputFormView.tokenInput,
+            myBundle, words, contextCompletionService, inputFormView.tokenInput,
             inputFormView.primaryContextInput, inputFormView.secondaryContextInput, inputFormView.synonymInput,
             inputFormView.antonymInput, inputFormView.definitionInput, wordTableView
         )

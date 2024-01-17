@@ -19,7 +19,8 @@ class JavaFileSanitizer : FileSanitizer() {
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
         private val REGEX_JAVA_STRING = "\".*\"".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
-        private const val JAVA_PACKAGE_DECLARATION = "package "
+        private const val JAVA_PACKAGE_DECLARATION = "package"
+        private const val JAVA_IMPORT_DECLARATION = "import"
     }
 
     private var inBlockComment = false
@@ -30,7 +31,7 @@ class JavaFileSanitizer : FileSanitizer() {
         lines.forEach { line ->
             var processedLine = processLineForComments(line)
             if (processedLine.isNotBlank()
-                && !checkPackageDeclaration(processedLine)
+                && !checkPackageDeclaration(processedLine) && !checkImportDeclaration(processedLine)
             ) {
                 processedLine = removeStringLiterals(processedLine)
                 extractWords(processedLine, words)
@@ -41,7 +42,11 @@ class JavaFileSanitizer : FileSanitizer() {
     }
 
     private fun checkPackageDeclaration(line: String): Boolean {
-        return line.startsWith(JAVA_PACKAGE_DECLARATION)
+        return line.startsWith("$JAVA_PACKAGE_DECLARATION ")
+    }
+
+    private fun checkImportDeclaration(line: String): Boolean {
+        return line.startsWith("$JAVA_IMPORT_DECLARATION ")
     }
 
     private fun processLineForComments(line: String): String {

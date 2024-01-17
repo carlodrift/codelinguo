@@ -1,5 +1,6 @@
 package fr.unilim.saes5.view
 
+import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
@@ -15,6 +16,7 @@ import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import tornadofx.*
+import java.io.File
 import java.util.*
 
 class ButtonBarView(
@@ -29,6 +31,10 @@ class ButtonBarView(
     private val definitionInput: TextArea,
     private val wordTableView: TableView<Word>? = null
 ) : View() {
+
+    private var lastOpenedDirectory: File? = null
+
+    private val defaultDirectory: File = File(System.getProperty("user.home"))
 
     override val root = hbox(20.0) {
         paddingBottom = 20.0
@@ -93,14 +99,19 @@ class ButtonBarView(
                     extensionFilters.addAll(
                         FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
                     )
+                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                 if (selectedFiles != null) {
+                    lastOpenedDirectory = selectedFiles.first().parentFile
+
                     val filePaths = selectedFiles.map { it.path }
-                    val words = JavaFileReader().read(filePaths)
+                    val analysisWords = JavaFileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                    ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
+                    val wordRank = analytics.wordRank(analysisWords)
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
             }
         }
@@ -109,12 +120,17 @@ class ButtonBarView(
             action {
                 val directoryChooser = DirectoryChooser().apply {
                     title = "Choisir un dossier"
+                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
-                    val words = JavaFileReader().read(file.toString())
+                    lastOpenedDirectory = file
+
+                    val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(words).mapKeys { it.key.token ?: "" }
-                    ViewUtilities.openWordOccurrenceView(wordRank, myBundle)
+                    val wordRank = analytics.wordRank(analysisWords)
+                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
             }
         }
@@ -147,7 +163,6 @@ class ButtonBarView(
                         )
                     } else {
                         words.add(newWord)
-                        ViewUtilities.updateCompletionService(newWord, completionService)
                         ViewUtilities.clearInputFields(
                             tokenInput,
                             primaryContextInput,
@@ -157,6 +172,7 @@ class ButtonBarView(
                             definitionInput
                         )
                         ViewUtilities.updateJsonFile(words)
+                        ViewUtilities.updateCompletionService()
                         wordTableView?.refresh()
                     }
                 }

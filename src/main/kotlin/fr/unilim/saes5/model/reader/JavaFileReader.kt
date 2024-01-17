@@ -31,8 +31,10 @@ class JavaFileReader : IRead {
 
     override fun readOne(path: String): List<Word> {
         if (path.endsWith(".java")) {
-            val lines = File(path).bufferedReader().readLines();
-            return JavaFileSanitizer().sanitizeLines(lines);
+            val lines = File(path).bufferedReader().readLines()
+            val words = JavaFileSanitizer().sanitizeLines(lines)
+            words.forEach { it.fileName = path.substringAfterLast("/", path).substringBeforeLast(".java") }
+            return words
         }
 
         return emptyList()

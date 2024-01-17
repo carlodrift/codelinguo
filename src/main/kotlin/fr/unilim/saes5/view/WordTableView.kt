@@ -23,19 +23,19 @@ class WordTableView(
         wordTableView = this
         columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
         addClass(ViewStyles.customTableView)
-        readonlyColumn(myBundle.getString("token_label"), Word::token)
-        readonlyColumn(myBundle.getString("definition_label"), Word::definition)
+        readonlyColumn(myBundle.getString("token_label") + " ⇅", Word::token)
+        readonlyColumn(myBundle.getString("definition_label") + " ⇅", Word::definition)
 
-        column(myBundle.getString("primary_context_label"), Word::context).cellFormat { cell ->
+        column(myBundle.getString("primary_context_label") + " ⇅", Word::context).cellFormat { cell ->
             text = cell?.filterIsInstance<PrimaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
         }
-        column(myBundle.getString("secondary_context_label"), Word::context).cellFormat { cell ->
+        column(myBundle.getString("secondary_context_label") + " ⇅", Word::context).cellFormat { cell ->
             text = cell?.filterIsInstance<SecondaryContext>()?.joinToString { it.word.token ?: "" } ?: ""
         }
-        column(myBundle.getString("synonym_label"), Word::synonyms).cellFormat { cell ->
+        column(myBundle.getString("synonym_label") + " ⇅", Word::synonyms).cellFormat { cell ->
             text = cell?.joinToString { it.token ?: "" } ?: ""
         }
-        column(myBundle.getString("antonym_label"), Word::antonyms).cellFormat { cell ->
+        column(myBundle.getString("antonym_label") + " ⇅", Word::antonyms).cellFormat { cell ->
             text = cell?.joinToString { it.token ?: "" } ?: ""
         }
         val removeColumn = TableColumn<Word, Word>("")
@@ -49,6 +49,7 @@ class WordTableView(
                         item?.let {
                             words.remove(it)
                             ViewUtilities.updateJsonFile(words)
+                            ViewUtilities.updateCompletionService()
                         }
                     }
                 }

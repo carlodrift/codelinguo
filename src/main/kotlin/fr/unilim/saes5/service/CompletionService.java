@@ -16,6 +16,10 @@ public class CompletionService {
         }
     }
 
+    public void clearCompletions() {
+        this.completions.clear();
+    }
+
     public Set<String> suggestCompletions(String input) {
         if (input == null) {
             return Set.of();
