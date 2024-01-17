@@ -1,5 +1,7 @@
 package fr.unilim.saes5.view
 
+import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
@@ -17,13 +19,18 @@ class CreateProjectView : View() {
             addClass(ViewStyles.heading)
         }
 
-        textfield {
+        val projectNameTextField = textfield {
             promptText = "Entrez le nom du projet"
             addClass(ViewStyles.customTextField)
         }
 
         button("Valider") {
             addClass(ViewStyles.projectButton)
+
+            action {
+                find(MainView::class, mapOf(MainView::projectName to projectNameTextField.text)).openWindow()
+
+            }
         }
 
 
