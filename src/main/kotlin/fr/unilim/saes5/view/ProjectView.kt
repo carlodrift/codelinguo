@@ -49,7 +49,15 @@ class ProjectView : View() {
                         cellFormat { project ->
                             graphic = hbox {
                                 label(project.name)
+
+                                setOnMouseClicked {
+                                    if (it.clickCount == 2) {
+                                        find(MainView::class, mapOf(MainView::projectName to project.name)).openWindow()
+                                    }
+                                }
                             }
+
+
                         }
                         prefHeight = 90.0
                         maxHeight = 180.0
