@@ -5,10 +5,9 @@ import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
-import javax.swing.GroupLayout.Alignment
 
 class ProjectView : View() {
-    private val glossaryDao = JsonGlossaryDao() // Instance of JsonGlossaryDao
+    private val glossaryDao = JsonGlossaryDao()
     private var projectsList = mutableListOf<Glossary>().observable()
 
     init {
@@ -21,8 +20,8 @@ class ProjectView : View() {
     }
 
     override val root = vbox(5.0) {
-        primaryStage.width = 850.0
-        primaryStage.height = 610.0
+        primaryStage.width = 550.0
+        primaryStage.height = 310.0
 
         vbox {
             paddingAll = 10.0
