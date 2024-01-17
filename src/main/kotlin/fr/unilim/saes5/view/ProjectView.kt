@@ -45,13 +45,6 @@ class ProjectView : View() {
                         find(CreateProjectView::class).openWindow()
                     }
                 }
-
-                button("Ouvrir un projet").apply {
-                    addClass(ViewStyles.projectButton)
-                    graphic = javafx.scene.image.ImageView(Image("/downloads.png"))
-                    action {
-                    }
-                }
             }
 
 
