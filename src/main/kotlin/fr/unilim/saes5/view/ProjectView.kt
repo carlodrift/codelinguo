@@ -1,6 +1,7 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.persistence.glossary.GlossaryDao
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.application.Platform
 import javafx.geometry.Insets
@@ -15,8 +16,8 @@ import java.util.*
 
 
 class ProjectView : View() {
-    private val glossaryDao = JsonGlossaryDao()
-    private var projectsList = mutableListOf<Glossary>().observable()
+    private val glossaryDao: GlossaryDao = JsonGlossaryDao()
+    private var projectsList = mutableListOf<Glossary>().asObservable()
     private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     init {

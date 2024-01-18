@@ -7,7 +7,7 @@ import tornadofx.*
 import java.util.*
 
 
-class MainView() : View() {
+class MainView : View() {
     val projectName: String by param()
 
     companion object {

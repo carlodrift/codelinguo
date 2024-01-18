@@ -11,5 +11,6 @@ public interface GlossaryDao {
     void saveProject(Glossary project, String name);
 
     List<Glossary> getAllProjects();
+
     void deleteProject(String name);
 }

@@ -1,6 +1,7 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.persistence.glossary.GlossaryDao
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
@@ -13,7 +14,7 @@ object DataLoader {
         tokenCompletionService: CompletionService,
         projectName: String
     ) {
-        val projectDao = JsonGlossaryDao()
+        val projectDao: GlossaryDao = JsonGlossaryDao()
         val projects = projectDao.allProjects
 
         contextCompletionService.clearCompletions()
@@ -23,7 +24,7 @@ object DataLoader {
         val project = projects.find { it.name == projectName }
 
         if (project != null) {
-            project.getWords()?.forEach { word ->
+            project.words?.forEach { word ->
                 word.context?.forEach { context ->
                     contextCompletionService.addCompletion(context.word.token ?: "")
                 }

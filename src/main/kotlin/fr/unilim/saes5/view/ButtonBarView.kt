@@ -5,6 +5,7 @@ import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
+import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
 import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.service.WordAnalyticsService
@@ -34,7 +35,7 @@ class ButtonBarView(
     name: String
 ) : View() {
 
-    private val directoryDao = JsonDirectoryDao()
+    private val directoryDao: DirectoryDao = JsonDirectoryDao()
     private var lastOpenedDirectory: File? = null
 
     private val defaultDirectory: File = File(System.getProperty("user.home"))
