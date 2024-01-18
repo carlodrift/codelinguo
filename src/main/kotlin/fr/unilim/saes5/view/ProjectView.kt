@@ -3,9 +3,13 @@ package fr.unilim.saes5.view
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.application.Platform
+import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+
 
 class ProjectView : View() {
     private val glossaryDao = JsonGlossaryDao()
@@ -18,7 +22,11 @@ class ProjectView : View() {
     override fun onDock() {
         super.onDock()
         loadProjects()
+        this.primaryStage.apply {
+            height = 350.0
+        }
     }
+
 
     private fun loadProjects() {
         projectsList.clear()
@@ -44,7 +52,7 @@ class ProjectView : View() {
             vbox {
                 alignment = Pos.CENTER_LEFT
                 label("Tous les projets") {
-                    paddingLeft = 5.0
+                    padding = Insets(20.0, 0.0, 0.0, 5.0)
                     addClass(ViewStyles.heading)
                 }
                 separator { addClass(ViewStyles.separator) }
@@ -55,7 +63,15 @@ class ProjectView : View() {
                     listview(projectsList) {
                         cellFormat { project ->
                             graphic = hbox(10.0) {
-                                label(project.name)
+                                alignment = Pos.CENTER_LEFT
+
+                                label(project.name) {
+                                    HBox.setHgrow(this, Priority.ALWAYS)
+                                }
+
+                                region {
+                                    HBox.setHgrow(this, Priority.ALWAYS)
+                                }
 
                                 button("X").apply {
                                     addClass(ViewStyles.removeButton)
@@ -66,12 +82,12 @@ class ProjectView : View() {
                                         }
                                     }
                                 }
-
-                                setOnMouseClicked {
-                                    if (it.clickCount == 2) {
-                                        primaryStage.close()
-                                        find(MainView::class, mapOf(MainView::projectName to project.name)).openWindow()
-                                    }
+                            }
+                            // Set the mouse clicked event on the list cell, not on the graphic.
+                            setOnMouseClicked {
+                                if (it.clickCount == 2) {
+                                    primaryStage.close()
+                                    find(MainView::class, mapOf(MainView::projectName to project.name)).openWindow()
                                 }
                             }
                         }
@@ -79,7 +95,6 @@ class ProjectView : View() {
                         maxHeight = 180.0
                     }
                 }
-
 
             }
 

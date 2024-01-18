@@ -41,8 +41,8 @@ class ViewStyles : Stylesheet() {
             borderRadius += box(15.px)
             fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
-
             and(hover) {
+                backgroundColor += c("#D7D7D7")
             }
         }
 
