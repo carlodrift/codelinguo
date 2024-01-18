@@ -65,6 +65,8 @@ class ButtonBarView(
                     initOwner(this@ButtonBarView.currentWindow)
                     title = myBundle.getString("help_title")
                     dialogPane.buttonTypes.add(ButtonType.CLOSE)
+                    val closeButton = dialogPane.lookupButton(ButtonType.CLOSE)
+                    closeButton.addClass(ViewStyles.helpButton)
                     val textFlow = TextFlow(
                         Text(myBundle.getString("token_label") + "\n").apply { style = "-fx-font-weight: bold" },
                         Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_token") + "\n\n"),
