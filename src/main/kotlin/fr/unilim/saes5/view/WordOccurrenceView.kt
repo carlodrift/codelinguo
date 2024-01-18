@@ -153,6 +153,7 @@ class WordOccurrenceView(
             prefWidth = 300.0
             cellFormat { wordEntry ->
                 text = wordEntry.token + " »"
+                cursor = Cursor.HAND
                 style {
                     alignment = Pos.CENTER_LEFT
                     textAlignment = TextAlignment.LEFT
@@ -162,6 +163,7 @@ class WordOccurrenceView(
                         text = "\u2713 $text"
                     }
                 }
+                tooltip("Double-cliquez pour afficher")
                 setOnMouseClicked {
                     if (it.clickCount == 2) {
                         showFileNamesWindow(wordEntry, wordRank)
@@ -169,6 +171,7 @@ class WordOccurrenceView(
                 }
             }
         }
+
 
         readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
