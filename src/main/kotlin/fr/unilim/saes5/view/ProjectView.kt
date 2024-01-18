@@ -60,7 +60,7 @@ class ProjectView  : View() {
             vbox {
                 alignment = Pos.CENTER_LEFT
                 label(myBundle.getString("all_projects")) {
-                    padding = Insets(20.0, 0.0, 0.0, 5.0)
+                    padding = Insets(20.0, 0.0, 5.0, 5.0)
                     addClass(ViewStyles.heading)
                 }
                 separator { addClass(ViewStyles.separator) }
