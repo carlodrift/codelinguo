@@ -54,8 +54,18 @@ class ProjectView : View() {
 
                     listview(projectsList) {
                         cellFormat { project ->
-                            graphic = hbox {
+                            graphic = hbox(10.0) {
                                 label(project.name)
+
+                                button("X").apply {
+                                    addClass(ViewStyles.removeButton)
+                                    action {
+                                        confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
+                                            glossaryDao.deleteProject(project.name)
+                                            loadProjects()
+                                        }
+                                    }
+                                }
 
                                 setOnMouseClicked {
                                     if (it.clickCount == 2) {
@@ -64,13 +74,12 @@ class ProjectView : View() {
                                     }
                                 }
                             }
-
-
                         }
                         prefHeight = 150.0
                         maxHeight = 180.0
                     }
                 }
+
 
             }
 

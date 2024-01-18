@@ -81,8 +81,14 @@ public class JsonGlossaryDao implements GlossaryDao {
         }
     }
 
-    public boolean isProjectNameAvailable(String projectName) {
-        File projectFile = new File(this.directory, projectName + ".json");
-        return !projectFile.exists();
+    public void deleteProject(String name) {
+        File projectFile = new File(this.directory, name + ".json");
+        if (projectFile.exists()) {
+            if (!projectFile.delete()) {
+                System.err.println("Failed to delete the project: " + name);
+            }
+        } else {
+            System.err.println("Project not found: " + name);
+        }
     }
 }
