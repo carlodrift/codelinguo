@@ -52,7 +52,7 @@ class ButtonBarView(
         paddingHorizontal = 20.0
         alignment = Pos.BASELINE_RIGHT
 
-        button("Quitter") {
+        button(myBundle.getString("button_quit")) {
             addClass(ViewStyles.helpButton)
             action {
                 Platform.exit()
@@ -108,9 +108,9 @@ class ButtonBarView(
             addClass(ViewStyles.downloadButtonHover)
             action {
                 val fileChooser = FileChooser().apply {
-                    title = "Choisir des fichiers"
+                    title = myBundle.getString("choose_files")
                     extensionFilters.addAll(
-                        FileChooser.ExtensionFilter("Fichiers Java", "*.java"),
+                        FileChooser.ExtensionFilter(myBundle.getString("file_java"), "*.java"),
                     )
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
@@ -133,7 +133,7 @@ class ButtonBarView(
             addClass(ViewStyles.downloadButtonHover)
             action {
                 val directoryChooser = DirectoryChooser().apply {
-                    title = "Choisir un dossier"
+                    title =myBundle.getString("choose_folder")
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->

@@ -11,11 +11,13 @@ import javafx.scene.image.Image
 import tornadofx.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import java.util.*
 
 
-class ProjectView : View() {
+class ProjectView  : View() {
     private val glossaryDao = JsonGlossaryDao()
     private var projectsList = mutableListOf<Glossary>().observable()
+    private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     init {
         loadProjects()
@@ -46,7 +48,7 @@ class ProjectView : View() {
 
         vbox {
             paddingAll = 10.0
-            button("Quitter").apply {
+            button(myBundle.getString("button_quit")).apply {
                 addClass(ViewStyles.helpButton)
                 action { Platform.exit() }
             }
@@ -57,7 +59,7 @@ class ProjectView : View() {
         hbox (30.0){
             vbox {
                 alignment = Pos.CENTER_LEFT
-                label("Tous les projets") {
+                label(myBundle.getString("all_projects")) {
                     padding = Insets(20.0, 0.0, 0.0, 5.0)
                     addClass(ViewStyles.heading)
                 }
@@ -81,14 +83,14 @@ class ProjectView : View() {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }
 
-                                button("Ouvrir").apply {
+                                button(myBundle.getString("button_open")).apply {
                                     addClass(ViewStyles.openButton)
                                     action {
                                         openProject(project.name)
                                     }
                                 }
 
-                                button("X").apply {
+                                button(myBundle.getString("button_X")).apply {
                                     addClass(ViewStyles.removeButton)
                                     cursor = Cursor.HAND
                                     action {
@@ -110,7 +112,7 @@ class ProjectView : View() {
             vbox(10.0) {
                 alignment = Pos.CENTER_RIGHT
 
-                button("Nouveau projet").apply {
+                button(myBundle.getString("button_new_project")).apply {
                     addClass(ViewStyles.projectButton)
                     graphic = javafx.scene.image.ImageView(Image("/plus.png"))
                     action {
