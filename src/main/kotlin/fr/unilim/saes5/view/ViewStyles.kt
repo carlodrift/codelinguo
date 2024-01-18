@@ -20,6 +20,7 @@ class ViewStyles : Stylesheet() {
         val removeButton by cssclass()
         val projectButton by cssclass()
         val separator by cssclass()
+        val openButton by cssclass()
     }
 
     init {
@@ -39,6 +40,20 @@ class ViewStyles : Stylesheet() {
             backgroundColor += c("#ffffff")
             borderColor += box(c("#000000"))
             borderRadius += box(15.px)
+            fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
+
+            and(hover) {
+                backgroundColor += c("#D7D7D7")
+            }
+        }
+
+        openButton {
+            fontSize = 13.px
+            cursor = Cursor.HAND
+            backgroundRadius += box(15.px)
+            backgroundColor += c("#ffffff")
+            borderColor += box(c("#000000"))
+            borderRadius += box(10.px)
             fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
 
             and(hover) {

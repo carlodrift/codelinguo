@@ -5,6 +5,7 @@ import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
 import tornadofx.*
 import javafx.scene.layout.HBox
@@ -27,6 +28,10 @@ class ProjectView : View() {
         }
     }
 
+    private fun openProject(projectName: String) {
+        primaryStage.close()
+        find(MainView::class, mapOf(MainView::projectName to projectName)).openWindow()
+    }
 
     private fun loadProjects() {
         projectsList.clear()
@@ -58,9 +63,11 @@ class ProjectView : View() {
                 separator { addClass(ViewStyles.separator) }
 
                 scrollpane(fitToWidth = true) {
-                    isFitToHeight = true
 
                     listview(projectsList) {
+                        selectionModel.selectionMode = SelectionMode.SINGLE
+
+                        isFocusTraversable = false
                         cellFormat { project ->
                             graphic = hbox(10.0) {
                                 alignment = Pos.CENTER_LEFT
@@ -73,6 +80,13 @@ class ProjectView : View() {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }
 
+                                button("Ouvrir").apply {
+                                    addClass(ViewStyles.openButton)
+                                    action {
+                                        openProject(project.name)
+                                    }
+                                }
+
                                 button("X").apply {
                                     addClass(ViewStyles.removeButton)
                                     action {
@@ -81,13 +95,6 @@ class ProjectView : View() {
                                             loadProjects()
                                         }
                                     }
-                                }
-                            }
-     
-                            setOnMouseClicked {
-                                if (it.clickCount == 2) {
-                                    primaryStage.close()
-                                    find(MainView::class, mapOf(MainView::projectName to project.name)).openWindow()
                                 }
                             }
                         }
