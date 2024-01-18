@@ -172,6 +172,14 @@ class WordOccurrenceView(
 
         readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
+            cellFormat { occurrenceEntry ->
+                text = occurrenceEntry.toString()
+                style {
+                    if (!wordsInListNotInGlossary.any { word -> word.token == this@cellFormat.rowItem.key.token }) {
+                        backgroundColor += c("#A1F9B4")
+                    }
+                }
+            }
         }
 
         columnResizePolicy = CONSTRAINED_RESIZE_POLICY
