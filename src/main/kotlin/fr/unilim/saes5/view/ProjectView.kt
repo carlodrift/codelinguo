@@ -43,7 +43,7 @@ class ProjectView : View() {
         hbox (5.0){
             vbox {
                 alignment = Pos.CENTER_LEFT
-                label("Projets récents") {
+                label("Tous les projets") {
                     paddingLeft = 5.0
                     addClass(ViewStyles.heading)
                 }
@@ -67,7 +67,7 @@ class ProjectView : View() {
 
 
                         }
-                        prefHeight = 90.0
+                        prefHeight = 150.0
                         maxHeight = 180.0
                     }
                 }
