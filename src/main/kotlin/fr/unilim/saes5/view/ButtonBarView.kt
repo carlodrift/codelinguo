@@ -5,6 +5,7 @@ import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
+import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
 import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
@@ -33,10 +34,19 @@ class ButtonBarView(
     name: String
 ) : View() {
 
+    private val directoryDao = JsonDirectoryDao()
     private var lastOpenedDirectory: File? = null
 
     private val defaultDirectory: File = File(System.getProperty("user.home"))
 
+    init {
+        val savedDirectoryPath = directoryDao.loadDirectory()
+        lastOpenedDirectory = if (savedDirectoryPath != null && savedDirectoryPath.isNotEmpty()) {
+            File(savedDirectoryPath)
+        } else {
+            defaultDirectory
+        }
+    }
     override val root = hbox(20.0) {
         paddingBottom = 20.0
         paddingHorizontal = 20.0
@@ -105,6 +115,7 @@ class ButtonBarView(
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                 if (selectedFiles != null) {
                     lastOpenedDirectory = selectedFiles.first().parentFile
+                    directoryDao.saveDirectory(lastOpenedDirectory?.absolutePath)
 
                     val filePaths = selectedFiles.map { it.path }
                     val analysisWords = JavaFileReader().read(filePaths)
@@ -125,6 +136,7 @@ class ButtonBarView(
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
                     lastOpenedDirectory = file
+                    directoryDao.saveDirectory(lastOpenedDirectory?.absolutePath)
 
                     val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
