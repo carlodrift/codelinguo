@@ -152,7 +152,7 @@ class WordOccurrenceView(
         readonlyColumn(myBundle.getString("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
-                text = wordEntry.token
+                text = wordEntry.token + " »"
                 style {
                     alignment = Pos.CENTER_LEFT
                     textAlignment = TextAlignment.LEFT
