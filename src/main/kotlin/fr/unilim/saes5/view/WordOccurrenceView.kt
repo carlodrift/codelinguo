@@ -203,28 +203,11 @@ class WordOccurrenceView(
         }
 
         label {
-            val percentageText = String.format("%.2f%%", glossaryRatio * 100)
             text = myBundle.getString("glossary_ratio")
             style {
                 fontSize = 20.px
                 fontWeight = FontWeight.BOLD
             }
-        }
-    }
-
-    private val activeViewProperty = SimpleObjectProperty<Node>(generalView)
-
-    private val generalButton = button(myBundle.getString("button_general")) {
-        toggleClass(ViewStyles.downloadButton, true)
-        action {
-            activeViewProperty.value = generalView
-        }
-    }
-
-    private val detailsButton = button(myBundle.getString("button_details")) {
-        toggleClass(ViewStyles.helpButton, true)
-        action {
-            activeViewProperty.value = detailsView
         }
     }
 
@@ -242,22 +225,15 @@ class WordOccurrenceView(
         top = hbox {
             paddingAll = 10.0
             spacing = 10.0
-            add(generalButton)
-            add(detailsButton)
             region {
                 hgrow = Priority.ALWAYS
             }
             add(closeButton)
         }
 
-        centerProperty().bind(activeViewProperty)
-
-        centerProperty().addListener { _, _, newValue ->
-            generalButton.toggleClass(ViewStyles.downloadButton, newValue == generalView)
-            generalButton.toggleClass(ViewStyles.helpButton, newValue != generalView)
-
-            detailsButton.toggleClass(ViewStyles.downloadButton, newValue == detailsView)
-            detailsButton.toggleClass(ViewStyles.helpButton, newValue != detailsView)
+        center = vbox {
+            add(generalView)
+            add(detailsView)
         }
     }
 }

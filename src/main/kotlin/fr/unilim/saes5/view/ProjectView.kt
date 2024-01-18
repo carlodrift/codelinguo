@@ -83,7 +83,7 @@ class ProjectView : View() {
                                     }
                                 }
                             }
-                            // Set the mouse clicked event on the list cell, not on the graphic.
+     
                             setOnMouseClicked {
                                 if (it.clickCount == 2) {
                                     primaryStage.close()
