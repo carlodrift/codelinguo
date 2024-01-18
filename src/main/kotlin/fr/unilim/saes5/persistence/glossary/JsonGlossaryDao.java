@@ -16,7 +16,6 @@ import java.util.List;
 
 public class JsonGlossaryDao implements GlossaryDao {
 
-    private static final String CODELINGUO_PROJECTS = ".codelinguo/projects";
     private final Gson gson;
 
     private final File directory;

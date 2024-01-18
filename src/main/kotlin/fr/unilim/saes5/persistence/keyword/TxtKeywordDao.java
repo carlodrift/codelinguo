@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 
 public class TxtKeywordDao implements KeywordDao {
 
-    private static final String KEYWORDS_FILE_PATH = "/java_reserved_keywords.txt";
-
     @Override
     public Set<String> loadKeywords() {
         try (InputStream is = TxtKeywordDao.class.getResourceAsStream(TxtKeywordDao.KEYWORDS_FILE_PATH);
