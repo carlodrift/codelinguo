@@ -75,7 +75,7 @@ class ProjectView : View() {
                             graphic = hbox(10.0) {
                                 alignment = Pos.CENTER_LEFT
 
-                                label(project.name) {
+                                label(project.name.take(20)) {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }
 
