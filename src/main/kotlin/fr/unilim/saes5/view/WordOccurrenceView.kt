@@ -186,12 +186,29 @@ class WordOccurrenceView(
     }
 
     private val detailsView = vbox {
-        label {
-            val boldText = Text(String.format("%.2f%%", glossaryRatio * 100)).apply {
-                style { fontWeight = FontWeight.BOLD }
+        alignment = Pos.CENTER
+        spacing = 20.0
+        style {
+            padding = box(20.px)
+        }
+
+        text {
+            val percentageText = String.format("%.2f%%", glossaryRatio * 100)
+            text = percentageText
+            style {
+                fontSize = 50.px
+                fontWeight = FontWeight.EXTRA_BOLD
+                fill = c("#0078D7")
             }
-            graphic = boldText
-            text = " " + myBundle.getString("glossary_ratio")
+        }
+
+        label {
+            val percentageText = String.format("%.2f%%", glossaryRatio * 100)
+            text = myBundle.getString("glossary_ratio")
+            style {
+                fontSize = 20.px
+                fontWeight = FontWeight.BOLD
+            }
         }
     }
 
