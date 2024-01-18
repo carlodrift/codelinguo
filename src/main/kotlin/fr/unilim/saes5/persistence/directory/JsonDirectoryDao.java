@@ -7,7 +7,7 @@ import java.io.*;
 
 public class JsonDirectoryDao implements DirectoryDao {
 
-    private static final String DIRECTORY_STORE = ".codelinguo/directory_store";
+    private static final String DIRECTORY_STORE = ".codelinguo/";
     private final File file;
     private final Gson gson;
 
