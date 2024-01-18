@@ -5,6 +5,7 @@ import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Cursor
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
 import tornadofx.*
@@ -89,6 +90,7 @@ class ProjectView : View() {
 
                                 button("X").apply {
                                     addClass(ViewStyles.removeButton)
+                                    cursor = Cursor.HAND
                                     action {
                                         confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
                                             glossaryDao.deleteProject(project.name)
