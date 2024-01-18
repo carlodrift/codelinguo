@@ -15,6 +15,11 @@ class ProjectView : View() {
         loadProjects()
     }
 
+    override fun onDock() {
+        super.onDock()
+        loadProjects()
+    }
+
     private fun loadProjects() {
         projectsList.clear()
         projectsList.addAll(glossaryDao.getAllProjects())
