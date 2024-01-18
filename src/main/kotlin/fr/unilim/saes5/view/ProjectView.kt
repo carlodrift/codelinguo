@@ -32,8 +32,8 @@ class ProjectView : View() {
 
         vbox {
             paddingAll = 10.0
-            button("Quitter X").apply {
-                addClass(ViewStyles.downloadButtonHover)
+            button("Quitter").apply {
+                addClass(ViewStyles.helpButton)
                 action { Platform.exit() }
             }
         }.alignment = Pos.TOP_RIGHT

@@ -42,17 +42,10 @@ class ButtonBarView(
         paddingHorizontal = 20.0
         alignment = Pos.BASELINE_RIGHT
 
-        button(myBundle.getString("button_quit")) {
+        button("Quitter") {
             addClass(ViewStyles.helpButton)
             action {
-                this@ButtonBarView.close()
-                find<ProjectView>().openWindow(stageStyle = javafx.stage.StageStyle.DECORATED)?.apply {
-                    this?.isResizable = false
-                    this?.isMaximized = false
-                    setWidth(550.0)
-                    setHeight(310.0)
-                    centerOnScreen()
-                }
+                Platform.exit()
             }
         }
         button(myBundle.getString("button_help")) {
