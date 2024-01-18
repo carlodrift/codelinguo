@@ -26,7 +26,7 @@ class ProjectView : View() {
     }
 
 
-    override val root = vbox(5.0) {
+    override val root = vbox {
         primaryStage.width = 550.0
         primaryStage.height = 310.0
 
@@ -40,7 +40,7 @@ class ProjectView : View() {
 
         separator { addClass(ViewStyles.separator) }
 
-        hbox (5.0){
+        hbox (30.0){
             vbox {
                 alignment = Pos.CENTER_LEFT
                 label("Tous les projets") {

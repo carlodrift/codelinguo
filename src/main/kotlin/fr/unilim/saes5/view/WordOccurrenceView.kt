@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Cursor
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.chart.PieChart
@@ -19,6 +20,7 @@ import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
 import tornadofx.*
 import java.util.*
+import javafx.scene.input.MouseEvent
 
 
 class WordOccurrenceView(
@@ -45,10 +47,19 @@ class WordOccurrenceView(
         }.let { FXCollections.observableArrayList(it) }
 
         val newCloseButton = button(myBundle.getString("button_close")) {
-            addClass(ViewStyles.downloadButtonHover)
             action {
                 val stage = this@button.scene.window as Stage
                 stage.close()
+            }
+            style {
+                fontSize = 18.px
+                cursor = Cursor.HAND
+                backgroundColor += c("#FFFFFF")
+                backgroundRadius += box(15.px)
+                borderRadius += box(15.px)
+                borderWidth += box(1.px)
+                borderColor += box(c("#000000"))
+                fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
             }
         }
 
@@ -60,7 +71,7 @@ class WordOccurrenceView(
 
         val closeButtonHBox = HBox().apply {
             alignment = Pos.TOP_RIGHT
-            children.add(newCloseButton)
+            add(newCloseButton)
             padding = Insets(10.0)
         }
 
@@ -163,7 +174,7 @@ class WordOccurrenceView(
     }
 
     private val closeButton = button(myBundle.getString("button_close")) {
-        addClass(ViewStyles.downloadButtonHover)
+        addClass(ViewStyles.helpButton)
         action {
             close()
         }
