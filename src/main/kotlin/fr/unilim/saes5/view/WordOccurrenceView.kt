@@ -61,7 +61,37 @@ class WordOccurrenceView(
                 borderColor += box(c("#000000"))
                 fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
             }
+            hoverProperty().addListener { _, _, isHovered ->
+                if (isHovered) {
+                    style {
+                        fontSize = 18.px
+                        cursor = Cursor.HAND
+                        backgroundColor += c("#D7D7D7")
+                        backgroundRadius += box(15.px)
+                        borderRadius += box(15.px)
+                        borderWidth += box(1.px)
+                        borderColor += box(c("#000000"))
+                        fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
+                    }
+                } else {
+                    style {
+                        fontSize = 18.px
+                        cursor = Cursor.HAND
+                        backgroundColor += c("#FFFFFF")
+                        backgroundRadius += box(15.px)
+                        borderRadius += box(15.px)
+                        borderWidth += box(1.px)
+                        borderColor += box(c("#000000"))
+                        fontFamily = listOf("DM Sans", "Arial", "Helvetica", "sans-serif").joinToString(",")
+                    }
+                }
+            }
         }
+
+
+
+
+
 
         val pieChart = PieChart(pieChartData).apply {
             isClockwise = true

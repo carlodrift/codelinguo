@@ -85,7 +85,6 @@ class ViewStyles : Stylesheet() {
         }
 
         downloadButtonHover {
-
             fontSize = 18.px
             cursor = Cursor.HAND
             backgroundColor += c("#000000")
