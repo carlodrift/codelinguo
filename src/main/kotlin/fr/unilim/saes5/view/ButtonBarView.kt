@@ -47,6 +47,7 @@ class ButtonBarView(
             defaultDirectory
         }
     }
+
     override val root = hbox(20.0) {
         paddingBottom = 20.0
         paddingHorizontal = 20.0
@@ -123,7 +124,8 @@ class ButtonBarView(
                     val analysisWords = JavaFileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+                    val wordsInListNotInGlossary =
+                        analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }
@@ -133,7 +135,7 @@ class ButtonBarView(
             addClass(ViewStyles.downloadButtonHover)
             action {
                 val directoryChooser = DirectoryChooser().apply {
-                    title =myBundle.getString("choose_folder")
+                    title = myBundle.getString("choose_folder")
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
@@ -143,7 +145,8 @@ class ButtonBarView(
                     val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+                    val wordsInListNotInGlossary =
+                        analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
                     ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
                 }

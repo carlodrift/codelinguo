@@ -8,13 +8,13 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
-import tornadofx.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import tornadofx.*
 import java.util.*
 
 
-class ProjectView  : View() {
+class ProjectView : View() {
     private val glossaryDao = JsonGlossaryDao()
     private var projectsList = mutableListOf<Glossary>().observable()
     private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
@@ -56,7 +56,7 @@ class ProjectView  : View() {
 
         separator { addClass(ViewStyles.separator) }
 
-        hbox (30.0){
+        hbox(30.0) {
             vbox {
                 alignment = Pos.CENTER_LEFT
                 label(myBundle.getString("all_projects")) {

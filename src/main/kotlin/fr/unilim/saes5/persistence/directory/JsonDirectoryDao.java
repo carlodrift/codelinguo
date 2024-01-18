@@ -3,7 +3,12 @@ package fr.unilim.saes5.persistence.directory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 
 public class JsonDirectoryDao implements DirectoryDao {
 

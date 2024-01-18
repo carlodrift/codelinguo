@@ -6,7 +6,13 @@ import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
 
 object DataLoader {
-    fun loadSavedWords(words: ObservableList<Word>, contextCompletionService: CompletionService, lexicoCompletionService: CompletionService, tokenCompletionService: CompletionService, projectName: String) {
+    fun loadSavedWords(
+        words: ObservableList<Word>,
+        contextCompletionService: CompletionService,
+        lexicoCompletionService: CompletionService,
+        tokenCompletionService: CompletionService,
+        projectName: String
+    ) {
         val projectDao = JsonGlossaryDao()
         val projects = projectDao.allProjects
 

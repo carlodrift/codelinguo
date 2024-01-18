@@ -19,7 +19,12 @@ object ViewUtilities {
         projectDao.saveProject(glossary, name)
     }
 
-    fun openWordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, myBundle: ResourceBundle) {
+    fun openWordOccurrenceView(
+        wordRank: Map<Word, Int>,
+        wordsInListNotInGlossary: List<Word>,
+        glossaryRatio: Float,
+        myBundle: ResourceBundle
+    ) {
         val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
@@ -70,7 +75,13 @@ object ViewUtilities {
     }
 
     fun updateCompletionService(projectName: String) {
-        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService, projectName)
+        DataLoader.loadSavedWords(
+            MainView.words,
+            MainView.contextCompletionService,
+            MainView.lexicoCompletionService,
+            MainView.tokenCompletionService,
+            projectName
+        )
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

@@ -14,7 +14,6 @@ class Word(var token: String?) {
     constructor() : this(null)
 
 
-
     override fun toString(): String {
         return "$token"
     }
