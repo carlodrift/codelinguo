@@ -23,6 +23,7 @@ class MainView() : View() {
 
     init {
         DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService, projectName)
+        ViewUtilities.updateJsonFile(words, projectName)
     }
 
     override val root = vbox(5.0) {
