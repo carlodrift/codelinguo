@@ -2,6 +2,7 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
+import javafx.application.Platform
 import javafx.geometry.Pos
 import javafx.scene.image.Image
 import tornadofx.*
@@ -28,7 +29,7 @@ class ProjectView : View() {
             paddingAll = 10.0
             button("Quitter X").apply {
                 addClass(ViewStyles.downloadButtonHover)
-                action { primaryStage.close() }
+                action { Platform.exit() }
             }
         }.alignment = Pos.TOP_RIGHT
 
