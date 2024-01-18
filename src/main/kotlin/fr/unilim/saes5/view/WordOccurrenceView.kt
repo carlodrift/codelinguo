@@ -1,12 +1,10 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
-import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
-import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.chart.PieChart
 import javafx.scene.control.*
@@ -15,12 +13,10 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.FontWeight
-import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
 import tornadofx.*
 import java.util.*
-import javafx.scene.input.MouseEvent
 
 
 class WordOccurrenceView(
