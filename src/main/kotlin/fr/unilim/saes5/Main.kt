@@ -3,6 +3,7 @@ package fr.unilim.saes5
 import fr.unilim.saes5.view.MainView
 import fr.unilim.saes5.view.ProjectView
 import fr.unilim.saes5.view.ViewStyles
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import tornadofx.App
 import tornadofx.launch
@@ -10,6 +11,7 @@ import tornadofx.launch
 class MainApp : App(ProjectView::class, ViewStyles::class) {
     override fun start(stage: Stage) {
         with(stage) {
+            icons += Image("/logo.jpg")
             isResizable = false
             isMaximized = false
         }
