@@ -9,9 +9,6 @@ import tornadofx.*
 class CreateProjectView : View() {
     private lateinit var projectNameTextField: TextField
 
-    init {
-    }
-
     override val root = vbox {
         alignment = Pos.CENTER
         paddingAll = 10.0

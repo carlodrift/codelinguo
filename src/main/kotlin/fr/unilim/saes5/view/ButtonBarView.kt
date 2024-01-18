@@ -7,7 +7,6 @@ import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
-import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.collections.ObservableList
@@ -24,7 +23,6 @@ import java.util.*
 class ButtonBarView(
     private val myBundle: ResourceBundle,
     private val words: ObservableList<Word>,
-    private val completionService: CompletionService,
     private val tokenInput: TextField,
     private val primaryContextInput: TextField,
     private val secondaryContextInput: TextField,

@@ -43,9 +43,9 @@ class MainView : View() {
         this += inputFormView
 
         val buttonBarView = ButtonBarView(
-            myBundle, words, contextCompletionService, inputFormView.tokenInput,
-            inputFormView.primaryContextInput, inputFormView.secondaryContextInput, inputFormView.synonymInput,
-            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView, projectName
+            myBundle, words, inputFormView.tokenInput, inputFormView.primaryContextInput,
+            inputFormView.secondaryContextInput, inputFormView.synonymInput, inputFormView.antonymInput,
+            inputFormView.definitionInput, wordTableView, projectName
         )
         this += buttonBarView
     }
