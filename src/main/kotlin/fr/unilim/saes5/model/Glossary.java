@@ -7,6 +7,16 @@ public class Glossary {
     private final List<Word> words;
     private String name;
 
+    private boolean demo;
+
+    public void setDemo(boolean demo) {
+        this.demo = demo;
+    }
+
+    public boolean isDemo() {
+        return this.demo;
+    }
+
     public Glossary(List<Word> words) {
         this.words = words;
     }

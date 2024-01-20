@@ -7,6 +7,7 @@ import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
+import javafx.scene.control.Alert
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
 import javafx.scene.layout.HBox
@@ -91,14 +92,20 @@ class ProjectView : View() {
                                     }
                                 }
 
-                                button(myBundle.getString("button_X")).apply {
-                                    addClass(ViewStyles.removeButton)
-                                    cursor = Cursor.HAND
-                                    action {
-                                        confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
-                                            glossaryDao.deleteProject(project.name)
-                                            loadProjects()
+                                if (!project.isDemo) {
+                                    button(myBundle.getString("button_X")).apply {
+                                        addClass(ViewStyles.removeButton)
+                                        cursor = Cursor.HAND
+                                        action {
+                                            confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
+                                                glossaryDao.deleteProject(project.name)
+                                                loadProjects()
+                                            }
                                         }
+                                    }
+                                }  else {
+                                    button("   ").apply {
+                                        addClass(ViewStyles.removeButton)
                                     }
                                 }
                             }
