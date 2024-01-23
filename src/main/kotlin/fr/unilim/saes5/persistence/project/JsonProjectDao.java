@@ -1,4 +1,4 @@
-package fr.unilim.saes5.persistence.glossary;
+package fr.unilim.saes5.persistence.project;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,15 +17,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonGlossaryDao implements GlossaryDao {
+public class JsonProjectDao implements ProjectDao {
 
     private final Gson gson;
 
     private final File directory;
 
-    public JsonGlossaryDao() {
+    public JsonProjectDao() {
         String userHome = System.getProperty("user.home");
-        this.directory = new File(userHome, JsonGlossaryDao.CODELINGUO_PROJECTS);
+        this.directory = new File(userHome, JsonProjectDao.CODELINGUO_PROJECTS);
         if (!this.directory.exists()) {
             this.directory.mkdirs();
         }
@@ -36,7 +36,7 @@ public class JsonGlossaryDao implements GlossaryDao {
     }
 
     @Override
-    public void saveProject(Glossary project, String name) {
+    public void save(Glossary project, String name) {
         File jsonFile = new File(this.directory, name + ".json");
         if (!jsonFile.exists()) {
             try {
@@ -52,7 +52,7 @@ public class JsonGlossaryDao implements GlossaryDao {
         this.writeListToFile(singleProjectList);
     }
 
-    public List<Glossary> getAllProjects() {
+    public List<Glossary> retrieve() {
         List<Glossary> allGlossaries = new ArrayList<>();
 
         File folder = this.directory;
@@ -97,7 +97,7 @@ public class JsonGlossaryDao implements GlossaryDao {
         }
     }
 
-    public void deleteProject(String name) {
+    public void delete(String name) {
         File projectFile = new File(this.directory, name + ".json");
         if (projectFile.exists()) {
             if (!projectFile.delete()) {

@@ -1,4 +1,4 @@
-package fr.unilim.saes5.view
+package fr.unilim.saes5.view.style
 
 import javafx.geometry.Pos
 import javafx.scene.Cursor

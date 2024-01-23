@@ -1,8 +1,8 @@
-package fr.unilim.saes5.view
+package fr.unilim.saes5.view.utilities
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.glossary.GlossaryDao
-import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
+import fr.unilim.saes5.persistence.project.ProjectDao
+import fr.unilim.saes5.persistence.project.JsonProjectDao
 import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
 
@@ -14,8 +14,8 @@ object DataLoader {
         tokenCompletionService: CompletionService,
         projectName: String
     ) {
-        val projectDao: GlossaryDao = JsonGlossaryDao()
-        val projects = projectDao.allProjects
+        val projectDao: ProjectDao = JsonProjectDao()
+        val projects = projectDao.retrieve()
 
         contextCompletionService.clearCompletions()
         lexicoCompletionService.clearCompletions()

@@ -1,6 +1,7 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.view.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos

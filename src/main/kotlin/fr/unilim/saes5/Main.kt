@@ -1,7 +1,7 @@
 package fr.unilim.saes5
 
 import fr.unilim.saes5.view.ProjectView
-import fr.unilim.saes5.view.ViewStyles
+import fr.unilim.saes5.view.style.ViewStyles
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tornadofx.App

@@ -28,7 +28,7 @@ public class JsonDirectoryDao implements DirectoryDao {
         if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
-                this.saveDirectory(null);
+                this.save(null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -36,7 +36,7 @@ public class JsonDirectoryDao implements DirectoryDao {
     }
 
     @Override
-    public void saveDirectory(String directory) {
+    public void save(String directory) {
         try (Writer writer = new FileWriter(this.file, false)) {
             this.gson.toJson(directory, writer);
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class JsonDirectoryDao implements DirectoryDao {
     }
 
     @Override
-    public String loadDirectory() {
+    public String retrieve() {
         try (Reader reader = new FileReader(this.file)) {
             return this.gson.fromJson(reader, String.class);
         } catch (IOException e) {

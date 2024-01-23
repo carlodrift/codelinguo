@@ -1,6 +1,8 @@
 package fr.unilim.saes5.view
 
 import  fr.unilim.saes5.service.CompletionService
+import fr.unilim.saes5.view.style.ViewStyles
+import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField

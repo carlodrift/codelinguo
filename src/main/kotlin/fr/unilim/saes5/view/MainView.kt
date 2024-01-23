@@ -2,6 +2,8 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.service.CompletionService
+import fr.unilim.saes5.view.utilities.DataLoader
+import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.scene.control.TableView
 import tornadofx.*
 import java.util.*
