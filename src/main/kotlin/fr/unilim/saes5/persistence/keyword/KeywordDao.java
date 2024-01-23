@@ -6,5 +6,5 @@ public interface KeywordDao {
 
     String KEYWORDS_FILE_PATH = "/java_reserved_keywords.txt";
 
-    Set<String> loadKeywords();
+    Set<String> retrieve();
 }

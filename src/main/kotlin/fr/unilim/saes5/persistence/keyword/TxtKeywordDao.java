@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class TxtKeywordDao implements KeywordDao {
 
     @Override
-    public Set<String> loadKeywords() {
+    public Set<String> retrieve() {
         try (InputStream is = TxtKeywordDao.class.getResourceAsStream(TxtKeywordDao.KEYWORDS_FILE_PATH);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 

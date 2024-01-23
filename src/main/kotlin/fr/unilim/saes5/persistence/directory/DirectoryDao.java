@@ -4,7 +4,7 @@ public interface DirectoryDao {
 
     String DIRECTORY_STORE = ".codelinguo/";
 
-    void saveDirectory(String directory);
+    void save(String directory);
 
-    String loadDirectory();
+    String retrieve();
 }

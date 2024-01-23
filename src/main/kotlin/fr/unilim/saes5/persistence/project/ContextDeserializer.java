@@ -1,4 +1,4 @@
-package fr.unilim.saes5.persistence.glossary;
+package fr.unilim.saes5.persistence.project;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

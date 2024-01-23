@@ -1,13 +1,12 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
-import fr.unilim.saes5.persistence.glossary.GlossaryDao
-import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
+import fr.unilim.saes5.persistence.project.ProjectDao
+import fr.unilim.saes5.persistence.project.JsonProjectDao
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
-import javafx.scene.control.Alert
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
 import javafx.scene.layout.HBox
@@ -17,7 +16,7 @@ import java.util.*
 
 
 class ProjectView : View() {
-    private val glossaryDao: GlossaryDao = JsonGlossaryDao()
+    private val projectDao: ProjectDao = JsonProjectDao()
     private var projectsList = mutableListOf<Glossary>().asObservable()
     private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
@@ -40,7 +39,7 @@ class ProjectView : View() {
 
     private fun loadProjects() {
         projectsList.clear()
-        projectsList.addAll(glossaryDao.getAllProjects())
+        projectsList.addAll(projectDao.retrieve())
     }
 
 
@@ -98,7 +97,7 @@ class ProjectView : View() {
                                         cursor = Cursor.HAND
                                         action {
                                             confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
-                                                glossaryDao.deleteProject(project.name)
+                                                projectDao.delete(project.name)
                                                 loadProjects()
                                             }
                                         }

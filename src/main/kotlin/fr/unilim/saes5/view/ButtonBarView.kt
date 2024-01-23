@@ -39,7 +39,7 @@ class ButtonBarView(
     private val defaultDirectory: File = File(System.getProperty("user.home"))
 
     init {
-        val savedDirectoryPath = directoryDao.loadDirectory()
+        val savedDirectoryPath = directoryDao.retrieve()
         lastOpenedDirectory = if (savedDirectoryPath != null && savedDirectoryPath.isNotEmpty()) {
             File(savedDirectoryPath)
         } else {
@@ -117,7 +117,7 @@ class ButtonBarView(
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
                 if (selectedFiles != null) {
                     lastOpenedDirectory = selectedFiles.first().parentFile
-                    directoryDao.saveDirectory(lastOpenedDirectory?.absolutePath)
+                    directoryDao.save(lastOpenedDirectory?.absolutePath)
 
                     val filePaths = selectedFiles.map { it.path }
                     val analysisWords = JavaFileReader().read(filePaths)
@@ -139,7 +139,7 @@ class ButtonBarView(
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
                     lastOpenedDirectory = file
-                    directoryDao.saveDirectory(lastOpenedDirectory?.absolutePath)
+                    directoryDao.save(lastOpenedDirectory?.absolutePath)
 
                     val analysisWords = JavaFileReader().read(file.toString())
                     val analytics = WordAnalyticsService()

@@ -13,7 +13,7 @@ class JavaFileSanitizer : FileSanitizer() {
 
         private fun loadJavaReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
-            return loader.loadKeywords()
+            return loader.retrieve()
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
