@@ -3,17 +3,21 @@ package fr.unilim.saes5.persistence.directory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 
 public class JsonDirectoryDao implements DirectoryDao {
 
-    private static final String DIRECTORY_STORE = ".codelinguo/";
     private final File file;
     private final Gson gson;
 
     public JsonDirectoryDao() {
         String userHome = System.getProperty("user.home");
-        File directory = new File(userHome, DIRECTORY_STORE);
+        File directory = new File(userHome, DirectoryDao.DIRECTORY_STORE);
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -24,7 +28,7 @@ public class JsonDirectoryDao implements DirectoryDao {
         if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
-                saveDirectory(null);
+                this.saveDirectory(null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -34,7 +38,7 @@ public class JsonDirectoryDao implements DirectoryDao {
     @Override
     public void saveDirectory(String directory) {
         try (Writer writer = new FileWriter(this.file, false)) {
-            gson.toJson(directory, writer);
+            this.gson.toJson(directory, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +47,7 @@ public class JsonDirectoryDao implements DirectoryDao {
     @Override
     public String loadDirectory() {
         try (Reader reader = new FileReader(this.file)) {
-            return gson.fromJson(reader, String.class);
+            return this.gson.fromJson(reader, String.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -23,10 +23,10 @@ class JavaFileReader : IRead {
     override fun read(paths: List<String>): List<Word> {
         val words = mutableListOf<Word>()
         for (path in paths) {
-            words.addAll(readOne(path));
+            words.addAll(readOne(path))
         }
 
-        return words;
+        return words
     }
 
     override fun readOne(path: String): List<Word> {

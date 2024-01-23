@@ -6,7 +6,7 @@
 
     <artifactId>codelinguo</artifactId>
     <groupId>fr.unilim</groupId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>CodeLinguo</name>
@@ -93,7 +93,8 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>fr.unilim.saes5.MainKt</mainClass>
                                 </transformer>
                             </transformers>

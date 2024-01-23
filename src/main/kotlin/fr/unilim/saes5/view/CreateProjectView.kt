@@ -1,20 +1,13 @@
 package fr.unilim.saes5.view
 
-import fr.unilim.saes5.model.Glossary
-import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.TextField
-import javafx.scene.image.Image
 import javafx.scene.layout.Priority
 import tornadofx.*
-import javax.swing.GroupLayout.Alignment
 
 class CreateProjectView : View() {
     private lateinit var projectNameTextField: TextField
-
-    init {
-    }
 
     override val root = vbox {
         alignment = Pos.CENTER

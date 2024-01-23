@@ -2,13 +2,12 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.service.CompletionService
-import javafx.event.EventHandler
 import javafx.scene.control.TableView
 import tornadofx.*
 import java.util.*
 
 
-class MainView() : View() {
+class MainView : View() {
     val projectName: String by param()
 
     companion object {
@@ -17,12 +16,19 @@ class MainView() : View() {
         val tokenCompletionService = CompletionService()
         val words = mutableListOf<Word>().asObservable()
     }
+
     private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     private var wordTableView: TableView<Word> by singleAssign()
 
     init {
-        DataLoader.loadSavedWords(words, contextCompletionService, lexicoCompletionService, tokenCompletionService, projectName)
+        DataLoader.loadSavedWords(
+            words,
+            contextCompletionService,
+            lexicoCompletionService,
+            tokenCompletionService,
+            projectName
+        )
         ViewUtilities.updateJsonFile(words, projectName)
     }
 
@@ -32,13 +38,14 @@ class MainView() : View() {
         wordTableView = wordTableViewComponent.wordTableView
         this += wordTableViewComponent
 
-        val inputFormView = InputFormView(contextCompletionService, lexicoCompletionService, tokenCompletionService, myBundle)
+        val inputFormView =
+            InputFormView(contextCompletionService, lexicoCompletionService, tokenCompletionService, myBundle)
         this += inputFormView
 
         val buttonBarView = ButtonBarView(
-            myBundle, words, contextCompletionService, inputFormView.tokenInput,
-            inputFormView.primaryContextInput, inputFormView.secondaryContextInput, inputFormView.synonymInput,
-            inputFormView.antonymInput, inputFormView.definitionInput, wordTableView, projectName
+            myBundle, words, inputFormView.tokenInput, inputFormView.primaryContextInput,
+            inputFormView.secondaryContextInput, inputFormView.synonymInput, inputFormView.antonymInput,
+            inputFormView.definitionInput, wordTableView, projectName
         )
         this += buttonBarView
     }

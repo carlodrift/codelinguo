@@ -86,10 +86,6 @@ class WordOccurrenceView(
         }
 
 
-
-
-
-
         val pieChart = PieChart(pieChartData).apply {
             isClockwise = true
             labelsVisible = true

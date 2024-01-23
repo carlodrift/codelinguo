@@ -1,22 +1,24 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.persistence.glossary.GlossaryDao
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
+import javafx.scene.control.Alert
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.Image
-import tornadofx.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import tornadofx.*
 import java.util.*
 
 
-class ProjectView  : View() {
-    private val glossaryDao = JsonGlossaryDao()
-    private var projectsList = mutableListOf<Glossary>().observable()
+class ProjectView : View() {
+    private val glossaryDao: GlossaryDao = JsonGlossaryDao()
+    private var projectsList = mutableListOf<Glossary>().asObservable()
     private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
 
     init {
@@ -56,7 +58,7 @@ class ProjectView  : View() {
 
         separator { addClass(ViewStyles.separator) }
 
-        hbox (30.0){
+        hbox(30.0) {
             vbox {
                 alignment = Pos.CENTER_LEFT
                 label(myBundle.getString("all_projects")) {
@@ -75,7 +77,7 @@ class ProjectView  : View() {
                             graphic = hbox(10.0) {
                                 alignment = Pos.CENTER_LEFT
 
-                                label(project.name) {
+                                label(project.name.take(20)) {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }
 
@@ -90,14 +92,20 @@ class ProjectView  : View() {
                                     }
                                 }
 
-                                button(myBundle.getString("button_X")).apply {
-                                    addClass(ViewStyles.removeButton)
-                                    cursor = Cursor.HAND
-                                    action {
-                                        confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
-                                            glossaryDao.deleteProject(project.name)
-                                            loadProjects()
+                                if (!project.isDemo) {
+                                    button(myBundle.getString("button_X")).apply {
+                                        addClass(ViewStyles.removeButton)
+                                        cursor = Cursor.HAND
+                                        action {
+                                            confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
+                                                glossaryDao.deleteProject(project.name)
+                                                loadProjects()
+                                            }
                                         }
+                                    }
+                                }  else {
+                                    button("   ").apply {
+                                        addClass(ViewStyles.removeButton)
                                     }
                                 }
                             }

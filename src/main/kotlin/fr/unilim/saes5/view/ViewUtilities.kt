@@ -2,6 +2,7 @@ package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.persistence.glossary.GlossaryDao
 import fr.unilim.saes5.persistence.glossary.JsonGlossaryDao
 import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
@@ -14,12 +15,17 @@ import java.util.*
 
 object ViewUtilities {
     fun updateJsonFile(words: ObservableList<Word>, name: String) {
-        val projectDao = JsonGlossaryDao()
+        val projectDao: GlossaryDao = JsonGlossaryDao()
         val glossary = Glossary(words.toList())
         projectDao.saveProject(glossary, name)
     }
 
-    fun openWordOccurrenceView(wordRank: Map<Word, Int>, wordsInListNotInGlossary: List<Word>, glossaryRatio: Float, myBundle: ResourceBundle) {
+    fun openWordOccurrenceView(
+        wordRank: Map<Word, Int>,
+        wordsInListNotInGlossary: List<Word>,
+        glossaryRatio: Float,
+        myBundle: ResourceBundle
+    ) {
         val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
@@ -70,7 +76,13 @@ object ViewUtilities {
     }
 
     fun updateCompletionService(projectName: String) {
-        DataLoader.loadSavedWords(MainView.words, MainView.contextCompletionService, MainView.lexicoCompletionService, MainView.tokenCompletionService, projectName)
+        DataLoader.loadSavedWords(
+            MainView.words,
+            MainView.contextCompletionService,
+            MainView.lexicoCompletionService,
+            MainView.tokenCompletionService,
+            projectName
+        )
     }
 
     fun clearInputFields(vararg inputs: TextInputControl) {

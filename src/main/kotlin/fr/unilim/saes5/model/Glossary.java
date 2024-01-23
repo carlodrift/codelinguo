@@ -7,12 +7,14 @@ public class Glossary {
     private final List<Word> words;
     private String name;
 
-    public String getName() {
-        return this.name;
+    private boolean demo;
+
+    public void setDemo(boolean demo) {
+        this.demo = demo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean isDemo() {
+        return this.demo;
     }
 
     public Glossary(List<Word> words) {
@@ -21,6 +23,14 @@ public class Glossary {
 
     public Glossary() {
         this.words = List.of();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addWord(Word word) {

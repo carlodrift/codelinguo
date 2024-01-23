@@ -9,14 +9,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JsonGlossaryDao implements GlossaryDao {
 
-    private static final String CODELINGUO_PROJECTS = ".codelinguo/projects";
     private final Gson gson;
 
     private final File directory;
@@ -52,8 +54,8 @@ public class JsonGlossaryDao implements GlossaryDao {
 
     public List<Glossary> getAllProjects() {
         List<Glossary> allGlossaries = new ArrayList<>();
-        File folder = this.directory;
 
+        File folder = this.directory;
         File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
 
         if (listOfFiles != null) {
@@ -65,6 +67,20 @@ public class JsonGlossaryDao implements GlossaryDao {
                     e.printStackTrace();
                 }
             }
+        }
+
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("demo.json");
+             Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            Glossary demoGlossary = this.gson.fromJson(reader, Glossary.class);
+
+            boolean demoExists = allGlossaries.stream()
+                    .anyMatch(glossary -> glossary.getName().equalsIgnoreCase(demoGlossary.getName()));
+
+            if (!demoExists) {
+                demoGlossary.setDemo(true);
+                allGlossaries.add(demoGlossary);
+            }
+        } catch (IOException | NullPointerException ignored) {
         }
 
         return allGlossaries;

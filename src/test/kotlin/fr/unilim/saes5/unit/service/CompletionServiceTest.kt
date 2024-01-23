@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 
 class CompletionServiceTest {
     private var completionService: CompletionService? = null
+
     @BeforeEach
     fun setUp() {
         completionService = CompletionService()
