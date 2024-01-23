@@ -15,6 +15,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
+import javafx.util.Duration
 import tornadofx.*
 import java.util.*
 
@@ -148,7 +149,7 @@ class WordOccurrenceView(
         readonlyColumn(myBundle.getString("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
-                text = wordEntry.token + " »"
+                text = wordEntry.token
                 cursor = Cursor.HAND
                 style {
                     alignment = Pos.CENTER_LEFT
@@ -159,7 +160,12 @@ class WordOccurrenceView(
                         text = "\u2713 $text"
                     }
                 }
-                tooltip("Double-cliquez pour afficher")
+
+                val tooltip = Tooltip("Double-cliquez pour afficher").apply {
+                    showDelay = Duration.ZERO
+                }
+                setTooltip(tooltip)
+
                 setOnMouseClicked {
                     if (it.clickCount == 2) {
                         showFileNamesWindow(wordEntry, wordRank)
@@ -169,7 +175,9 @@ class WordOccurrenceView(
         }
 
 
-        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
+
+
+    readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
             cellFormat { occurrenceEntry ->
                 text = occurrenceEntry.toString()
