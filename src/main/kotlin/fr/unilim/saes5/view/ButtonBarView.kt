@@ -8,6 +8,8 @@ import fr.unilim.saes5.model.reader.JavaFileReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
 import fr.unilim.saes5.service.WordAnalyticsService
+import fr.unilim.saes5.view.style.ViewStyles
+import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.application.Platform
 import javafx.collections.ObservableList
 import javafx.geometry.Pos

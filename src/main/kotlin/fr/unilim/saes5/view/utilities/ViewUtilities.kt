@@ -1,10 +1,12 @@
-package fr.unilim.saes5.view
+package fr.unilim.saes5.view.utilities
 
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.persistence.project.JsonProjectDao
 import fr.unilim.saes5.service.CompletionService
+import fr.unilim.saes5.view.MainView
+import fr.unilim.saes5.view.WordOccurrenceView
 import javafx.collections.ObservableList
 import javafx.geometry.Side
 import javafx.scene.control.ContextMenu

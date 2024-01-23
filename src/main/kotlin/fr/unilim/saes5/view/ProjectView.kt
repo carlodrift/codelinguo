@@ -3,6 +3,7 @@ package fr.unilim.saes5.view
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.persistence.project.JsonProjectDao
+import fr.unilim.saes5.view.style.ViewStyles
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos

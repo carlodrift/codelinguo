@@ -3,6 +3,8 @@ package fr.unilim.saes5.view
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
+import fr.unilim.saes5.view.style.ViewStyles
+import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.collections.ObservableList
 import javafx.scene.control.Button

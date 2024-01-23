@@ -1,4 +1,4 @@
-package fr.unilim.saes5.view
+package fr.unilim.saes5.view.utilities
 
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.persistence.project.ProjectDao
