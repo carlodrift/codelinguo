@@ -109,6 +109,8 @@ class WordOccurrenceView(
             scene = Scene(borderPane, 500.0, 500.0)
         }
         stage.show()
+        stage.isAlwaysOnTop = true
+
     }
 
 
@@ -169,9 +171,6 @@ class WordOccurrenceView(
                 }
             }
         }
-
-
-
 
     readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
