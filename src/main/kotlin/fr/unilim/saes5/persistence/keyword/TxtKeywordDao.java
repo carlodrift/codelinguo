@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class TxtKeywordDao implements KeywordDao {
 
     @Override
-    public Set<String> retrieve() {
-        try (InputStream is = TxtKeywordDao.class.getResourceAsStream(TxtKeywordDao.KEYWORDS_FILE_PATH);
+    public Set<String> retrieve(String language) {
+        try (InputStream is = TxtKeywordDao.class.getResourceAsStream("/keywords/" + language + ".txt");
              BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
             return reader.lines().collect(Collectors.toSet());

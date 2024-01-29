@@ -5,22 +5,19 @@ import fr.unilim.saes5.persistence.keyword.KeywordDao
 import fr.unilim.saes5.persistence.keyword.TxtKeywordDao
 import java.util.*
 
-
-class JavaFileSanitizer : FileSanitizer() {
+class JavascriptFileSanitizer : FileSanitizer() {
 
     companion object {
-        private val JAVA_RESERVED_KEYWORDS = loadJavaReservedKeywords()
+        private val JAVASCRIPT_RESERVED_KEYWORDS = loadJavascriptReservedKeywords()
 
-        private fun loadJavaReservedKeywords(): Set<String> {
+        private fun loadJavascriptReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
-            return loader.retrieve("java")
+            return loader.retrieve("javascript")
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
-        private val REGEX_JAVA_STRING = "\".*\"".toRegex()
+        private val REGEX_JAVASCRIPT_STRING = """".*?"|'.*?'""".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
-        private const val JAVA_PACKAGE_DECLARATION = "package"
-        private const val JAVA_IMPORT_DECLARATION = "import"
     }
 
     private var inBlockComment = false
@@ -30,23 +27,13 @@ class JavaFileSanitizer : FileSanitizer() {
 
         lines.forEach { line ->
             var processedLine = processLineForComments(line)
-            if (processedLine.isNotBlank()
-                && !checkPackageDeclaration(processedLine) && !checkImportDeclaration(processedLine)
-            ) {
+            if (processedLine.isNotBlank()) {
                 processedLine = removeStringLiterals(processedLine)
                 extractWords(processedLine, words)
             }
         }
 
         return words
-    }
-
-    private fun checkPackageDeclaration(line: String): Boolean {
-        return line.startsWith("$JAVA_PACKAGE_DECLARATION ")
-    }
-
-    private fun checkImportDeclaration(line: String): Boolean {
-        return line.startsWith("$JAVA_IMPORT_DECLARATION ")
     }
 
     private fun processLineForComments(line: String): String {
@@ -88,13 +75,13 @@ class JavaFileSanitizer : FileSanitizer() {
         return line
     }
 
-    private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVA_STRING, "")
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVASCRIPT_STRING, "")
 
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
             splitCamelCase(word).forEach { splitWord ->
-                if (splitWord !in JAVA_RESERVED_KEYWORDS) {
+                if (splitWord !in JAVASCRIPT_RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }
