@@ -8,18 +8,18 @@ import java.util.*
 class KotlinFileSanitizer : FileSanitizer() {
 
     companion object {
-        private val KOTLIN_RESERVED_KEYWORDS = loadKotlinReservedKeywords()
+        private val RESERVED_KEYWORDS = loadReservedKeywords()
 
-        private fun loadKotlinReservedKeywords(): Set<String> {
+        private fun loadReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
             return loader.retrieve("kotlin")
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
-        private val REGEX_KOTLIN_STRING = "\".*?\"|\"\"\".*?\"\"\"".toRegex()
+        private val REGEX_STRING = "\".*?\"|\"\"\".*?\"\"\"".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
-        private const val KOTLIN_PACKAGE_DECLARATION = "package"
-        private const val KOTLIN_IMPORT_DECLARATION = "import"
+        private const val PACKAGE_DECLARATION = "package"
+        private const val IMPORT_DECLARATION = "import"
     }
 
     private var inBlockComment = false
@@ -41,11 +41,11 @@ class KotlinFileSanitizer : FileSanitizer() {
     }
 
     private fun checkPackageDeclaration(line: String): Boolean {
-        return line.startsWith("$KOTLIN_PACKAGE_DECLARATION ")
+        return line.startsWith("$PACKAGE_DECLARATION ")
     }
 
     private fun checkImportDeclaration(line: String): Boolean {
-        return line.startsWith("$KOTLIN_IMPORT_DECLARATION ")
+        return line.startsWith("$IMPORT_DECLARATION ")
     }
 
     private fun processLineForComments(line: String): String {
@@ -87,13 +87,13 @@ class KotlinFileSanitizer : FileSanitizer() {
         return line
     }
 
-    private fun removeStringLiterals(line: String): String = line.replace(REGEX_KOTLIN_STRING, "")
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_STRING, "")
 
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
             splitCamelCase(word).forEach { splitWord ->
-                if (splitWord !in KOTLIN_RESERVED_KEYWORDS) {
+                if (splitWord !in RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }

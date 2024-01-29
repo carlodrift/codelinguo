@@ -8,15 +8,15 @@ import java.util.*
 class JavascriptFileSanitizer : FileSanitizer() {
 
     companion object {
-        private val JAVASCRIPT_RESERVED_KEYWORDS = loadJavascriptReservedKeywords()
+        private val RESERVED_KEYWORDS = loadReservedKeywords()
 
-        private fun loadJavascriptReservedKeywords(): Set<String> {
+        private fun loadReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
             return loader.retrieve("javascript")
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
-        private val REGEX_JAVASCRIPT_STRING = """".*?"|'.*?'""".toRegex()
+        private val REGEX_STRING = """".*?"|'.*?'""".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
     }
 
@@ -75,13 +75,13 @@ class JavascriptFileSanitizer : FileSanitizer() {
         return line
     }
 
-    private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVASCRIPT_STRING, "")
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_STRING, "")
 
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
             splitCamelCase(word).forEach { splitWord ->
-                if (splitWord !in JAVASCRIPT_RESERVED_KEYWORDS) {
+                if (splitWord !in RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }

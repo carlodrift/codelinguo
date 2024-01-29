@@ -9,18 +9,18 @@ import java.util.*
 class JavaFileSanitizer : FileSanitizer() {
 
     companion object {
-        private val JAVA_RESERVED_KEYWORDS = loadJavaReservedKeywords()
+        private val RESERVED_KEYWORDS = loadReservedKeywords()
 
-        private fun loadJavaReservedKeywords(): Set<String> {
+        private fun loadReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
             return loader.retrieve("java")
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
-        private val REGEX_JAVA_STRING = "\".*\"".toRegex()
+        private val REGEX_STRING = "\".*\"".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
-        private const val JAVA_PACKAGE_DECLARATION = "package"
-        private const val JAVA_IMPORT_DECLARATION = "import"
+        private const val PACKAGE_DECLARATION = "package"
+        private const val IMPORT_DECLARATION = "import"
     }
 
     private var inBlockComment = false
@@ -42,11 +42,11 @@ class JavaFileSanitizer : FileSanitizer() {
     }
 
     private fun checkPackageDeclaration(line: String): Boolean {
-        return line.startsWith("$JAVA_PACKAGE_DECLARATION ")
+        return line.startsWith("$PACKAGE_DECLARATION ")
     }
 
     private fun checkImportDeclaration(line: String): Boolean {
-        return line.startsWith("$JAVA_IMPORT_DECLARATION ")
+        return line.startsWith("$IMPORT_DECLARATION ")
     }
 
     private fun processLineForComments(line: String): String {
@@ -88,13 +88,13 @@ class JavaFileSanitizer : FileSanitizer() {
         return line
     }
 
-    private fun removeStringLiterals(line: String): String = line.replace(REGEX_JAVA_STRING, "")
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_STRING, "")
 
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
             splitCamelCase(word).forEach { splitWord ->
-                if (splitWord !in JAVA_RESERVED_KEYWORDS) {
+                if (splitWord !in RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }

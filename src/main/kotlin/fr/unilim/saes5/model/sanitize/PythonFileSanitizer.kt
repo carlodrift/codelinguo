@@ -8,15 +8,15 @@ import java.util.*
 class PythonFileSanitizer : FileSanitizer() {
 
     companion object {
-        private val PYTHON_RESERVED_KEYWORDS = loadPythonReservedKeywords()
+        private val RESERVED_KEYWORDS = loadReservedKeywords()
 
-        private fun loadPythonReservedKeywords(): Set<String> {
+        private fun loadReservedKeywords(): Set<String> {
             val loader: KeywordDao = TxtKeywordDao()
             return loader.retrieve("python")
         }
 
         private val REGEX_WORD_SEPARATION = "[a-zA-Z]+".toRegex()
-        private val REGEX_PYTHON_STRING = "\"\"\".*?\"\"\"|'''.*?'''|\".*?\"|'.*?'".toRegex()
+        private val REGEX_STRING = "\"\"\".*?\"\"\"|'''.*?'''|\".*?\"|'.*?'".toRegex()
         private val REGEX_CAMEL_CASE = "(?<!^)(?=[A-Z])".toRegex()
     }
 
@@ -75,13 +75,13 @@ class PythonFileSanitizer : FileSanitizer() {
         return line
     }
 
-    private fun removeStringLiterals(line: String): String = line.replace(REGEX_PYTHON_STRING, "")
+    private fun removeStringLiterals(line: String): String = line.replace(REGEX_STRING, "")
 
     private fun extractWords(line: String, words: MutableList<Word>) {
         REGEX_WORD_SEPARATION.findAll(line).forEach { match ->
             val word = match.value
             splitCamelCase(word).forEach { splitWord ->
-                if (splitWord !in PYTHON_RESERVED_KEYWORDS) {
+                if (splitWord !in RESERVED_KEYWORDS) {
                     words.add(Word(splitWord))
                 }
             }

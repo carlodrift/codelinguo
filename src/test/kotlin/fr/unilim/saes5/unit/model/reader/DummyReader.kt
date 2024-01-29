@@ -1,4 +1,4 @@
-package fr.unilim.saes5.unit.model
+package fr.unilim.saes5.unit.model.reader
 
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.reader.IRead
