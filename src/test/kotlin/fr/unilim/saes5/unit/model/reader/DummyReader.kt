@@ -8,7 +8,7 @@ class DummyReader(private var words: List<Word>) : IRead {
         return words
     }
 
-    override fun read(paths: List<String>): List<Word?>? {
+    override fun read(paths: List<String>): List<Word?> {
         return words
     }
 

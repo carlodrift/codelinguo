@@ -173,7 +173,7 @@ class WordOccurrenceView(
             }
         }
 
-    readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
+        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
             cellFormat { occurrenceEntry ->
                 text = occurrenceEntry.toString()

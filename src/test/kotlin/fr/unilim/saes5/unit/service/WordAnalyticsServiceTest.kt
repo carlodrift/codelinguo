@@ -2,9 +2,9 @@ package fr.unilim.saes5.unit.service
 
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.unit.model.reader.DummyReader
 import fr.unilim.saes5.model.reader.IRead
 import fr.unilim.saes5.service.WordAnalyticsService
+import fr.unilim.saes5.unit.model.reader.DummyReader
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

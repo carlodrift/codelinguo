@@ -9,16 +9,16 @@ public class Glossary {
 
     private boolean demo;
 
-    public void setDemo(boolean demo) {
-        this.demo = demo;
+    public Glossary(List<Word> words) {
+        this.words = words;
     }
 
     public boolean isDemo() {
         return this.demo;
     }
 
-    public Glossary(List<Word> words) {
-        this.words = words;
+    public void setDemo(boolean demo) {
+        this.demo = demo;
     }
 
     public String getName() {

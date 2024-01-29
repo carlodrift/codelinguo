@@ -1,8 +1,8 @@
 package fr.unilim.saes5.view.utilities
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.persistence.project.JsonProjectDao
+import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.service.CompletionService
 import javafx.collections.ObservableList
 

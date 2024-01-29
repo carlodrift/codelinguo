@@ -1,8 +1,8 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
-import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.persistence.project.JsonProjectDao
+import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.view.style.ViewStyles
 import javafx.application.Platform
 import javafx.geometry.Insets
@@ -97,13 +97,16 @@ class ProjectView : View() {
                                         addClass(ViewStyles.removeButton)
                                         cursor = Cursor.HAND
                                         action {
-                                            confirm("Confirmer la suppression", "Voulez-vous supprimer ${project.name} ?") {
+                                            confirm(
+                                                "Confirmer la suppression",
+                                                "Voulez-vous supprimer ${project.name} ?"
+                                            ) {
                                                 projectDao.delete(project.name)
                                                 loadProjects()
                                             }
                                         }
                                     }
-                                }  else {
+                                } else {
                                     button("   ").apply {
                                         addClass(ViewStyles.removeButton)
                                     }

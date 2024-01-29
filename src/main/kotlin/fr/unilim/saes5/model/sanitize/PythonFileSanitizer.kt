@@ -7,7 +7,8 @@ class PythonFileSanitizer : ScriptingFileSanitizer() {
         private const val ALTERNATE_BLOCK_COMMENT = "'''"
     }
 
-    override val regexString = "$BLOCK_COMMENT.*?$BLOCK_COMMENT|$ALTERNATE_BLOCK_COMMENT.*?$ALTERNATE_BLOCK_COMMENT|\".*?\"|'.*?'".toRegex()
+    override val regexString =
+        "$BLOCK_COMMENT.*?$BLOCK_COMMENT|$ALTERNATE_BLOCK_COMMENT.*?$ALTERNATE_BLOCK_COMMENT|\".*?\"|'.*?'".toRegex()
     override val reservedKeywords = loadReservedKeywords("python")
     override var lineCommentSymbol = "#"
 

@@ -69,7 +69,7 @@ public class JsonProjectDao implements ProjectDao {
             }
         }
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("demo.json");
+        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("demo.json");
              Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
             Glossary demoGlossary = this.gson.fromJson(reader, Glossary.class);
 
