@@ -13,6 +13,8 @@ open class JavaFileSanitizer : FileSanitizer() {
     companion object {
         private const val PACKAGE_DECLARATION = "package"
         private const val IMPORT_DECLARATION = "import"
+        private const val BLOCK_COMMENT_START = "/*"
+        private const val BLOCK_COMMENT_END = "*/"
     }
 
     override fun sanitizeLines(lines: List<String>): List<Word> {
@@ -40,12 +42,12 @@ open class JavaFileSanitizer : FileSanitizer() {
     }
 
     override fun handleBlockCommentStart(line: String): String {
-        if (line.contains("/*")) {
+        if (line.contains(BLOCK_COMMENT_START)) {
             inBlockComment = true
-            val processedLine = line.substringBefore("/*")
-            return if (line.contains("*/")) {
+            val processedLine = line.substringBefore(BLOCK_COMMENT_START)
+            return if (line.contains(BLOCK_COMMENT_END)) {
                 inBlockComment = false
-                processedLine + line.substringAfter("*/")
+                processedLine + line.substringAfter(BLOCK_COMMENT_END)
             } else {
                 processedLine
             }
@@ -54,9 +56,9 @@ open class JavaFileSanitizer : FileSanitizer() {
     }
 
     override fun handleBlockCommentEnd(line: String): String {
-        if (line.contains("*/")) {
+        if (line.contains(BLOCK_COMMENT_END)) {
             inBlockComment = false
-            return line.substringAfter("*/")
+            return line.substringAfter(BLOCK_COMMENT_END)
         }
         return ""
     }
