@@ -11,6 +11,7 @@ class PythonFileSanitizer : FileSanitizer() {
     override val regexWordSeparation = "[a-zA-Z]+".toRegex()
     override val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     override val reservedKeywords = loadReservedKeywords("python")
+    override var lineCommentSymbol = "#"
     override var inBlockComment = false
 
     override fun sanitizeLines(lines: List<String>): List<Word> {
@@ -47,12 +48,5 @@ class PythonFileSanitizer : FileSanitizer() {
             return line.substringAfterLast("\"\"\"").substringAfterLast("'''")
         }
         return ""
-    }
-
-    override fun handleLineComment(line: String): String {
-        if (!inBlockComment && line.contains("#")) {
-            return line.substringBefore("#")
-        }
-        return line
     }
 }

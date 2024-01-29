@@ -10,11 +10,11 @@ abstract class FileSanitizer {
     abstract val regexWordSeparation: Regex
     abstract val regexCamelCase: Regex
     abstract val reservedKeywords: Set<String>
+    abstract val lineCommentSymbol: String
     abstract var inBlockComment: Boolean
 
     abstract fun sanitizeLines(lines: List<String>): List<Word>
     abstract fun handleBlockCommentEnd(line: String): String
-    abstract fun handleLineComment(line: String): String
     abstract fun handleBlockCommentStart(line: String): String
 
     fun loadReservedKeywords(language: String): Set<String> {
@@ -43,6 +43,13 @@ abstract class FileSanitizer {
         val processedLine = handleBlockCommentStart(line)
 
         return handleLineComment(processedLine)
+    }
+
+    private fun handleLineComment(line: String): String {
+        if (!inBlockComment && line.contains(lineCommentSymbol)) {
+            return line.substringBefore(lineCommentSymbol)
+        }
+        return line
     }
 
     private fun splitCamelCase(word: String): List<String> {

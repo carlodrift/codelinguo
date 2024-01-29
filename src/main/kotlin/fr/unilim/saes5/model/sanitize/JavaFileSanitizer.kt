@@ -12,6 +12,7 @@ class JavaFileSanitizer : FileSanitizer() {
     override val regexWordSeparation = "[a-zA-Z]+".toRegex()
     override val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     override val reservedKeywords = loadReservedKeywords("java")
+    override val lineCommentSymbol = "//"
     override var inBlockComment = false
 
     companion object {
@@ -63,12 +64,5 @@ class JavaFileSanitizer : FileSanitizer() {
             return line.substringAfter("*/")
         }
         return ""
-    }
-
-    override fun handleLineComment(line: String): String {
-        if (!inBlockComment && line.contains("//")) {
-            return line.substringBefore("//")
-        }
-        return line
     }
 }
