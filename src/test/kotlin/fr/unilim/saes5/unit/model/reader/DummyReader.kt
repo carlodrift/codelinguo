@@ -9,10 +9,10 @@ class DummyReader(private var words: List<Word>) : IRead {
     }
 
     override fun read(paths: List<String>): List<Word?>? {
-        TODO("Not yet implemented")
+        return words
     }
 
     override fun readOne(path: String): List<Word> {
-        TODO("Not yet implemented")
+        return words
     }
 }
