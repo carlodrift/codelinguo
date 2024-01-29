@@ -1,9 +1,6 @@
 package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.keyword.KeywordDao
-import fr.unilim.saes5.persistence.keyword.TxtKeywordDao
-import java.util.*
 
 class JavascriptFileSanitizer : FileSanitizer() {
 
@@ -32,21 +29,23 @@ class JavascriptFileSanitizer : FileSanitizer() {
         if (line.contains("/*")) {
             inBlockComment = true
             val processedLine = line.substringBefore("/*")
-            return if (line.contains("*/")) {
+            if (line.contains("*/")) {
                 inBlockComment = false
-                processedLine + line.substringAfter("*/")
-            } else {
-                processedLine
+                return processedLine + line.substringAfter("*/")
             }
+            return processedLine
         }
         return line
     }
 
     override fun handleBlockCommentEnd(line: String): String {
-        if (line.contains("*/")) {
-            inBlockComment = false
-            return line.substringAfter("*/")
+        if (inBlockComment) {
+            if (line.contains("*/")) {
+                inBlockComment = false
+                return line.substringAfter("*/")
+            }
+            return ""
         }
-        return ""
+        return line
     }
 }

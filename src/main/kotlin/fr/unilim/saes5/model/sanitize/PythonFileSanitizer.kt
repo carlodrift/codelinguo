@@ -1,9 +1,6 @@
 package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.keyword.KeywordDao
-import fr.unilim.saes5.persistence.keyword.TxtKeywordDao
-import java.util.*
 
 class PythonFileSanitizer : FileSanitizer() {
 
@@ -29,24 +26,22 @@ class PythonFileSanitizer : FileSanitizer() {
     }
 
     override fun handleBlockCommentStart(line: String): String {
-        if (line.contains("\"\"\"") || line.contains("'''")) {
+        if ((line.contains("\"\"\"") || line.contains("'''")) && !inBlockComment) {
             inBlockComment = true
-            val processedLine = line.substringBefore("\"\"\"").substringBefore("'''")
-            return if (line.contains("\"\"\"") || line.contains("'''")) {
-                inBlockComment = false
-                processedLine + line.substringAfterLast("\"\"\"").substringAfterLast("'''")
-            } else {
-                processedLine
-            }
+            return line.substringBefore("\"\"\"").substringBefore("'''")
+        } else if (inBlockComment) {
+            return ""
         }
         return line
     }
 
     override fun handleBlockCommentEnd(line: String): String {
-        if (line.contains("\"\"\"") || line.contains("'''")) {
+        if (inBlockComment && (line.contains("\"\"\"") || line.contains("'''"))) {
             inBlockComment = false
             return line.substringAfterLast("\"\"\"").substringAfterLast("'''")
+        } else if (inBlockComment) {
+            return ""
         }
-        return ""
+        return line
     }
 }
