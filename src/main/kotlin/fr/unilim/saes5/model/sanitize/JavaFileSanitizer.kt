@@ -1,9 +1,6 @@
 package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
-import fr.unilim.saes5.persistence.keyword.KeywordDao
-import fr.unilim.saes5.persistence.keyword.TxtKeywordDao
-import java.util.*
 
 
 class JavaFileSanitizer : FileSanitizer() {
