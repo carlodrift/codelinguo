@@ -84,3 +84,6 @@ Set
 String
 undefined
 from
+async
+require
+string
