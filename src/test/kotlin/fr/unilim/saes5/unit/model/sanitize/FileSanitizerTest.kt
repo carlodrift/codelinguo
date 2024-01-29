@@ -14,6 +14,9 @@ class FileSanitizerTest {
             "// This is a single-line comment",
             "/* This is a block comment",
             "   spanning multiple lines */",
+            "/* Start of block comment",
+            "   Still inside block comment",
+            "   End of block comment */",
             "boolean success = board.placeToken(column, activePlayer);",
             "if (board.checkVictory(column)) {"
         )
@@ -140,9 +143,12 @@ class FileSanitizerTest {
             "import board",
             "# This is a single-line comment",
             "\"\"\" This is a block comment",
+            "    This line should be ignored as it's inside the block comment",
             "    spanning multiple lines \"\"\"",
             "success = board.place_token(column, active_player)",
-            "if board.check_victory(column):"
+            "if board.check_victory(column):",
+            "\"\"\"Single line block comment\"\"\"",
+            "'''Another form of block comment'''"
         )
 
         val sanitized: List<Word> = PythonFileSanitizer().sanitizeLines(lines)
