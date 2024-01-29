@@ -4,7 +4,7 @@ import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
-import fr.unilim.saes5.model.reader.JavaFileReader
+import fr.unilim.saes5.model.reader.FileReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
 import fr.unilim.saes5.service.WordAnalyticsService
@@ -122,7 +122,7 @@ class ButtonBarView(
                     directoryDao.save(lastOpenedDirectory?.absolutePath)
 
                     val filePaths = selectedFiles.map { it.path }
-                    val analysisWords = JavaFileReader().read(filePaths)
+                    val analysisWords = FileReader().read(filePaths)
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
                     val wordsInListNotInGlossary =
@@ -143,7 +143,7 @@ class ButtonBarView(
                     lastOpenedDirectory = file
                     directoryDao.save(lastOpenedDirectory?.absolutePath)
 
-                    val analysisWords = JavaFileReader().read(file.toString())
+                    val analysisWords = FileReader().read(file.toString())
                     val analytics = WordAnalyticsService()
                     val wordRank = analytics.wordRank(analysisWords)
                     val wordsInListNotInGlossary =
