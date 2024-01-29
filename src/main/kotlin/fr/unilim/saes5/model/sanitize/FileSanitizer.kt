@@ -7,11 +7,12 @@ import java.util.*
 
 abstract class FileSanitizer {
     abstract val regexString: Regex
-    abstract val regexWordSeparation: Regex
-    abstract val regexCamelCase: Regex
     abstract val reservedKeywords: Set<String>
     abstract val lineCommentSymbol: String
     abstract var inBlockComment: Boolean
+
+    private val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
+    private val regexWordSeparation = "[a-zA-Z]+".toRegex()
 
     abstract fun sanitizeLines(lines: List<String>): List<Word>
     abstract fun handleBlockCommentEnd(line: String): String

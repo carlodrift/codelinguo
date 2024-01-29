@@ -3,11 +3,9 @@ package fr.unilim.saes5.model.sanitize
 import fr.unilim.saes5.model.Word
 
 
-class JavaFileSanitizer : FileSanitizer() {
+open class JavaFileSanitizer : FileSanitizer() {
 
     override val regexString = "\".*\"".toRegex()
-    override val regexWordSeparation = "[a-zA-Z]+".toRegex()
-    override val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     override val reservedKeywords = loadReservedKeywords("java")
     override val lineCommentSymbol = "//"
     override var inBlockComment = false
