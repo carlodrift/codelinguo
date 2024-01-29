@@ -2,7 +2,7 @@ package fr.unilim.saes5.model.sanitize
 
 import fr.unilim.saes5.model.Word
 
-class JavascriptFileSanitizer : FileSanitizer() {
+open class JavascriptFileSanitizer : FileSanitizer() {
 
     override val regexString = """".*?"|'.*?'""".toRegex()
     override val regexWordSeparation = "[a-zA-Z]+".toRegex()
