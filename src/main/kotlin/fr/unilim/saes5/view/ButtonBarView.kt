@@ -111,9 +111,6 @@ class ButtonBarView(
             action {
                 val fileChooser = FileChooser().apply {
                     title = myBundle.getString("choose_files")
-                    extensionFilters.addAll(
-                        FileChooser.ExtensionFilter(myBundle.getString("file_java"), "*.java"),
-                    )
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
