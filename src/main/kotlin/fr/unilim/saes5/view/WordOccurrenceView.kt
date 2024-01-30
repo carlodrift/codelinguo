@@ -6,7 +6,7 @@ import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Cursor
-import javafx.scene.Scene
+import javafx.scene.Node
 import javafx.scene.chart.PieChart
 import javafx.scene.control.*
 import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
@@ -15,8 +15,8 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
-import javafx.stage.Stage
 import javafx.util.Duration
+import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.util.*
 
@@ -30,24 +30,26 @@ class WordOccurrenceView(
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
-    private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>) {
+    private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
         val fileOccurrencesMap = wordRank.filterKeys { it.token == word.token }
         val totalOccurrences = fileOccurrencesMap.values.sum()
 
         val topFileOccurrences = fileOccurrencesMap.entries
             .sortedByDescending { it.value }
-            .take(10)
+            .take(9)
+
+        val otherOccurrencesCount = fileOccurrencesMap.values.sum() - topFileOccurrences.sumOf { it.value }
 
         val pieChartData = topFileOccurrences.map { (word, count) ->
             val percentage = if (totalOccurrences > 0) count.toDouble() / totalOccurrences * 100 else 0.0
             val fileName = word.fileName?.substringAfterLast("\\")?.substringAfterLast("/") ?: "Inconnu"
             PieChart.Data("$fileName (${String.format("%.2f%%", percentage)})", count.toDouble())
-        }.let { FXCollections.observableArrayList(it) }
+        }.toMutableList()
 
         val newCloseButton = button(myBundle.getString("button_close")) {
             action {
-                val stage = this@button.scene.window as Stage
-                stage.close()
+                val popup = this@button.scene.window as PopOver
+                popup.hide(Duration.millis(0.0))
             }
             style {
                 fontSize = 18.px
@@ -86,12 +88,24 @@ class WordOccurrenceView(
             }
         }
 
+        if (otherOccurrencesCount > 0) {
+            val otherPercentage = otherOccurrencesCount.toDouble() / totalOccurrences * 100
+            pieChartData.add(
+                PieChart.Data(
+                    "Autre (${String.format("%.2f%%", otherPercentage)})",
+                    otherOccurrencesCount.toDouble()
+                )
+            )
+        }
 
-        val pieChart = PieChart(pieChartData).apply {
+        val observablePieChartData = FXCollections.observableArrayList(pieChartData)
+
+        val pieChart = PieChart(observablePieChartData).apply {
             isClockwise = true
             labelsVisible = true
             startAngle = 180.0
         }
+
 
         val closeButtonHBox = HBox().apply {
             alignment = Pos.TOP_RIGHT
@@ -99,21 +113,14 @@ class WordOccurrenceView(
             padding = Insets(10.0)
         }
 
-        val borderPane = BorderPane().apply {
+        return BorderPane().apply {
             top = closeButtonHBox
             center = pieChart
+            style {
+                backgroundColor += c("#FFFFFF")
+            }
         }
-
-        val stage = Stage().apply {
-            title = "${word.token}"
-            isResizable = false
-            scene = Scene(borderPane, 500.0, 500.0)
-        }
-        stage.show()
-        stage.isAlwaysOnTop = true
-
     }
-
 
     private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
         aggregatedWordMap.map { (token, fileNames) ->
@@ -160,14 +167,16 @@ class WordOccurrenceView(
                     }
                 }
 
-                val tooltip = Tooltip("Double-cliquez pour afficher").apply {
-                    showDelay = Duration.ZERO
+                val customTooltip = PopOver().apply {
+                    contentNode = showFileNamesWindow(wordEntry, wordRank)
+                    arrowLocation = PopOver.ArrowLocation.LEFT_TOP
+                    isDetachable = false
+                    isAutoHide = true
                 }
-                setTooltip(tooltip)
 
-                setOnMouseClicked {
-                    if (it.clickCount == 2) {
-                        showFileNamesWindow(wordEntry, wordRank)
+                setOnMouseClicked { event ->
+                    if (event.clickCount > 0) {
+                        customTooltip.show(this@cellFormat, event.screenX, event.screenY)
                     }
                 }
             }
