@@ -13,6 +13,7 @@ import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.util.Duration
@@ -29,6 +30,16 @@ class WordOccurrenceView(
 ) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
+
+    private val clickDetailLabel = label("Cliquez sur un mot pour voir le détail.") {
+        style {
+            fontSize = 14.px
+            fontStyle = FontPosture.ITALIC
+            textFill = c("#616161")
+            padding = box(5.px)
+            alignment = Pos.CENTER
+        }
+    }
 
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
         val fileOccurrencesMap = wordRank.filterKeys { it.token == word.token }
@@ -237,9 +248,16 @@ class WordOccurrenceView(
         top = hbox {
             paddingAll = 10.0
             spacing = 10.0
+
+            vbox {
+                add(clickDetailLabel)
+                alignment = Pos.CENTER_LEFT
+            }
+
             region {
                 hgrow = Priority.ALWAYS
             }
+
             add(closeButton)
         }
 
