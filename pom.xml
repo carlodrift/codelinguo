@@ -33,7 +33,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>1.9.20</version>
+                <version>1.9.22</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -124,6 +124,12 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>1.9.22</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-plugin</artifactId>
+            <version>1.9.22</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
