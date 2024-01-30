@@ -34,7 +34,6 @@ class WordOccurrenceView(
     private val clickDetailLabel = label("Cliquez sur un mot pour voir le détail.") {
         style {
             fontSize = 14.px
-            fontStyle = FontPosture.ITALIC
             textFill = c("#616161")
             padding = box(5.px)
             alignment = Pos.CENTER
