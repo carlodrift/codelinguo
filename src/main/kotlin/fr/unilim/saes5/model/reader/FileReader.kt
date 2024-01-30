@@ -7,12 +7,11 @@ import java.nio.file.Files
 
 class FileReader : IRead {
     override fun read(path: String): List<Word> {
-
         val words = mutableListOf<Word>()
 
-        File(path).walk().forEach {
-            if (!Files.isDirectory(it.toPath())) {
-                words.addAll(readOne(it.path))
+        File(path).walk().forEach { file ->
+            if (!Files.isDirectory(file.toPath()) && !file.path.contains("/node_modules/")) {
+                words.addAll(readOne(file.path))
             }
         }
 
