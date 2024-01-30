@@ -41,7 +41,11 @@ class ProjectView : View() {
     private fun loadProjects() {
         projectsList.clear()
         projectsList.addAll(projectDao.retrieve())
+
+        val comparator = compareBy<Glossary> { it.name == "Démo" }.thenBy { it.name }
+        projectsList.sortWith(comparator)
     }
+
 
 
     override val root = vbox {
@@ -92,7 +96,7 @@ class ProjectView : View() {
                                     }
                                 }
 
-                                if (!project.isDemo) {
+                                if (!project.isDemo && project.name != "Démo") {
                                     button(myBundle.getString("button_X")).apply {
                                         addClass(ViewStyles.removeButton)
                                         cursor = Cursor.HAND
