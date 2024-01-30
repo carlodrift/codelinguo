@@ -10,7 +10,7 @@ class FileReader : IRead {
         val words = mutableListOf<Word>()
 
         File(path).walk().forEach { file ->
-            if (!Files.isDirectory(file.toPath()) && !file.path.contains("/node_modules/")) {
+            if (!Files.isDirectory(file.toPath()) && !file.path.contains(File.separator + "node_modules" + File.separator)) {
                 words.addAll(readOne(file.path))
             }
         }
