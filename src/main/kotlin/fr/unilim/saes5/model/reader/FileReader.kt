@@ -4,13 +4,16 @@ import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.sanitize.*
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 
 class FileReader : IRead {
+    private val supportedExtensions = listOf(".java", ".kt", ".py", ".js", ".html")
+
     override fun read(path: String): List<Word> {
         val words = mutableListOf<Word>()
 
         File(path).walk().forEach { file ->
-            if (!Files.isDirectory(file.toPath()) && !file.path.contains(File.separator + "node_modules" + File.separator)) {
+            if (isPathValidForProcessing(file.toPath())) {
                 words.addAll(readOne(file.path))
             }
         }
@@ -21,7 +24,9 @@ class FileReader : IRead {
     override fun read(paths: List<String>): List<Word> {
         val words = mutableListOf<Word>()
         for (path in paths) {
-            words.addAll(readOne(path))
+            if (isPathValidForProcessing(Path.of(path))) {
+                words.addAll(readOne(path))
+            }
         }
 
         return words
@@ -36,6 +41,13 @@ class FileReader : IRead {
             path.endsWith(".html") -> processFile(path, HtmlFileSanitizer())
             else -> emptyList()
         }
+    }
+
+    private fun isPathValidForProcessing(path: Path): Boolean {
+        val pathStr = path.toString()
+        return !Files.isDirectory(path)
+                && supportedExtensions.any { pathStr.endsWith(it) }
+                && !pathStr.contains(File.separator + "node_modules" + File.separator)
     }
 
     private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
