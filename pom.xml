@@ -99,6 +99,7 @@
                                 </transformer>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <finalName>CodeLinguo</finalName>
                         </configuration>
                     </execution>
                 </executions>

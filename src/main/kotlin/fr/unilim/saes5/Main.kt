@@ -10,7 +10,7 @@ import tornadofx.launch
 class MainApp : App(ProjectView::class, ViewStyles::class) {
     override fun start(stage: Stage) {
         with(stage) {
-            icons += Image("/logo.png")
+            icons += Image("/logo/logo.png")
             isResizable = false
             isMaximized = false
         }
