@@ -48,7 +48,7 @@ class ButtonBarView(
     private val defaultDirectory: File = File(System.getProperty("user.home"))
 
     private fun openGitProjectDialog() {
-        val dialog: Dialog<String> = Dialog()
+        val dialog: Dialog<Pair<String, String>> = Dialog()
         dialog.title = lang.getMessage("git_dialog_title")
         dialog.headerText = lang.getMessage("git_dialog_header")
 
@@ -63,13 +63,19 @@ class ButtonBarView(
         val gitUrlField = TextField()
         gitUrlField.promptText = "https://github.com/user/repo.git"
 
+        val branchField = TextField()
+        branchField.promptText = "main"
+        branchField.text = "main"
+
         grid.add(Label("Git URL:"), 0, 0)
         grid.add(gitUrlField, 1, 0)
+        grid.add(Label("Branch:"), 0, 1)
+        grid.add(branchField, 1, 1)
 
         val openButton: Node = dialog.dialogPane.lookupButton(openButtonType)
         openButton.isDisable = true
 
-        gitUrlField.textProperty().addListener { observable, oldValue, newValue ->
+        gitUrlField.textProperty().addListener { _, _, newValue ->
             openButton.isDisable = newValue.trim().isEmpty()
         }
 
@@ -79,22 +85,23 @@ class ButtonBarView(
 
         dialog.setResultConverter { dialogButton ->
             if (dialogButton === openButtonType) {
-                return@setResultConverter gitUrlField.text
+                return@setResultConverter Pair(gitUrlField.text, branchField.text)
             }
             null
         }
 
-        val result: Optional<String> = dialog.showAndWait()
+        val result: Optional<Pair<String, String>> = dialog.showAndWait()
 
-        result.ifPresent { gitUrl ->
-            handleGitUrl(gitUrl)
+        result.ifPresent { gitUrlBranchPair ->
+            handleGitUrl(gitUrlBranchPair.first, gitUrlBranchPair.second)
         }
     }
 
-    private fun handleGitUrl(gitUrl: String) {
+    private fun handleGitUrl(gitUrl: String, branchName: String) {
         try {
             val gitProjectReader = GitProjectReader()
-            val wordsFromGit = gitProjectReader.readFromGitUrl(gitUrl, "main")
+            // Pass the branch name to the readFromGitUrl method
+            val wordsFromGit = gitProjectReader.readFromGitUrl(gitUrl, branchName)
 
             val analytics = WordAnalyticsService()
             val wordRank = analytics.wordRank(wordsFromGit)
@@ -118,6 +125,7 @@ class ButtonBarView(
             }
         }
     }
+
 
 
     init {
