@@ -14,6 +14,7 @@
   "button_help": "Aide",
   "button_download_file": "Télécharger des fichiers",
   "button_download_folder": "Télécharger un dossier",
+  "button_open_git": "Ouvrir un dépôt Git",
   "button_add": "Ajouter",
   "statute_obligatory": "Statut : Obligatoire",
   "statute_facultative": "Statut : Facultatif",

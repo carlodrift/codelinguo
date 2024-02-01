@@ -5,22 +5,29 @@ import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.FileReader
+import fr.unilim.saes5.model.reader.GitProjectReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
 import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.service.WordAnalyticsService
 import fr.unilim.saes5.view.style.ViewStyles
 import fr.unilim.saes5.view.utilities.ViewUtilities
+import fr.unilim.saes5.view.utilities.ViewUtilities.openWordOccurrenceView
 import javafx.application.Platform
 import javafx.collections.ObservableList
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.control.*
+import javafx.scene.layout.GridPane
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
+import java.util.*
+
 
 class ButtonBarView(
     private val lang: LangDAO,
@@ -39,6 +46,79 @@ class ButtonBarView(
     private var lastOpenedDirectory: File? = null
 
     private val defaultDirectory: File = File(System.getProperty("user.home"))
+
+    private fun openGitProjectDialog() {
+        val dialog: Dialog<String> = Dialog()
+        dialog.title = lang.getMessage("git_dialog_title")
+        dialog.headerText = lang.getMessage("git_dialog_header")
+
+        val openButtonType = ButtonType("Ouvrir", ButtonBar.ButtonData.OK_DONE)
+        dialog.dialogPane.buttonTypes.addAll(openButtonType, ButtonType.CANCEL)
+
+        val grid = GridPane()
+        grid.hgap = 10.0
+        grid.vgap = 10.0
+        grid.padding = Insets(20.0, 150.0, 10.0, 10.0)
+
+        val gitUrlField = TextField()
+        gitUrlField.promptText = "https://github.com/user/repo.git"
+
+        grid.add(Label("Git URL:"), 0, 0)
+        grid.add(gitUrlField, 1, 0)
+
+        val openButton: Node = dialog.dialogPane.lookupButton(openButtonType)
+        openButton.isDisable = true
+
+        gitUrlField.textProperty().addListener { observable, oldValue, newValue ->
+            openButton.isDisable = newValue.trim().isEmpty()
+        }
+
+        dialog.dialogPane.content = grid
+
+        Platform.runLater(gitUrlField::requestFocus)
+
+        dialog.setResultConverter { dialogButton ->
+            if (dialogButton === openButtonType) {
+                return@setResultConverter gitUrlField.text
+            }
+            null
+        }
+
+        val result: Optional<String> = dialog.showAndWait()
+
+        result.ifPresent { gitUrl ->
+            handleGitUrl(gitUrl)
+        }
+    }
+
+    private fun handleGitUrl(gitUrl: String) {
+        try {
+            val gitProjectReader = GitProjectReader()
+            val wordsFromGit = gitProjectReader.readFromGitUrl(gitUrl, "main")
+
+            val analytics = WordAnalyticsService()
+            val wordRank = analytics.wordRank(wordsFromGit)
+            val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(
+                wordRank.keys.map { it },
+                Glossary(words)
+            )
+            val glossaryRatio = analytics.glossaryRatio(wordsFromGit, Glossary(words))
+
+            Platform.runLater {
+                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+            }
+        } catch (e: Exception) {
+            Platform.runLater {
+                val alert = Alert(
+                    Alert.AlertType.ERROR,
+                    "Failed to open Git project: ${e.message}",
+                    ButtonType.OK
+                )
+                alert.showAndWait()
+            }
+        }
+    }
+
 
     init {
         val savedDirectoryPath = directoryDao.retrieve()
@@ -125,7 +205,7 @@ class ButtonBarView(
                     val wordsInListNotInGlossary =
                         analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+                    openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
                 }
             }
         }
@@ -146,8 +226,14 @@ class ButtonBarView(
                     val wordsInListNotInGlossary =
                         analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+                    openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
                 }
+            }
+        }
+        button(lang.getMessage("button_open_git")) {
+            addClass(ViewStyles.downloadButtonHover)
+            action {
+                openGitProjectDialog()
             }
         }
         button(lang.getMessage("button_add")) {
