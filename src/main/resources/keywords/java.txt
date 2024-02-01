@@ -64,3 +64,10 @@ sqrt
 await
 args
 arg
+override
+nonnull
+value
+map
+exception
+object
+array
