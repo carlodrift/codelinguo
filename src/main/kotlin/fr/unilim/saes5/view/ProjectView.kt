@@ -1,6 +1,8 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Glossary
+import fr.unilim.saes5.persistence.lang.JsonLangDao
+import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.persistence.project.JsonProjectDao
 import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.view.style.ViewStyles
@@ -13,13 +15,12 @@ import javafx.scene.image.Image
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import tornadofx.*
-import java.util.*
 
 
 class ProjectView : View() {
     private val projectDao: ProjectDao = JsonProjectDao()
     private var projectsList = mutableListOf<Glossary>().asObservable()
-    private val myBundle: ResourceBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
+    private val lang: LangDAO = JsonLangDao()
 
     init {
         loadProjects()
@@ -47,14 +48,13 @@ class ProjectView : View() {
     }
 
 
-
     override val root = vbox {
         primaryStage.width = 550.0
         primaryStage.height = 310.0
 
         vbox {
             paddingAll = 10.0
-            button(myBundle.getString("button_quit")).apply {
+            button(lang.getMessage("button_quit")).apply {
                 addClass(ViewStyles.helpButton)
                 action { Platform.exit() }
             }
@@ -65,7 +65,7 @@ class ProjectView : View() {
         hbox(30.0) {
             vbox {
                 alignment = Pos.CENTER_LEFT
-                label(myBundle.getString("all_projects")) {
+                label(lang.getMessage("all_projects")) {
                     padding = Insets(20.0, 0.0, 5.0, 5.0)
                     addClass(ViewStyles.heading)
                 }
@@ -89,7 +89,7 @@ class ProjectView : View() {
                                     HBox.setHgrow(this, Priority.ALWAYS)
                                 }
 
-                                button(myBundle.getString("button_open")).apply {
+                                button(lang.getMessage("button_open")).apply {
                                     addClass(ViewStyles.openButton)
                                     action {
                                         openProject(project.name)
@@ -97,7 +97,7 @@ class ProjectView : View() {
                                 }
 
                                 if (!project.isDemo && project.name != "Démo") {
-                                    button(myBundle.getString("button_X")).apply {
+                                    button(lang.getMessage("button_X")).apply {
                                         addClass(ViewStyles.removeButton)
                                         cursor = Cursor.HAND
                                         action {
@@ -127,7 +127,7 @@ class ProjectView : View() {
             vbox(10.0) {
                 alignment = Pos.CENTER_RIGHT
 
-                button(myBundle.getString("button_new_project")).apply {
+                button(lang.getMessage("button_new_project")).apply {
                     addClass(ViewStyles.projectButton)
                     graphic = javafx.scene.image.ImageView(Image("/plus.png"))
                     action {

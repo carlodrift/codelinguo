@@ -7,6 +7,7 @@ import fr.unilim.saes5.model.context.SecondaryContext
 import fr.unilim.saes5.model.reader.FileReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
+import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.service.WordAnalyticsService
 import fr.unilim.saes5.view.style.ViewStyles
 import fr.unilim.saes5.view.utilities.ViewUtilities
@@ -20,10 +21,9 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
-import java.util.*
 
 class ButtonBarView(
-    private val myBundle: ResourceBundle,
+    private val lang: LangDAO,
     private val words: ObservableList<Word>,
     private val tokenInput: TextField,
     private val primaryContextInput: TextField,
@@ -54,40 +54,40 @@ class ButtonBarView(
         paddingHorizontal = 20.0
         alignment = Pos.BASELINE_RIGHT
 
-        button(myBundle.getString("button_quit")) {
+        button(lang.getMessage("button_quit")) {
             addClass(ViewStyles.helpButton)
             action {
                 Platform.exit()
             }
         }
-        button(myBundle.getString("button_help")) {
+        button(lang.getMessage("button_help")) {
             addClass(ViewStyles.helpButton)
             action {
                 val dialog = Dialog<ButtonType>().apply {
                     initOwner(this@ButtonBarView.currentWindow)
-                    title = myBundle.getString("help_title")
+                    title = lang.getMessage("help_title")
                     dialogPane.buttonTypes.add(ButtonType.CLOSE)
                     val closeButton = dialogPane.lookupButton(ButtonType.CLOSE)
                     closeButton.addClass(ViewStyles.helpButton)
                     val textFlow = TextFlow(
-                        Text(myBundle.getString("token_label") + "\n").apply { style = "-fx-font-weight: bold" },
-                        Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_token") + "\n\n"),
-                        Text(myBundle.getString("definition_label") + "\n").apply {
+                        Text(lang.getMessage("token_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                        Text(lang.getMessage("statute_obligatory") + "\n" + lang.getMessage("description_token") + "\n\n"),
+                        Text(lang.getMessage("definition_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
-                        Text(myBundle.getString("statute_facultative") + "\n " + myBundle.getString("description_definition") + "\n\n"),
-                        Text(myBundle.getString("primary_context_label") + "\n").apply {
+                        Text(lang.getMessage("statute_facultative") + "\n " + lang.getMessage("description_definition") + "\n\n"),
+                        Text(lang.getMessage("primary_context_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
-                        Text(myBundle.getString("statute_obligatory") + "\n" + myBundle.getString("description_primary_context") + "\n\n"),
-                        Text(myBundle.getString("secondary_context_label") + "\n").apply {
+                        Text(lang.getMessage("statute_obligatory") + "\n" + lang.getMessage("description_primary_context") + "\n\n"),
+                        Text(lang.getMessage("secondary_context_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
-                        Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_secondary_content") + "\n\n"),
-                        Text(myBundle.getString("synonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
-                        Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_synonym") + "\n\n"),
-                        Text(myBundle.getString("antonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
-                        Text(myBundle.getString("statute_facultative") + "\n" + myBundle.getString("description_antonym") + "\n\n")
+                        Text(lang.getMessage("statute_facultative") + "\n" + lang.getMessage("description_secondary_content") + "\n\n"),
+                        Text(lang.getMessage("synonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                        Text(lang.getMessage("statute_facultative") + "\n" + lang.getMessage("description_synonym") + "\n\n"),
+                        Text(lang.getMessage("antonym_label") + "\n").apply { style = "-fx-font-weight: bold" },
+                        Text(lang.getMessage("statute_facultative") + "\n" + lang.getMessage("description_antonym") + "\n\n")
                     )
                     dialogPane.content = textFlow
                     dialogPane.prefWidth = primaryStage.width * 0.8
@@ -106,11 +106,11 @@ class ButtonBarView(
                 dialog.showAndWait()
             }
         }
-        button(myBundle.getString("button_download_file")) {
+        button(lang.getMessage("button_download_file")) {
             addClass(ViewStyles.downloadButtonHover)
             action {
                 val fileChooser = FileChooser().apply {
-                    title = myBundle.getString("choose_files")
+                    title = lang.getMessage("choose_files")
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
@@ -125,15 +125,15 @@ class ButtonBarView(
                     val wordsInListNotInGlossary =
                         analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
                 }
             }
         }
-        button(myBundle.getString("button_download_folder")) {
+        button(lang.getMessage("button_download_folder")) {
             addClass(ViewStyles.downloadButtonHover)
             action {
                 val directoryChooser = DirectoryChooser().apply {
-                    title = myBundle.getString("choose_folder")
+                    title = lang.getMessage("choose_folder")
                     initialDirectory = lastOpenedDirectory ?: defaultDirectory
                 }
                 directoryChooser.showDialog(currentWindow)?.let { file ->
@@ -146,18 +146,18 @@ class ButtonBarView(
                     val wordsInListNotInGlossary =
                         analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
                     val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
+                    ViewUtilities.openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
                 }
             }
         }
-        button(myBundle.getString("button_add")) {
+        button(lang.getMessage("button_add")) {
             addClass(ViewStyles.addButton)
             action {
                 if (tokenInput.text.isBlank() || primaryContextInput.text.isBlank()) {
                     alert(
                         type = Alert.AlertType.WARNING,
-                        header = myBundle.getString("missing_fields_header"),
-                        content = myBundle.getString("missing_fields_content")
+                        header = lang.getMessage("missing_fields_header"),
+                        content = lang.getMessage("missing_fields_content")
                     )
                 } else {
                     val newWord = Word(tokenInput.text).apply {
@@ -174,8 +174,8 @@ class ButtonBarView(
                     if (duplicate) {
                         alert(
                             type = Alert.AlertType.WARNING,
-                            header = myBundle.getString("duplicate_header"),
-                            content = myBundle.getString("duplicate_content")
+                            header = lang.getMessage("duplicate_header"),
+                            content = lang.getMessage("duplicate_content")
                         )
                     } else {
                         words.add(newWord)
