@@ -21,6 +21,7 @@ class ViewStyles : Stylesheet() {
         val projectButton by cssclass()
         val separator by cssclass()
         val openButton by cssclass()
+        val clickDetailLabel by cssclass()
     }
 
     init {
@@ -157,6 +158,13 @@ class ViewStyles : Stylesheet() {
 
         separator {
             backgroundColor += c("#000000")
+        }
+
+        clickDetailLabel {
+            fontSize = 14.px
+            textFill = c("#616161")
+            padding = box(5.px)
+            alignment = Pos.CENTER
         }
     }
 

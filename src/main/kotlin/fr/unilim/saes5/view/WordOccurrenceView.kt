@@ -31,13 +31,8 @@ class WordOccurrenceView(
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
-    private val clickDetailLabel = label("Cliquez sur un mot pour voir le détail.") {
-        style {
-            fontSize = 14.px
-            textFill = c("#616161")
-            padding = box(5.px)
-            alignment = Pos.CENTER
-        }
+    private val clickDetailLabel = label(myBundle.getString("click_detail_label")) {
+        addClass(ViewStyles.clickDetailLabel)
     }
 
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
