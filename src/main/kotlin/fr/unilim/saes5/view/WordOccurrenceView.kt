@@ -31,7 +31,7 @@ class WordOccurrenceView(
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
-    private val clickDetailLabel = label(myBundle.getString("click_detail_label")) {
+    private val clickDetailLabel = label(lang.getMessage("click_detail_label")) {
         addClass(ViewStyles.clickDetailLabel)
     }
 
