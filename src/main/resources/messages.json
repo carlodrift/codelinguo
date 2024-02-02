@@ -12,9 +12,9 @@
   "prompt_antonym": "Aigri",
   "prompt_secondary_context": "Psychologie",
   "button_help": "Aide",
-  "button_download_file": "Télécharger des fichiers",
-  "button_download_folder": "Télécharger un dossier",
-  "button_open_git": "Ouvrir un dépôt Git",
+  "button_download_file": "Fichiers",
+  "button_download_folder": "Dossier",
+  "button_open_git": "Git",
   "button_add": "Ajouter",
   "statute_obligatory": "Statut : Obligatoire",
   "statute_facultative": "Statut : Facultatif",
@@ -41,5 +41,6 @@
   "choose_folder": "Choisir un dossier",
   "all_projects": "Tous les projets",
   "button_new_project": "Nouveau projet",
-  "click_detail_label": "Cliquez sur un mot pour voir le détail."
+  "click_detail_label": "Cliquez sur un mot pour voir le détail.",
+  "button_analyze": "Analyser"
 }

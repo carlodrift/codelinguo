@@ -4,7 +4,6 @@ import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
-import fr.unilim.saes5.model.reader.FileReader
 import fr.unilim.saes5.model.reader.GitProjectReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
@@ -22,11 +21,14 @@ import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
-import javafx.stage.DirectoryChooser
-import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
 import java.util.*
+import javafx.stage.DirectoryChooser
+import javafx.stage.FileChooser
+import fr.unilim.saes5.model.reader.FileReader
+import javafx.scene.layout.VBox
+import org.controlsfx.control.PopOver
 
 
 class ButtonBarView(
@@ -47,10 +49,88 @@ class ButtonBarView(
 
     private val defaultDirectory: File = File(System.getProperty("user.home"))
 
-    private fun openGitProjectDialog() {
+    private fun setupAnalyzePopOver(): PopOver {
+        val popOver = PopOver()
+        popOver.arrowLocation = PopOver.ArrowLocation.TOP_CENTER
+
+        val vbox = VBox(10.0).apply {
+            padding = Insets(10.0)
+            children.addAll(
+                Button(lang.getMessage("button_download_file")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        handleFileSelection()
+                    }
+                },
+                Button(lang.getMessage("button_download_folder")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        handleFolderSelection()
+                    }
+                },
+                Button(lang.getMessage("button_open_git")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        handleGitSelection()
+                    }
+                }
+            )
+        }
+
+        popOver.contentNode = vbox
+        return popOver
+    }
+
+    private fun handleFileSelection() {
+        val fileChooser = FileChooser().apply {
+            title = lang.getMessage("choose_files")
+            initialDirectory = lastOpenedDirectory ?: defaultDirectory
+        }
+        val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
+        if (selectedFiles != null) {
+            lastOpenedDirectory = selectedFiles.first().parentFile
+            directoryDao.save(lastOpenedDirectory?.absolutePath)
+
+            val filePaths = selectedFiles.map { it.path }
+            val analysisWords = FileReader().read(filePaths)
+            val analytics = WordAnalyticsService()
+            val wordRank = analytics.wordRank(analysisWords)
+            val wordsInListNotInGlossary =
+                analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+            val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+        }
+    }
+
+    private fun handleFolderSelection() {
+        val directoryChooser = DirectoryChooser().apply {
+            title = lang.getMessage("choose_folder")
+            initialDirectory = lastOpenedDirectory ?: defaultDirectory
+        }
+        directoryChooser.showDialog(currentWindow)?.let { file ->
+            lastOpenedDirectory = file
+            directoryDao.save(lastOpenedDirectory?.absolutePath)
+
+            val analysisWords = FileReader().read(file.toString())
+            val analytics = WordAnalyticsService()
+            val wordRank = analytics.wordRank(analysisWords)
+            val wordsInListNotInGlossary =
+                analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
+            val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+        }
+    }
+
+    private fun handleGitSelection() {
         val dialog: Dialog<Pair<String, String>> = Dialog()
-        dialog.title = lang.getMessage("git_dialog_title")
-        dialog.headerText = lang.getMessage("git_dialog_header")
+        //dialog.title = lang.getMessage("git_dialog_title")
+        //dialog.headerText = lang.getMessage("git_dialog_header")
 
         val openButtonType = ButtonType("Ouvrir", ButtonBar.ButtonData.OK_DONE)
         dialog.dialogPane.buttonTypes.addAll(openButtonType, ButtonType.CANCEL)
@@ -67,9 +147,9 @@ class ButtonBarView(
         branchField.promptText = "main"
         branchField.text = "main"
 
-        grid.add(Label("Git URL:"), 0, 0)
+        grid.add(Label("URL :"), 0, 0)
         grid.add(gitUrlField, 1, 0)
-        grid.add(Label("Branch:"), 0, 1)
+        grid.add(Label("Branche :"), 0, 1)
         grid.add(branchField, 1, 1)
 
         val openButton: Node = dialog.dialogPane.lookupButton(openButtonType)
@@ -100,7 +180,6 @@ class ButtonBarView(
     private fun handleGitUrl(gitUrl: String, branchName: String) {
         try {
             val gitProjectReader = GitProjectReader()
-            // Pass the branch name to the readFromGitUrl method
             val wordsFromGit = gitProjectReader.readFromGitUrl(gitUrl, branchName)
 
             val analytics = WordAnalyticsService()
@@ -194,56 +273,19 @@ class ButtonBarView(
                 dialog.showAndWait()
             }
         }
-        button(lang.getMessage("button_download_file")) {
+        val analyzeButton = Button(lang.getMessage("button_analyze")).apply {
             addClass(ViewStyles.downloadButtonHover)
+            val popOver = setupAnalyzePopOver()
             action {
-                val fileChooser = FileChooser().apply {
-                    title = lang.getMessage("choose_files")
-                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
+                if (!popOver.isShowing) {
+                    popOver.show(this)
+                } else {
+                    popOver.hide()
                 }
-                val selectedFiles = fileChooser.showOpenMultipleDialog(currentWindow)
-                if (selectedFiles != null) {
-                    lastOpenedDirectory = selectedFiles.first().parentFile
-                    directoryDao.save(lastOpenedDirectory?.absolutePath)
+            }
+        }
 
-                    val filePaths = selectedFiles.map { it.path }
-                    val analysisWords = FileReader().read(filePaths)
-                    val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary =
-                        analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
-                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
-                }
-            }
-        }
-        button(lang.getMessage("button_download_folder")) {
-            addClass(ViewStyles.downloadButtonHover)
-            action {
-                val directoryChooser = DirectoryChooser().apply {
-                    title = lang.getMessage("choose_folder")
-                    initialDirectory = lastOpenedDirectory ?: defaultDirectory
-                }
-                directoryChooser.showDialog(currentWindow)?.let { file ->
-                    lastOpenedDirectory = file
-                    directoryDao.save(lastOpenedDirectory?.absolutePath)
-
-                    val analysisWords = FileReader().read(file.toString())
-                    val analytics = WordAnalyticsService()
-                    val wordRank = analytics.wordRank(analysisWords)
-                    val wordsInListNotInGlossary =
-                        analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
-                    val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-                    openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
-                }
-            }
-        }
-        button(lang.getMessage("button_open_git")) {
-            addClass(ViewStyles.downloadButtonHover)
-            action {
-                openGitProjectDialog()
-            }
-        }
+        this += analyzeButton
         button(lang.getMessage("button_add")) {
             addClass(ViewStyles.addButton)
             action {
