@@ -1,12 +1,13 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.persistence.lang.JsonLangDao
+import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.view.utilities.DataLoader
 import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.scene.control.TableView
 import tornadofx.*
-import java.util.*
 
 
 class MainView : View() {
@@ -19,7 +20,7 @@ class MainView : View() {
         val words = mutableListOf<Word>().asObservable()
     }
 
-    private val myBundle = ResourceBundle.getBundle("Messages", Locale.getDefault())
+    private val lang: LangDAO = JsonLangDao()
 
     private var wordTableView: TableView<Word> by singleAssign()
 
@@ -36,16 +37,16 @@ class MainView : View() {
 
     override val root = vbox(5.0) {
 
-        val wordTableViewComponent = WordTableView(words, myBundle, projectName)
+        val wordTableViewComponent = WordTableView(words, lang, projectName)
         wordTableView = wordTableViewComponent.wordTableView
         this += wordTableViewComponent
 
         val inputFormView =
-            InputFormView(contextCompletionService, lexicoCompletionService, tokenCompletionService, myBundle)
+            InputFormView(contextCompletionService, lexicoCompletionService, tokenCompletionService, lang)
         this += inputFormView
 
         val buttonBarView = ButtonBarView(
-            myBundle, words, inputFormView.tokenInput, inputFormView.primaryContextInput,
+            lang, words, inputFormView.tokenInput, inputFormView.primaryContextInput,
             inputFormView.secondaryContextInput, inputFormView.synonymInput, inputFormView.antonymInput,
             inputFormView.definitionInput, wordTableView, projectName
         )

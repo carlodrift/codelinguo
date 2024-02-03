@@ -1,6 +1,7 @@
 package fr.unilim.saes5.view
 
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.view.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -13,7 +14,6 @@ import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
-import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.util.Duration
@@ -26,18 +26,13 @@ class WordOccurrenceView(
     private val wordRank: Map<Word, Int>,
     wordsInListNotInGlossary: List<Word>,
     private val glossaryRatio: Float,
-    private val myBundle: ResourceBundle
+    private val lang: LangDAO
 ) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
-    private val clickDetailLabel = label("Cliquez sur un mot pour voir le détail.") {
-        style {
-            fontSize = 14.px
-            textFill = c("#616161")
-            padding = box(5.px)
-            alignment = Pos.CENTER
-        }
+    private val clickDetailLabel = label(lang.getMessage("click_detail_label")) {
+        addClass(ViewStyles.clickDetailLabel)
     }
 
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
@@ -56,7 +51,7 @@ class WordOccurrenceView(
             PieChart.Data("$fileName (${String.format("%.2f%%", percentage)})", count.toDouble())
         }.toMutableList()
 
-        val newCloseButton = button(myBundle.getString("button_close")) {
+        val newCloseButton = button(lang.getMessage("button_close")) {
             action {
                 val popup = this@button.scene.window as PopOver
                 popup.hide(Duration.millis(0.0))
@@ -162,7 +157,7 @@ class WordOccurrenceView(
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
-        readonlyColumn(myBundle.getString("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
+        readonlyColumn(lang.getMessage("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
                 text = wordEntry.token
@@ -194,7 +189,7 @@ class WordOccurrenceView(
             }
         }
 
-        readonlyColumn(myBundle.getString("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
+        readonlyColumn(lang.getMessage("wordoccurrenceview_occurrences") + " ⇅", Map.Entry<Word, Int>::value) {
             prefWidth = 100.0
             cellFormat { occurrenceEntry ->
                 text = occurrenceEntry.toString()
@@ -207,6 +202,7 @@ class WordOccurrenceView(
         }
 
         columnResizePolicy = CONSTRAINED_RESIZE_POLICY
+        selectionModel = null
     }
 
     private val detailsView = vbox {
@@ -227,7 +223,7 @@ class WordOccurrenceView(
         }
 
         label {
-            text = myBundle.getString("glossary_ratio")
+            text = lang.getMessage("glossary_ratio")
             style {
                 fontSize = 20.px
                 fontWeight = FontWeight.BOLD
@@ -235,7 +231,7 @@ class WordOccurrenceView(
         }
     }
 
-    private val closeButton = button(myBundle.getString("button_close")) {
+    private val closeButton = button(lang.getMessage("button_close")) {
         addClass(ViewStyles.helpButton)
         action {
             close()

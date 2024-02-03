@@ -2,6 +2,7 @@ package fr.unilim.saes5.view.utilities
 
 import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
+import fr.unilim.saes5.persistence.lang.LangDAO
 import fr.unilim.saes5.persistence.project.JsonProjectDao
 import fr.unilim.saes5.persistence.project.ProjectDao
 import fr.unilim.saes5.service.CompletionService
@@ -13,7 +14,6 @@ import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.TextField
 import javafx.scene.control.TextInputControl
-import java.util.*
 
 object ViewUtilities {
     fun updateJsonFile(words: ObservableList<Word>, name: String) {
@@ -26,9 +26,9 @@ object ViewUtilities {
         wordRank: Map<Word, Int>,
         wordsInListNotInGlossary: List<Word>,
         glossaryRatio: Float,
-        myBundle: ResourceBundle
+        lang: LangDAO
     ) {
-        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, myBundle)
+        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
 

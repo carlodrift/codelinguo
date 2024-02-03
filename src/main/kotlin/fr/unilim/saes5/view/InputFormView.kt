@@ -1,46 +1,46 @@
 package fr.unilim.saes5.view
 
-import  fr.unilim.saes5.service.CompletionService
+import fr.unilim.saes5.persistence.lang.LangDAO
+import fr.unilim.saes5.service.CompletionService
 import fr.unilim.saes5.view.style.ViewStyles
 import fr.unilim.saes5.view.utilities.ViewUtilities
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import tornadofx.*
-import java.util.*
 
 class InputFormView(
     private val contextCompletionService: CompletionService,
     private val lexicoCompletionService: CompletionService,
     private val tokenCompletionService: CompletionService,
-    private val myBundle: ResourceBundle,
+    private val lang: LangDAO,
     private val activeContextMenus: MutableMap<TextField, ContextMenu> = mutableMapOf()
 ) : View() {
 
     val tokenInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_token")
+        promptText = lang.getMessage("prompt_token")
     }
     val synonymInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_synonym")
+        promptText = lang.getMessage("prompt_synonym")
     }
     val definitionInput: TextArea = textarea {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_definition")
+        promptText = lang.getMessage("prompt_definition")
         prefHeight = 145.0
     }
     val primaryContextInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_primary_context")
+        promptText = lang.getMessage("prompt_primary_context")
     }
     val antonymInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_antonym")
+        promptText = lang.getMessage("prompt_antonym")
     }
     val secondaryContextInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
-        promptText = myBundle.getString("prompt_secondary_context")
+        promptText = lang.getMessage("prompt_secondary_context")
     }
 
     init {
@@ -66,19 +66,19 @@ class InputFormView(
             fieldset {
                 field {
                     vbox {
-                        label(myBundle.getString("token_label") + myBundle.getString("required_field"))
+                        label(lang.getMessage("token_label") + lang.getMessage("required_field"))
                         this += tokenInput
                     }
                 }
                 field {
                     vbox {
-                        label(myBundle.getString("primary_context_label") + myBundle.getString("required_field"))
+                        label(lang.getMessage("primary_context_label") + lang.getMessage("required_field"))
                         this += primaryContextInput
                     }
                 }
                 field {
                     vbox {
-                        label(myBundle.getString("secondary_context_label"))
+                        label(lang.getMessage("secondary_context_label"))
                         this += secondaryContextInput
                     }
                 }
@@ -88,13 +88,13 @@ class InputFormView(
             fieldset {
                 field {
                     vbox {
-                        label(myBundle.getString("synonym_label"))
+                        label(lang.getMessage("synonym_label"))
                         this += synonymInput
                     }
                 }
                 field {
                     vbox {
-                        label(myBundle.getString("antonym_label"))
+                        label(lang.getMessage("antonym_label"))
                         this += antonymInput
                     }
                 }
@@ -104,7 +104,7 @@ class InputFormView(
             fieldset {
                 field {
                     vbox {
-                        label(myBundle.getString("definition_label"))
+                        label(lang.getMessage("definition_label"))
                         this += definitionInput
                     }
                 }
