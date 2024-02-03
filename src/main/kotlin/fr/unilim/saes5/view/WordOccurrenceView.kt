@@ -186,6 +186,8 @@ class WordOccurrenceView(
 
                 setOnMouseClicked { event ->
                     if (event.clickCount > 0) {
+                        val tableView = this@tableview
+                        tableView.selectionModel.select(this@cellFormat.index)
                         customTooltip.show(this@cellFormat, event.screenX, event.screenY)
                     }
                 }
