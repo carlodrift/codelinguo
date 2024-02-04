@@ -51,7 +51,7 @@ class ButtonBarView(
 
     private fun setupAnalyzePopOver(): PopOver {
         val popOver = PopOver()
-        popOver.arrowLocation = PopOver.ArrowLocation.TOP_CENTER
+        popOver.arrowLocation = PopOver.ArrowLocation.BOTTOM_CENTER
 
         val vbox = VBox(10.0).apply {
             padding = Insets(10.0)

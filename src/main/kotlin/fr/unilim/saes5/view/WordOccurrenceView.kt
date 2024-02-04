@@ -202,7 +202,6 @@ class WordOccurrenceView(
         }
 
         columnResizePolicy = CONSTRAINED_RESIZE_POLICY
-        selectionModel = null
     }
 
     private val detailsView = vbox {
