@@ -10,7 +10,7 @@ import javafx.scene.Cursor
 import javafx.scene.Node
 import javafx.scene.chart.PieChart
 import javafx.scene.control.*
-import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY
+import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -201,7 +201,7 @@ class WordOccurrenceView(
             }
         }
 
-        columnResizePolicy = CONSTRAINED_RESIZE_POLICY
+        columnResizePolicy = CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
     }
 
     private val detailsView = vbox {
