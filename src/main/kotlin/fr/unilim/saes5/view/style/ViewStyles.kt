@@ -114,11 +114,32 @@ class ViewStyles : Stylesheet() {
         }
 
         customTextField {
-            borderWidth += box(1.px)
+            backgroundColor += c("#ffffff")
             borderColor += box(c(0, 0, 0, 1.0))
             backgroundRadius += box(15.px)
             borderRadius += box(15.px)
+
+            s(".scroll-pane") {
+                backgroundColor += c("#ffffff")
+                backgroundInsets += box(0.px)
+                backgroundRadius += box(15.px)
+            }
+
+            s(".content") {
+                backgroundColor += c("#ffffff")
+                backgroundInsets += box(0.px)
+                backgroundRadius += box(15.px)
+            }
+
+            s(".viewport") {
+                backgroundColor += c("#ffffff")
+                backgroundInsets += box(0.px)
+                backgroundRadius += box(15.px)
+            }
         }
+
+
+
 
         customTableView {
             backgroundColor += c("#E5E5E5")

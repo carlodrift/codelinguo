@@ -29,6 +29,7 @@ class InputFormView(
         addClass(ViewStyles.customTextField)
         promptText = lang.getMessage("prompt_definition")
         prefHeight = 145.0
+        isWrapText = true
     }
     val primaryContextInput: TextField = textfield {
         addClass(ViewStyles.customTextField)
