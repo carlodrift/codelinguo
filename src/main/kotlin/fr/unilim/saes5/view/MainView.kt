@@ -25,6 +25,9 @@ class MainView : View() {
     private var wordTableView: TableView<Word> by singleAssign()
 
     init {
+        this.whenDocked {
+            currentStage?.isResizable = false
+        }
         DataLoader.loadSavedWords(
             words,
             contextCompletionService,
