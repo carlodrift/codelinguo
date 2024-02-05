@@ -27,7 +27,10 @@ public class JsonDirectoryDao implements DirectoryDao {
 
         if (!this.file.exists()) {
             try {
-                this.file.createNewFile();
+                boolean created = this.file.createNewFile();
+                if (!created) {
+                    throw new IOException("Failed to create file: " + this.file);
+                }
                 this.save(null);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -4,6 +4,7 @@ import fr.unilim.saes5.model.Glossary
 import fr.unilim.saes5.model.Word
 import fr.unilim.saes5.model.context.PrimaryContext
 import fr.unilim.saes5.model.context.SecondaryContext
+import fr.unilim.saes5.model.reader.FileReader
 import fr.unilim.saes5.model.reader.GitProjectReader
 import fr.unilim.saes5.persistence.directory.DirectoryDao
 import fr.unilim.saes5.persistence.directory.JsonDirectoryDao
@@ -19,16 +20,15 @@ import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.VBox
 import javafx.scene.text.Text
 import javafx.scene.text.TextFlow
+import javafx.stage.DirectoryChooser
+import javafx.stage.FileChooser
+import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.io.File
 import java.util.*
-import javafx.stage.DirectoryChooser
-import javafx.stage.FileChooser
-import fr.unilim.saes5.model.reader.FileReader
-import javafx.scene.layout.VBox
-import org.controlsfx.control.PopOver
 
 
 class ButtonBarView(
@@ -204,7 +204,6 @@ class ButtonBarView(
             }
         }
     }
-
 
 
     init {

@@ -19,13 +19,14 @@ import java.util.List;
 
 public class JsonProjectDao implements ProjectDao {
 
+    private static final String FILE_EXTENSION = ".json";
     private final Gson gson;
 
     private final File directory;
 
     public JsonProjectDao() {
         String userHome = System.getProperty("user.home");
-        this.directory = new File(userHome, JsonProjectDao.CODELINGUO_PROJECTS);
+        this.directory = new File(userHome, ProjectDao.CODELINGUO_PROJECTS);
         if (!this.directory.exists()) {
             this.directory.mkdirs();
         }
@@ -37,7 +38,7 @@ public class JsonProjectDao implements ProjectDao {
 
     @Override
     public void save(Glossary project, String name) {
-        File jsonFile = new File(this.directory, name + ".json");
+        File jsonFile = new File(this.directory, name + JsonProjectDao.FILE_EXTENSION);
         if (!jsonFile.exists()) {
             try {
                 jsonFile.createNewFile();
@@ -56,7 +57,7 @@ public class JsonProjectDao implements ProjectDao {
         List<Glossary> allGlossaries = new ArrayList<>();
 
         File folder = this.directory;
-        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+        File[] listOfFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(JsonProjectDao.FILE_EXTENSION));
 
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
@@ -89,7 +90,7 @@ public class JsonProjectDao implements ProjectDao {
     private void writeListToFile(List<Glossary> projects) {
         for (Glossary project : projects) {
             String fileName = project.getName();
-            try (Writer writer = new FileWriter(new File(this.directory, fileName + ".json"), false)) {
+            try (Writer writer = new FileWriter(new File(this.directory, fileName + JsonProjectDao.FILE_EXTENSION), false)) {
                 this.gson.toJson(project, writer);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -98,7 +99,7 @@ public class JsonProjectDao implements ProjectDao {
     }
 
     public void delete(String name) {
-        File projectFile = new File(this.directory, name + ".json");
+        File projectFile = new File(this.directory, name + JsonProjectDao.FILE_EXTENSION);
         if (projectFile.exists()) {
             if (!projectFile.delete()) {
                 System.err.println("Failed to delete the project: " + name);

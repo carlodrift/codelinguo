@@ -3,11 +3,13 @@ package fr.unilim.saes5.model.reader;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class GitRepoDownloader {
+
+    private GitRepoDownloader() {
+    }
 
     public static Path cloneRepository(String repoUrl, String branch) throws GitAPIException {
         try {
