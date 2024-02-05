@@ -37,3 +37,4 @@ True
 None
 plt
 write
+self
