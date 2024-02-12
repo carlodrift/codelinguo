@@ -1,5 +1,7 @@
 package fr.unilim.codelinguo.view
 
+import fr.unilim.codelinguo.persistence.lang.JsonLangDao
+import fr.unilim.codelinguo.persistence.lang.LangDAO
 import fr.unilim.codelinguo.view.style.ViewStyles
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -9,19 +11,20 @@ import tornadofx.*
 
 class CreateProjectView : View() {
     private lateinit var projectNameTextField: TextField
+    private val lang: LangDAO = JsonLangDao()
 
     override val root = vbox {
         alignment = Pos.CENTER
         paddingAll = 10.0
         spacing = 10.0
 
-        label("Nom du projet") {
+        label(lang.getMessage("project_name_label")) {
             addClass(ViewStyles.heading)
             padding = Insets(0.0, 0.0, 20.0, 0.0)
         }
 
         projectNameTextField = textfield {
-            promptText = "Entrez le nom du projet"
+            promptText = lang.getMessage("project_new_name")
             addClass(ViewStyles.customTextField)
         }
 
@@ -30,7 +33,7 @@ class CreateProjectView : View() {
             vgrow = Priority.ALWAYS
         }
 
-        button("Valider") {
+        button(lang.getMessage("button_validate")) {
             addClass(ViewStyles.projectButton)
             action {
                 primaryStage.close()

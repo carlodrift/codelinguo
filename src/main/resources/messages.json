@@ -47,5 +47,8 @@
   "choose_destination": "Choisir une destination",
   "export_done": "Export effectué",
   "confirm_delete": "Confirmer la suppression",
-  "confirm_delete_content": "Voulez-vous supprimer"
+  "confirm_delete_content": "Voulez-vous supprimer",
+  "project_name_label": "Nom du projet",
+  "project_new_name": "Entrez le nom du projet",
+  "button_validate": "Valider"
 }
