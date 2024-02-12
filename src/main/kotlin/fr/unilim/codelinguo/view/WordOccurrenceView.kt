@@ -283,7 +283,8 @@ class WordOccurrenceView(
         }
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
-            CSVWordRankDAO().save(directory.absolutePath, wordRank, glossaryRatio, projectName)
+            val wordRankMap = wordRankList.associate { it.key to it.value }
+            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName)
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
