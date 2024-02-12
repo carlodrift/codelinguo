@@ -129,7 +129,12 @@ class AdvancedJavaFileSanitizer : FileSanitizer() {
             }
         }
 
-        return allWords.map { Word(it) }
+        var result = allWords.map { Word(it) }
+        if (result.isEmpty()) {
+            result = JavaFileSanitizer().sanitizeFile(path)
+            println("AdvancedJavaFileSanitizer: falling back to JavaFileSanitizer for $path")
+        }
+        return result
     }
 
     private fun splitIdentifierIntoWords(identifier: String): List<String> {

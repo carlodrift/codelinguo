@@ -39,6 +39,8 @@ class FileReader : IRead {
         return Files.isRegularFile(path)
                 && fileSanitizers.keys.any { pathStr.endsWith(it) }
                 && !pathStr.contains("${File.separator}node_modules${File.separator}")
+                && !pathStr.endsWith("module-info.java")
+                && !pathStr.endsWith("package-info.java")
     }
 
     private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
