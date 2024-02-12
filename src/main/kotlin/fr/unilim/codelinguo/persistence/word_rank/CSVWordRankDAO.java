@@ -12,14 +12,14 @@ import java.util.Map;
 public class CSVWordRankDAO implements WordRankDAO {
 
     @Override
-    public void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio) {
+    public void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName) {
         File dir = new File(directory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         String score = String.format(Locale.US, "%.2f", glossaryRatio * 100);
-        File file = new File(dir, "word_rank_" + score + ".csv");
+        File file = new File(dir, projectName + "_wordRank_" + score + ".csv");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Mot,Occurrences");

@@ -41,7 +41,7 @@ class ButtonBarView(
     private val antonymInput: TextField,
     private val definitionInput: TextArea,
     private val wordTableView: TableView<Word>? = null,
-    name: String
+    private val name: String
 ) : View() {
 
     private val directoryDao: DirectoryDao = JsonDirectoryDao()
@@ -104,7 +104,7 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
         }
     }
 
@@ -123,7 +123,7 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
         }
     }
 
@@ -191,7 +191,7 @@ class ButtonBarView(
             val glossaryRatio = analytics.glossaryRatio(wordsFromGit, Glossary(words))
 
             Platform.runLater {
-                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang)
+                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
             }
         } catch (e: Exception) {
             Platform.runLater {
