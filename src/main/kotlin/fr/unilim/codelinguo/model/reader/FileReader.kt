@@ -8,7 +8,7 @@ import java.nio.file.Path
 
 class FileReader : IRead {
     private val fileSanitizers = mapOf(
-        ".java" to JavaFileSanitizer(),
+        ".java" to AdvancedJavaFileSanitizer(),
         ".kt" to KotlinFileSanitizer(),
         ".py" to PythonFileSanitizer(),
         ".js" to JavascriptFileSanitizer(),
@@ -43,7 +43,7 @@ class FileReader : IRead {
 
     private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
         val lines = File(path).useLines { it.toList() }
-        return sanitizer.sanitizeLines(lines).onEach {
+        return sanitizer.sanitizeLines(lines, path).onEach {
             it.fileName = path.substringAfterLast(File.separator).substringBeforeLast(".")
         }
     }

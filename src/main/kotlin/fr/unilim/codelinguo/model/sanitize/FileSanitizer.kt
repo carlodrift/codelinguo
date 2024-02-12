@@ -14,7 +14,7 @@ abstract class FileSanitizer {
     private val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     private val regexWordSeparation = "[a-zA-Z]+".toRegex()
 
-    abstract fun sanitizeLines(lines: List<String>): List<Word>
+    abstract fun sanitizeLines(lines: List<String>, path: String): List<Word>
     abstract fun handleBlockCommentEnd(line: String): String
     abstract fun handleBlockCommentStart(line: String): String
 

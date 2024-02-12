@@ -10,12 +10,12 @@ class HtmlFileSanitizer : JavascriptFileSanitizer() {
         Pattern.CASE_INSENSITIVE
     )
 
-    override fun sanitizeLines(lines: List<String>): List<Word> {
+    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
         val words = mutableListOf<Word>()
         val scriptContents = extractScriptContents(lines.joinToString("\n"))
 
         scriptContents.forEach { scriptContent ->
-            super.sanitizeLines(scriptContent.split("\n")).forEach { word ->
+            super.sanitizeLines(scriptContent.split("\n"), path).forEach { word ->
                 words.add(word)
             }
         }

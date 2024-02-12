@@ -4,6 +4,7 @@ import fr.unilim.codelinguo.model.Word
 import fr.unilim.codelinguo.model.sanitize.*
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
 
 class FileSanitizerTest {
     @Test
@@ -21,7 +22,7 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = JavaFileSanitizer().sanitizeLines(lines)
+        val sanitized: List<Word> = JavaFileSanitizer().sanitizeLines(lines, "")
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -40,6 +41,58 @@ class FileSanitizerTest {
     }
 
     @Test
+    fun testSanitizeAdvancedSingleFileJava() {
+        val lines = listOf(
+            "package com.example.project;",
+            "",
+            "import java.util.List;",
+            "",
+            "public class ExampleClass {",
+            "    // This is a single-line comment",
+            "    /* This is a block comment",
+            "       spanning multiple lines */",
+            "    /* Start of block comment",
+            "       Still inside block comment",
+            "       End of block comment */",
+            "    public void exampleMethod() {",
+            "        boolean success = board.placeToken(column, activePlayer);",
+            "        if (board.checkVictory(column)) {",
+            "            // Method logic here",
+            "        }",
+            "    }",
+            "}"
+        )
+
+        val tempFile = Files.createTempFile("testFile", ".java").toFile()
+
+        tempFile.deleteOnExit()
+
+        tempFile.writeText(lines.joinToString("\n"))
+
+        val sanitizer = AdvancedJavaFileSanitizer()
+        val sanitized: List<Word> = sanitizer.sanitizeLines(lines, tempFile.absolutePath)
+
+        Assertions.assertThat(sanitized.toSet()).isEqualTo(
+            setOf(
+                Word("success"),
+                Word("board"),
+                Word("place"),
+                Word("token"),
+                Word("column"),
+                Word("active"),
+                Word("player"),
+                Word("check"),
+                Word("victory"),
+                Word("example"),
+                Word("class"),
+                Word("method"),
+            )
+        )
+
+        tempFile.delete()
+    }
+
+    @Test
     fun testSanitizeSingleFileKotlin() {
         val lines = listOf(
             "package com.example.project",
@@ -51,7 +104,7 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = KotlinFileSanitizer().sanitizeLines(lines)
+        val sanitized: List<Word> = KotlinFileSanitizer().sanitizeLines(lines, "")
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -80,7 +133,7 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = JavascriptFileSanitizer().sanitizeLines(lines)
+        val sanitized: List<Word> = JavascriptFileSanitizer().sanitizeLines(lines, "")
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -119,7 +172,7 @@ class FileSanitizerTest {
             "</html>"
         )
 
-        val sanitized: List<Word> = HtmlFileSanitizer().sanitizeLines(lines)
+        val sanitized: List<Word> = HtmlFileSanitizer().sanitizeLines(lines, "")
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -151,7 +204,7 @@ class FileSanitizerTest {
             "'''Another form of block comment'''"
         )
 
-        val sanitized: List<Word> = PythonFileSanitizer().sanitizeLines(lines)
+        val sanitized: List<Word> = PythonFileSanitizer().sanitizeLines(lines, "")
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(

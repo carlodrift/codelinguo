@@ -6,7 +6,7 @@ abstract class ScriptingFileSanitizer : FileSanitizer() {
 
     override var inBlockComment = false
 
-    override fun sanitizeLines(lines: List<String>): List<Word> {
+    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
         val words = mutableListOf<Word>()
 
         lines.forEach { line ->
