@@ -104,7 +104,8 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
+            val fileName = lastOpenedDirectory?.name ?: ""
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
         }
     }
 
@@ -123,7 +124,7 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, file.name)
         }
     }
 
@@ -190,8 +191,9 @@ class ButtonBarView(
             )
             val glossaryRatio = analytics.glossaryRatio(wordsFromGit, Glossary(words))
 
+            val fileName = gitUrl.substringAfterLast("/").substringBefore(".")
             Platform.runLater {
-                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name)
+                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
             }
         } catch (e: Exception) {
             Platform.runLater {

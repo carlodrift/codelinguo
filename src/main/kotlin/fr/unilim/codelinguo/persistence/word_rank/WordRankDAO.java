@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface WordRankDAO {
 
-    void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName);
+    void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName);
 
 }

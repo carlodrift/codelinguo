@@ -30,7 +30,8 @@ class WordOccurrenceView(
     wordsInListNotInGlossary: List<Word>,
     private val glossaryRatio: Float,
     private val lang: LangDAO,
-    private val projectName: String
+    private val projectName: String,
+    private val fileName: String
 ) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
@@ -284,7 +285,7 @@ class WordOccurrenceView(
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
             val wordRankMap = wordRankList.associate { it.key to it.value }
-            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName)
+            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
