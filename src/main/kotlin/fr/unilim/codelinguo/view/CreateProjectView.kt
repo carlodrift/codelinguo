@@ -5,6 +5,7 @@ import fr.unilim.codelinguo.persistence.lang.LangDAO
 import fr.unilim.codelinguo.view.style.ViewStyles
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.control.Alert
 import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import tornadofx.*
@@ -36,8 +37,16 @@ class CreateProjectView : View() {
         button(lang.getMessage("button_validate")) {
             addClass(ViewStyles.projectButton)
             action {
-                primaryStage.close()
-                find(MainView::class, mapOf(MainView::projectName to projectNameTextField.text)).openWindow()
+                if (projectNameTextField.text.trim().isBlank()) {
+                    alert(
+                        Alert.AlertType.WARNING,
+                        lang.getMessage("project_name_error_title"),
+                        lang.getMessage("project_name_blank_error_message")
+                    )
+                } else {
+                    primaryStage.close()
+                    find(MainView::class, mapOf(MainView::projectName to projectNameTextField.text.trim())).openWindow()
+                }
             }
         }
     }
