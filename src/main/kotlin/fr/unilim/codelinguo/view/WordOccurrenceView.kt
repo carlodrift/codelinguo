@@ -2,6 +2,7 @@ package fr.unilim.codelinguo.view
 
 import fr.unilim.codelinguo.model.Word
 import fr.unilim.codelinguo.persistence.lang.LangDAO
+import fr.unilim.codelinguo.persistence.word_rank.CSVWordRankDAO
 import fr.unilim.codelinguo.view.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -16,9 +17,11 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
+import javafx.stage.DirectoryChooser
 import javafx.util.Duration
 import org.controlsfx.control.PopOver
 import tornadofx.*
+import java.awt.Desktop
 import java.util.*
 
 
@@ -237,6 +240,13 @@ class WordOccurrenceView(
         }
     }
 
+    private val exportButton = button("Exporter") {
+        addClass(ViewStyles.downloadButtonHover)
+        action {
+            exportWords()
+        }
+    }
+
     override val root = borderpane {
         minWidth = 600.0
         minHeight = 400.0
@@ -254,12 +264,30 @@ class WordOccurrenceView(
                 hgrow = Priority.ALWAYS
             }
 
-            add(closeButton)
+            hbox(spacing = 10.0) {
+                add(exportButton)
+                add(closeButton)
+            }
         }
 
         center = vbox {
             add(generalView)
             add(detailsView)
+        }
+    }
+
+    private fun exportWords() {
+        val directoryChooser = DirectoryChooser().apply {
+            title = "Choisir la destination"
+        }
+        val selectedDirectory = directoryChooser.showDialog(currentWindow)
+        selectedDirectory?.let { directory ->
+            CSVWordRankDAO().save(directory.absolutePath, wordRank)
+            try {
+                Desktop.getDesktop().open(directory)
+            } catch (ignored: Exception) {
+            }
+            information("Export effectué")
         }
     }
 }
