@@ -103,7 +103,7 @@ class ProjectView : View() {
                                         action {
                                             confirm(
                                                 lang.getMessage("confirm_delete"),
-                                                 lang.getMessage("confirm_delete_content") + " ${project.name} ?"
+                                                lang.getMessage("confirm_delete_content") + " ${project.name} ?"
                                             ) {
                                                 projectDao.delete(project.name)
                                                 loadProjects()

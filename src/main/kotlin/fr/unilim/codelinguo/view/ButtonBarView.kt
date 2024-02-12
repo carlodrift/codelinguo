@@ -9,6 +9,7 @@ import fr.unilim.codelinguo.model.reader.GitProjectReader
 import fr.unilim.codelinguo.persistence.directory.DirectoryDao
 import fr.unilim.codelinguo.persistence.directory.JsonDirectoryDao
 import fr.unilim.codelinguo.persistence.lang.LangDAO
+import fr.unilim.codelinguo.persistence.recent_git_url.JsonRecentGitURLDAO
 import fr.unilim.codelinguo.service.WordAnalyticsService
 import fr.unilim.codelinguo.view.style.ViewStyles
 import fr.unilim.codelinguo.view.utilities.ViewUtilities
@@ -28,7 +29,6 @@ import javafx.stage.FileChooser
 import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.io.File
-import java.util.*
 
 
 class ButtonBarView(
@@ -134,48 +134,50 @@ class ButtonBarView(
 
     private fun handleGitSelection() {
         val dialog: Dialog<Pair<String, String>> = Dialog()
-        //dialog.title = lang.getMessage("git_dialog_title")
-        //dialog.headerText = lang.getMessage("git_dialog_header")
 
         val openButtonType = ButtonType("Ouvrir", ButtonBar.ButtonData.OK_DONE)
+
         dialog.dialogPane.buttonTypes.addAll(openButtonType, ButtonType.CANCEL)
 
-        val grid = GridPane()
-        grid.hgap = 10.0
-        grid.vgap = 10.0
-        grid.padding = Insets(20.0, 150.0, 10.0, 10.0)
+        val grid = GridPane().apply {
+            hgap = 10.0
+            vgap = 10.0
+            padding = Insets(20.0, 150.0, 10.0, 10.0)
+        }
 
-        val gitUrlField = TextField()
-        gitUrlField.promptText = "https://github.com/user/repo.git"
+        val gitUrlComboBox = ComboBox<String>().apply {
+            isEditable = true
+            items.addAll(JsonRecentGitURLDAO().retrieve())
+        }
 
-        val branchField = TextField()
-        branchField.promptText = "main"
-        branchField.text = "main"
+        val branchField = TextField().apply {
+            promptText = "main"
+            text = "main"
+        }
 
         grid.add(Label("URL :"), 0, 0)
-        grid.add(gitUrlField, 1, 0)
+        grid.add(gitUrlComboBox, 1, 0)
         grid.add(Label("Branche :"), 0, 1)
         grid.add(branchField, 1, 1)
 
         val openButton: Node = dialog.dialogPane.lookupButton(openButtonType)
         openButton.isDisable = true
 
-        gitUrlField.textProperty().addListener { _, _, newValue ->
+        gitUrlComboBox.editor.textProperty().addListener { _, _, newValue ->
             openButton.isDisable = newValue.trim().isEmpty()
         }
 
         dialog.dialogPane.content = grid
 
-        Platform.runLater(gitUrlField::requestFocus)
+        Platform.runLater { gitUrlComboBox.requestFocus() }
 
         dialog.setResultConverter { dialogButton ->
-            if (dialogButton === openButtonType) {
-                return@setResultConverter Pair(gitUrlField.text, branchField.text)
-            }
-            null
+            if (dialogButton == openButtonType) {
+                Pair(gitUrlComboBox.value ?: gitUrlComboBox.editor.text, branchField.text)
+            } else null
         }
 
-        val result: Optional<Pair<String, String>> = dialog.showAndWait()
+        val result = dialog.showAndWait()
 
         result.ifPresent { gitUrlBranchPair ->
             handleGitUrl(gitUrlBranchPair.first, gitUrlBranchPair.second)
@@ -199,6 +201,8 @@ class ButtonBarView(
             Platform.runLater {
                 openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
             }
+
+            JsonRecentGitURLDAO().add(gitUrl)
         } catch (e: Exception) {
             Platform.runLater {
                 val alert = Alert(
