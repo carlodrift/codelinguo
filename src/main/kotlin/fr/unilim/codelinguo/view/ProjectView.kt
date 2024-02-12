@@ -102,8 +102,8 @@ class ProjectView : View() {
                                         cursor = Cursor.HAND
                                         action {
                                             confirm(
-                                                "Confirmer la suppression",
-                                                "Voulez-vous supprimer ${project.name} ?"
+                                                lang.getMessage("confirm_delete"),
+                                                 lang.getMessage("confirm_delete_content") + " ${project.name} ?"
                                             ) {
                                                 projectDao.delete(project.name)
                                                 loadProjects()

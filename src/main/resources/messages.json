@@ -42,5 +42,10 @@
   "all_projects": "Tous les projets",
   "button_new_project": "Nouveau projet",
   "click_detail_label": "Cliquez sur un mot pour voir le détail.",
-  "button_analyze": "Analyser"
+  "button_analyze": "Analyser",
+  "button_export": "Exporter",
+  "choose_destination": "Choisir une destination",
+  "export_done": "Export effectué",
+  "confirm_delete": "Confirmer la suppression",
+  "confirm_delete_content": "Voulez-vous supprimer"
 }

@@ -241,7 +241,7 @@ class WordOccurrenceView(
         }
     }
 
-    private val exportButton = button("Exporter") {
+    private val exportButton = button(lang.getMessage("button_export")) {
         addClass(ViewStyles.downloadButtonHover)
         action {
             exportWords()
@@ -279,7 +279,7 @@ class WordOccurrenceView(
 
     private fun exportWords() {
         val directoryChooser = DirectoryChooser().apply {
-            title = "Choisir la destination"
+            title = lang.getMessage("choose_destination")
         }
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
@@ -288,7 +288,7 @@ class WordOccurrenceView(
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
             }
-            information("Export effectué")
+            information(lang.getMessage("export_done"))
         }
     }
 }
