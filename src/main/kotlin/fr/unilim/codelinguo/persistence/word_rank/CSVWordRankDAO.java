@@ -6,18 +6,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 
 public class CSVWordRankDAO implements WordRankDAO {
 
     @Override
-    public void save(String directory, Map<Word, Integer> wordRank) {
+    public void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio) {
         File dir = new File(directory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        File file = new File(dir, "word_rank.csv");
+        String score = String.format(Locale.US, "%.2f", glossaryRatio * 100);
+        File file = new File(dir, "word_rank_" + score + ".csv");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Mot,Occurrences");
