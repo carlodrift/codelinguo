@@ -1,6 +1,7 @@
 package fr.unilim.codelinguo.model.sanitize
 
 import fr.unilim.codelinguo.model.Word
+import java.io.File
 
 
 open class JavaFileSanitizer : FileSanitizer() {
@@ -8,7 +9,6 @@ open class JavaFileSanitizer : FileSanitizer() {
     override val regexString = "\".*\"".toRegex()
     override val reservedKeywords = loadReservedKeywords("java")
     override val lineCommentSymbol = "//"
-    override var inBlockComment = false
 
     companion object {
         private const val PACKAGE_DECLARATION = "package"
@@ -17,7 +17,8 @@ open class JavaFileSanitizer : FileSanitizer() {
         private const val BLOCK_COMMENT_END = "*/"
     }
 
-    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
+    override fun sanitizeFile(path: String): List<Word> {
+        val lines = File(path).useLines { it.toList() }
         val words = mutableListOf<Word>()
 
         lines.forEach { line ->

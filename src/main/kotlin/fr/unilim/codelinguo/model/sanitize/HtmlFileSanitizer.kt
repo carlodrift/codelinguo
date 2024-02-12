@@ -1,6 +1,7 @@
 package fr.unilim.codelinguo.model.sanitize
 
 import fr.unilim.codelinguo.model.Word
+import java.io.File
 import java.util.regex.Pattern
 
 class HtmlFileSanitizer : JavascriptFileSanitizer() {
@@ -10,13 +11,19 @@ class HtmlFileSanitizer : JavascriptFileSanitizer() {
         Pattern.CASE_INSENSITIVE
     )
 
-    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
+    override fun sanitizeFile(path: String): List<Word> {
+        val lines = File(path).useLines { it.toList() }
         val words = mutableListOf<Word>()
         val scriptContents = extractScriptContents(lines.joinToString("\n"))
 
         scriptContents.forEach { scriptContent ->
-            super.sanitizeLines(scriptContent.split("\n"), path).forEach { word ->
-                words.add(word)
+            val scriptLines = scriptContent.split("\n")
+            scriptLines.forEach { line ->
+                var processedLine = processLineForComments(line)
+                if (processedLine.isNotBlank()) {
+                    processedLine = removeStringLiterals(processedLine)
+                    extractWords(processedLine, words)
+                }
             }
         }
 

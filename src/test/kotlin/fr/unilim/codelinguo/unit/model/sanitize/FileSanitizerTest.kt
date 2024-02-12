@@ -7,6 +7,14 @@ import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
 class FileSanitizerTest {
+
+    private fun createTempFileWithLines(prefix: String, extension: String, lines: List<String>): String {
+        val tempFile = Files.createTempFile(prefix, extension).toFile()
+        tempFile.writeText(lines.joinToString("\n"))
+        tempFile.deleteOnExit()
+        return tempFile.absolutePath
+    }
+
     @Test
     fun testSanitizeSingleFileJava() {
         val lines = listOf(
@@ -22,7 +30,8 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = JavaFileSanitizer().sanitizeLines(lines, "")
+        val filePath = createTempFileWithLines("testJavaFile", ".java", lines)
+        val sanitized: List<Word> = JavaFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -36,7 +45,6 @@ class FileSanitizerTest {
                 Word("check"),
                 Word("victory"),
             )
-
         )
     }
 
@@ -63,14 +71,8 @@ class FileSanitizerTest {
             "}"
         )
 
-        val tempFile = Files.createTempFile("testFile", ".java").toFile()
-
-        tempFile.deleteOnExit()
-
-        tempFile.writeText(lines.joinToString("\n"))
-
-        val sanitizer = AdvancedJavaFileSanitizer()
-        val sanitized: List<Word> = sanitizer.sanitizeLines(lines, tempFile.absolutePath)
+        val filePath = createTempFileWithLines("testAdvancedJavaFile", ".java", lines)
+        val sanitized: List<Word> = AdvancedJavaFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -88,8 +90,6 @@ class FileSanitizerTest {
                 Word("method"),
             )
         )
-
-        tempFile.delete()
     }
 
     @Test
@@ -104,7 +104,8 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = KotlinFileSanitizer().sanitizeLines(lines, "")
+        val filePath = createTempFileWithLines("testKotlinFile", ".kt", lines)
+        val sanitized: List<Word> = KotlinFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -118,7 +119,6 @@ class FileSanitizerTest {
                 Word("check"),
                 Word("victory"),
             )
-
         )
     }
 
@@ -133,7 +133,8 @@ class FileSanitizerTest {
             "if (board.checkVictory(column)) {"
         )
 
-        val sanitized: List<Word> = JavascriptFileSanitizer().sanitizeLines(lines, "")
+        val filePath = createTempFileWithLines("testJSFile", ".js", lines)
+        val sanitized: List<Word> = JavascriptFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -147,7 +148,6 @@ class FileSanitizerTest {
                 Word("check"),
                 Word("victory"),
             )
-
         )
     }
 
@@ -172,7 +172,8 @@ class FileSanitizerTest {
             "</html>"
         )
 
-        val sanitized: List<Word> = HtmlFileSanitizer().sanitizeLines(lines, "")
+        val filePath = createTempFileWithLines("testHTMLFile", ".html", lines)
+        val sanitized: List<Word> = HtmlFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -186,7 +187,6 @@ class FileSanitizerTest {
                 Word("check"),
                 Word("victory"),
             )
-
         )
     }
 
@@ -204,7 +204,8 @@ class FileSanitizerTest {
             "'''Another form of block comment'''"
         )
 
-        val sanitized: List<Word> = PythonFileSanitizer().sanitizeLines(lines, "")
+        val filePath = createTempFileWithLines("testPythonFile", ".py", lines)
+        val sanitized: List<Word> = PythonFileSanitizer().sanitizeFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -218,7 +219,6 @@ class FileSanitizerTest {
                 Word("check"),
                 Word("victory"),
             )
-
         )
     }
 }

@@ -1,12 +1,12 @@
 package fr.unilim.codelinguo.model.sanitize
 
 import fr.unilim.codelinguo.model.Word
+import java.io.File
 
 abstract class ScriptingFileSanitizer : FileSanitizer() {
 
-    override var inBlockComment = false
-
-    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
+    override fun sanitizeFile(path: String): List<Word> {
+        val lines = File(path).useLines { it.toList() }
         val words = mutableListOf<Word>()
 
         lines.forEach { line ->

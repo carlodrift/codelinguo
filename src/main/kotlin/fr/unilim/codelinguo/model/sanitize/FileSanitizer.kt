@@ -6,17 +6,23 @@ import fr.unilim.codelinguo.persistence.keyword.TxtKeywordDao
 import java.util.*
 
 abstract class FileSanitizer {
-    abstract val regexString: Regex
+    protected open val regexString: Regex = "".toRegex()
+    protected open val lineCommentSymbol: String = ""
+    protected open var inBlockComment: Boolean = false
+
     abstract val reservedKeywords: Set<String>
-    abstract val lineCommentSymbol: String
-    abstract var inBlockComment: Boolean
 
     private val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     private val regexWordSeparation = "[a-zA-Z]+".toRegex()
 
-    abstract fun sanitizeLines(lines: List<String>, path: String): List<Word>
-    abstract fun handleBlockCommentEnd(line: String): String
-    abstract fun handleBlockCommentStart(line: String): String
+    abstract fun sanitizeFile(path: String): List<Word>
+    protected open fun handleBlockCommentEnd(line: String): String {
+        return ""
+    }
+
+    protected open fun handleBlockCommentStart(line: String): String {
+        return ""
+    }
 
     fun loadReservedKeywords(language: String): Set<String> {
         val loader: KeywordDao = TxtKeywordDao()

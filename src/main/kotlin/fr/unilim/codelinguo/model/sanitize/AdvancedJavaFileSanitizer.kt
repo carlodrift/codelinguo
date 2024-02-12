@@ -15,18 +15,12 @@ import java.util.*
 
 
 class AdvancedJavaFileSanitizer : FileSanitizer() {
-    override val regexString = "".toRegex()
     override val reservedKeywords = loadReservedKeywords("advanced_java")
-    override val lineCommentSymbol = ""
-    override var inBlockComment = false
 
-    override fun sanitizeLines(lines: List<String>, path: String): List<Word> {
-        return sanitizeFile(File(path))
-    }
-
-    private fun sanitizeFile(file: File?): List<Word> {
+    override fun sanitizeFile(path: String): List<Word> {
+        val file = File(path)
         val allWords = mutableListOf<String>()
-        file?.inputStream()?.use { inputStream ->
+        file.inputStream().use { inputStream ->
             val parseResult = JavaParser().parse(inputStream)
             if (parseResult.result.isPresent) {
                 val cu = parseResult.result.get()
@@ -156,14 +150,5 @@ class AdvancedJavaFileSanitizer : FileSanitizer() {
             .map { it.lowercase(Locale.getDefault()) }
 
         return words.filter { it.length > 2 && it.all { char -> char.isLetter() } && !reservedKeywords.contains(it) }
-    }
-
-
-    override fun handleBlockCommentEnd(line: String): String {
-        return ""
-    }
-
-    override fun handleBlockCommentStart(line: String): String {
-        return ""
     }
 }

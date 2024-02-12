@@ -42,8 +42,7 @@ class FileReader : IRead {
     }
 
     private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
-        val lines = File(path).useLines { it.toList() }
-        return sanitizer.sanitizeLines(lines, path).onEach {
+        return sanitizer.sanitizeFile(path).onEach {
             it.fileName = path.substringAfterLast(File.separator).substringBeforeLast(".")
         }
     }
