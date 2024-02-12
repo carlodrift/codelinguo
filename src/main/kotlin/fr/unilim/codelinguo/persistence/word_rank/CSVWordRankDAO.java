@@ -1,6 +1,8 @@
 package fr.unilim.codelinguo.persistence.word_rank;
 
 import fr.unilim.codelinguo.model.Word;
+import fr.unilim.codelinguo.persistence.lang.JsonLangDao;
+import fr.unilim.codelinguo.persistence.lang.LangDAO;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +24,8 @@ public class CSVWordRankDAO implements WordRankDAO {
         File file = new File(dir, projectName + "_" + fileName + "_wordRank_" + score + ".csv");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("Mot,Occurrences");
+            LangDAO lang = new JsonLangDao();
+            writer.write(lang.getMessage("wordoccurrenceview_word") + "," + lang.getMessage("wordoccurrenceview_occurrences"));
             writer.newLine();
 
             for (Map.Entry<Word, Integer> entry : wordRank.entrySet()) {

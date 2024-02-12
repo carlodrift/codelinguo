@@ -203,7 +203,7 @@ class ButtonBarView(
             Platform.runLater {
                 val alert = Alert(
                     Alert.AlertType.ERROR,
-                    "Failed to open Git project: ${e.message}",
+                    "${e.message}",
                     ButtonType.OK
                 )
                 alert.showAndWait()
