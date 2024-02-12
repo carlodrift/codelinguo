@@ -38,3 +38,5 @@ None
 plt
 write
 self
+int
+true
