@@ -104,7 +104,11 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            val fileName = lastOpenedDirectory?.name ?: ""
+            val fileName = if (selectedFiles.size == 1) {
+                selectedFiles.first().name
+            } else {
+                lastOpenedDirectory?.name ?: ""
+            }
             openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
         }
     }
