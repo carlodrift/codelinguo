@@ -4,7 +4,7 @@ import fr.unilim.codelinguo.model.Word
 import fr.unilim.codelinguo.persistence.keyword.KeywordDao
 import fr.unilim.codelinguo.persistence.keyword.TxtKeywordDao
 
-open abstract class FileProcessor {
+abstract class FileProcessor {
 
     protected abstract val reservedKeywords: Set<String>
 
