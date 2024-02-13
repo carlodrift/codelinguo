@@ -3,7 +3,7 @@ package fr.unilim.codelinguo.desktop
 import fr.unilim.codelinguo.desktop.style.ViewStyles
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.persistence.word_rank.CSVWordRankDAO
+import fr.unilim.codelinguo.common.persistence.wordrank.CSVWordRankDAO
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -285,7 +285,8 @@ class WordOccurrenceView(
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
             val wordRankMap = wordRankList.associate { it.key to it.value }
-            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+            CSVWordRankDAO()
+                .save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {

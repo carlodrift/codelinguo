@@ -12,7 +12,7 @@ import fr.unilim.codelinguo.common.model.reader.GitProjectReader
 import fr.unilim.codelinguo.common.persistence.directory.DirectoryDao
 import fr.unilim.codelinguo.common.persistence.directory.JsonDirectoryDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.persistence.recent_git_url.JsonRecentGitURLDAO
+import fr.unilim.codelinguo.common.persistence.recentgiturl.JsonRecentGitURLDAO
 import fr.unilim.codelinguo.common.service.WordAnalyticsService
 import javafx.application.Platform
 import javafx.collections.ObservableList

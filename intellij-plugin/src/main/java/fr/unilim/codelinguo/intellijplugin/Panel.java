@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.intellij_plugin;
+package fr.unilim.codelinguo.intellijplugin;
 
 import com.intellij.AppTopics;
 import com.intellij.openapi.editor.Document;

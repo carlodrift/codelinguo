@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.persistence.recent_git_url;
+package fr.unilim.codelinguo.common.persistence.recentgiturl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

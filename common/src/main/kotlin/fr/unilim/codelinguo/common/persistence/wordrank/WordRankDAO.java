@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.persistence.word_rank;
+package fr.unilim.codelinguo.common.persistence.wordrank;
 
 import fr.unilim.codelinguo.common.model.Word;
 
