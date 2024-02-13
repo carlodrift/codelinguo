@@ -1,0 +1,333 @@
+{
+  "words": [
+    {
+      "token": "grille",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Structure du jeu"
+    },
+    {
+      "token": "alignement",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": " Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Arrangement de jetons"
+    },
+    {
+      "token": "victoire",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Alignement de 4 jetons"
+    },
+    {
+      "token": "égalité",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": " Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Grille complètement remplie sans alignement"
+    },
+    {
+      "token": "jeton",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Éléments du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Pièces utilisées par les joueurs"
+    },
+    {
+      "token": "colonne",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": " Éléments du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Division verticale de la grille"
+    },
+    {
+      "token": "rangée",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Éléments du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Division horizontale de la grille"
+    },
+    {
+      "token": "coup",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Actions des joueurs",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Action d\u0027insérer un jeton"
+    }
+  ],
+  "name": "Démo"
+}
