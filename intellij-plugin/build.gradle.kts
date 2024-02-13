@@ -14,7 +14,6 @@ repositories {
 
 dependencies {
     implementation("fr.unilim:codelinguo.common:1.0")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
 intellij {
@@ -28,16 +27,27 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
+}
+
+sourceSets {
+    main {
+        kotlin.srcDir("src/main/kotlin")
+        resources.srcDir("src/main/resources")
+    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks {
     withType<JavaCompile> {
-        sourceCompatibility = "21"
-        targetCompatibility = "21"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "21"
+        kotlinOptions.jvmTarget = "17"
     }
 
     patchPluginXml {

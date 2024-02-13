@@ -1,7 +1,7 @@
-package fr.unililim.codelinguo.desktop.view
+package fr.unilim.codelinguo.desktop
 
-import fr.unililim.codelinguo.desktop.view.style.ViewStyles
-import fr.unililim.codelinguo.desktop.view.utilities.ViewUtilities
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.context.PrimaryContext
 import fr.unilim.codelinguo.common.model.context.SecondaryContext
@@ -45,7 +45,7 @@ class WordTableView(
         removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
         removeColumn.cellFactory = Callback {
             object : TableCell<Word, Word>() {
-                private val button = Button(lang.getMessage("button_X")).apply {
+                private val button = Button("X").apply {
                     addClass(ViewStyles.removeButton)
                     action {
                         val item = tableRow.item

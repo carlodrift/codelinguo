@@ -25,8 +25,7 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-<!--        /Users/clement/IdeaProjects/sae_s5/intellij-plugin/src/main/kotlin/fr/unilim/codelinguo/intellij_plugin/Panel.java-->
-        <toolWindow id="CodeLinguo" anchor="right" factoryClass="intellij-plugin.src.main.kotlin.fr.unilim.codelinguo.intellij_plugin.Panel"/>
+        <toolWindow id="CodeLinguo" anchor="right" factoryClass="fr.unilim.codelinguo.intellij_plugin.Panel"/>
     </extensions>
 
 </idea-plugin>

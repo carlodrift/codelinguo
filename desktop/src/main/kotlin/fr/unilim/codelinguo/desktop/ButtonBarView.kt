@@ -1,8 +1,8 @@
-package fr.unililim.codelinguo.desktop.view
+package fr.unilim.codelinguo.desktop
 
-import fr.unililim.codelinguo.desktop.view.style.ViewStyles
-import fr.unililim.codelinguo.desktop.view.utilities.ViewUtilities
-import fr.unililim.codelinguo.desktop.view.utilities.ViewUtilities.openWordOccurrenceView
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities.openWordOccurrenceView
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.context.PrimaryContext
@@ -251,7 +251,7 @@ class ButtonBarView(
                         Text(lang.getMessage("definition_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
-                        Text(lang.getMessage("statute_facultative") + "\n" + lang.getMessage("description_definition") + "\n\n"),
+                        Text(lang.getMessage("statute_facultative") + "\n " + lang.getMessage("description_definition") + "\n\n"),
                         Text(lang.getMessage("primary_context_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },

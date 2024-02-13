@@ -1,7 +1,7 @@
-package fr.unilim.codelinguo.desktop.view
+package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.view.style.ViewStyles
-import fr.unilim.codelinguo.desktop.view.utilities.ViewUtilities
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.service.CompletionService
 import javafx.scene.control.ContextMenu
