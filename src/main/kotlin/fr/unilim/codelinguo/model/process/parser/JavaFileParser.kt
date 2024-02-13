@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.model.sanitize
+package fr.unilim.codelinguo.model.process.parser
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.*
@@ -10,14 +10,16 @@ import com.github.javaparser.ast.stmt.TryStmt
 import com.github.javaparser.ast.type.TypeParameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 import fr.unilim.codelinguo.model.Word
+import fr.unilim.codelinguo.model.process.sanitizer.FileSanitizer
+import fr.unilim.codelinguo.model.process.sanitizer.JavaFileSanitizer
 import java.io.File
 import java.util.*
 
 
-class AdvancedJavaFileSanitizer : FileSanitizer() {
+class JavaFileParser : FileSanitizer() {
     override val reservedKeywords = loadReservedKeywords("advanced_java")
 
-    override fun sanitizeFile(path: String): List<Word> {
+    override fun processFile(path: String): List<Word> {
         val file = File(path)
         val allWords = mutableListOf<String>()
         file.inputStream().use { inputStream ->
@@ -131,8 +133,8 @@ class AdvancedJavaFileSanitizer : FileSanitizer() {
 
         var result = allWords.map { Word(it) }
         if (result.isEmpty()) {
-            result = JavaFileSanitizer().sanitizeFile(path)
-            println("AdvancedJavaFileSanitizer: falling back to JavaFileSanitizer for $path")
+            result = JavaFileSanitizer().processFile(path)
+            println("JavaFileParser: falling back to JavaFileSanitizer for $path")
         }
         return result
     }

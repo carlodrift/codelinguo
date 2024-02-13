@@ -1,11 +1,11 @@
-package fr.unilim.codelinguo.model.sanitize
+package fr.unilim.codelinguo.model.process.sanitizer
 
 import fr.unilim.codelinguo.model.Word
 import java.io.File
 
 abstract class ScriptingFileSanitizer : FileSanitizer() {
 
-    override fun sanitizeFile(path: String): List<Word> {
+    override fun processFile(path: String): List<Word> {
         val lines = File(path).useLines { it.toList() }
         val words = mutableListOf<Word>()
 

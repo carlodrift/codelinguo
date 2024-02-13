@@ -1,7 +1,8 @@
 package fr.unilim.codelinguo.unit.model.sanitize
 
 import fr.unilim.codelinguo.model.Word
-import fr.unilim.codelinguo.model.sanitize.*
+import fr.unilim.codelinguo.model.process.parser.JavaFileParser
+import fr.unilim.codelinguo.model.process.sanitizer.*
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -31,7 +32,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testJavaFile", ".java", lines)
-        val sanitized: List<Word> = JavaFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = JavaFileSanitizer().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -49,7 +50,7 @@ class FileSanitizerTest {
     }
 
     @Test
-    fun testSanitizeAdvancedSingleFileJava() {
+    fun testParseSingleFileJava() {
         val lines = listOf(
             "package com.example.project;",
             "",
@@ -72,7 +73,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testAdvancedJavaFile", ".java", lines)
-        val sanitized: List<Word> = AdvancedJavaFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = JavaFileParser().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -105,7 +106,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testKotlinFile", ".kt", lines)
-        val sanitized: List<Word> = KotlinFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = KotlinFileSanitizer().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -134,7 +135,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testJSFile", ".js", lines)
-        val sanitized: List<Word> = JavascriptFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = JavascriptFileSanitizer().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -173,7 +174,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testHTMLFile", ".html", lines)
-        val sanitized: List<Word> = HtmlFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = HtmlFileSanitizer().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(
@@ -205,7 +206,7 @@ class FileSanitizerTest {
         )
 
         val filePath = createTempFileWithLines("testPythonFile", ".py", lines)
-        val sanitized: List<Word> = PythonFileSanitizer().sanitizeFile(filePath)
+        val sanitized: List<Word> = PythonFileSanitizer().processFile(filePath)
 
         Assertions.assertThat(sanitized.toSet()).isEqualTo(
             setOf(

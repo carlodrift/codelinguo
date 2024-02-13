@@ -1,32 +1,23 @@
-package fr.unilim.codelinguo.model.sanitize
+package fr.unilim.codelinguo.model.process.sanitizer
 
 import fr.unilim.codelinguo.model.Word
-import fr.unilim.codelinguo.persistence.keyword.KeywordDao
-import fr.unilim.codelinguo.persistence.keyword.TxtKeywordDao
+import fr.unilim.codelinguo.model.process.FileProcessor
 import java.util.*
 
-abstract class FileSanitizer {
+abstract class FileSanitizer : FileProcessor() {
     protected open val regexString: Regex = "".toRegex()
     protected open val lineCommentSymbol: String = ""
     protected open var inBlockComment: Boolean = false
 
-    abstract val reservedKeywords: Set<String>
-
     private val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     private val regexWordSeparation = "[a-zA-Z]+".toRegex()
 
-    abstract fun sanitizeFile(path: String): List<Word>
     protected open fun handleBlockCommentEnd(line: String): String {
         return ""
     }
 
     protected open fun handleBlockCommentStart(line: String): String {
         return ""
-    }
-
-    fun loadReservedKeywords(language: String): Set<String> {
-        val loader: KeywordDao = TxtKeywordDao()
-        return loader.retrieve(language)
     }
 
     fun removeStringLiterals(line: String): String = line.replace(regexString, "")

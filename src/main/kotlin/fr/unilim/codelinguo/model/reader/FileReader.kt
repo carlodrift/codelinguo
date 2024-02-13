@@ -1,14 +1,15 @@
 package fr.unilim.codelinguo.model.reader
 
 import fr.unilim.codelinguo.model.Word
-import fr.unilim.codelinguo.model.sanitize.*
+import fr.unilim.codelinguo.model.process.parser.JavaFileParser
+import fr.unilim.codelinguo.model.process.sanitizer.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
 class FileReader : IRead {
     private val fileSanitizers = mapOf(
-        ".java" to AdvancedJavaFileSanitizer(),
+        ".java" to JavaFileParser(),
         ".kt" to KotlinFileSanitizer(),
         ".py" to PythonFileSanitizer(),
         ".js" to JavascriptFileSanitizer(),
@@ -44,7 +45,7 @@ class FileReader : IRead {
     }
 
     private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
-        return sanitizer.sanitizeFile(path).onEach {
+        return sanitizer.processFile(path).onEach {
             it.fileName = path.substringAfterLast(File.separator).substringBeforeLast(".")
         }
     }
