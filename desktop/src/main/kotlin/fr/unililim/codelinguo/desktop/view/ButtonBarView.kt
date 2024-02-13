@@ -251,7 +251,7 @@ class ButtonBarView(
                         Text(lang.getMessage("definition_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
-                        Text(lang.getMessage("statute_facultative") + "\n " + lang.getMessage("description_definition") + "\n\n"),
+                        Text(lang.getMessage("statute_facultative") + "\n" + lang.getMessage("description_definition") + "\n\n"),
                         Text(lang.getMessage("primary_context_label") + "\n").apply {
                             style = "-fx-font-weight: bold"
                         },
