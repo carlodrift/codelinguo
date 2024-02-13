@@ -23,7 +23,7 @@ import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.awt.Desktop
 import java.util.*
-
+import fr.unilim.codelinguo.common.model.context.PrimaryContext
 
 class WordOccurrenceView(
     private val wordRank: Map<Word, Int>,
@@ -31,7 +31,8 @@ class WordOccurrenceView(
     private val glossaryRatio: Float,
     private val lang: LangDAO,
     private val projectName: String,
-    private val fileName: String
+    private val fileName: String,
+    private val wordTableView: TableView<Word>?
 ) : Fragment() {
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
@@ -249,6 +250,32 @@ class WordOccurrenceView(
         }
     }
 
+    private val detailButton = button(lang.getMessage("Detail")) {
+        addClass(ViewStyles.downloadButtonHover)
+        action {
+            val wordOccurrences = wordRankList
+                .mapNotNull { it.key.token?.let { token -> token to it.value } }
+                .toMap()
+
+            val wordContexts = wordTableView?.items
+                ?.mapNotNull { wordItem ->
+                    wordItem.token?.let { token ->
+                        val contextString = wordItem.context
+                            ?.filterIsInstance<PrimaryContext>()
+                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() } // Assuming `word` is non-null here
+
+                        token to contextString
+                    }
+                }
+                ?.toMap()
+
+            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts)
+        }
+    }
+
+
+
+
     override val root = borderpane {
         minWidth = 600.0
         minHeight = 400.0
@@ -267,6 +294,7 @@ class WordOccurrenceView(
             }
 
             hbox(spacing = 10.0) {
+                add(detailButton)
                 add(exportButton)
                 add(closeButton)
             }

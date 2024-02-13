@@ -109,7 +109,7 @@ class ButtonBarView(
             } else {
                 lastOpenedDirectory?.name ?: ""
             }
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, wordTableView)
         }
     }
 
@@ -128,7 +128,7 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, file.name)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, file.name, wordTableView)
         }
     }
 
@@ -199,7 +199,7 @@ class ButtonBarView(
 
             val fileName = gitUrl.substringAfterLast("/").substringBefore(".")
             Platform.runLater {
-                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
+                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, wordTableView)
             }
 
             JsonRecentGitURLDAO().add(gitUrl)
