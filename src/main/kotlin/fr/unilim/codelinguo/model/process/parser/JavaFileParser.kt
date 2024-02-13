@@ -10,13 +10,13 @@ import com.github.javaparser.ast.stmt.TryStmt
 import com.github.javaparser.ast.type.TypeParameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 import fr.unilim.codelinguo.model.Word
-import fr.unilim.codelinguo.model.process.sanitizer.FileSanitizer
+import fr.unilim.codelinguo.model.process.FileProcessor
 import fr.unilim.codelinguo.model.process.sanitizer.JavaFileSanitizer
 import java.io.File
 import java.util.*
 
 
-class JavaFileParser : FileSanitizer() {
+class JavaFileParser : FileProcessor() {
     override val reservedKeywords = loadReservedKeywords("advanced_java")
 
     override fun processFile(path: String): List<Word> {

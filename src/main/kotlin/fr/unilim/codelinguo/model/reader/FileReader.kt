@@ -1,8 +1,12 @@
 package fr.unilim.codelinguo.model.reader
 
 import fr.unilim.codelinguo.model.Word
+import fr.unilim.codelinguo.model.process.FileProcessor
 import fr.unilim.codelinguo.model.process.parser.JavaFileParser
-import fr.unilim.codelinguo.model.process.sanitizer.*
+import fr.unilim.codelinguo.model.process.sanitizer.HtmlFileSanitizer
+import fr.unilim.codelinguo.model.process.sanitizer.JavascriptFileSanitizer
+import fr.unilim.codelinguo.model.process.sanitizer.KotlinFileSanitizer
+import fr.unilim.codelinguo.model.process.sanitizer.PythonFileSanitizer
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -44,7 +48,7 @@ class FileReader : IRead {
                 && !pathStr.endsWith("package-info.java")
     }
 
-    private fun processFile(path: String, sanitizer: FileSanitizer): List<Word> {
+    private fun processFile(path: String, sanitizer: FileProcessor): List<Word> {
         return sanitizer.processFile(path).onEach {
             it.fileName = path.substringAfterLast(File.separator).substringBeforeLast(".")
         }

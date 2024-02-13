@@ -5,20 +5,16 @@ import fr.unilim.codelinguo.model.process.FileProcessor
 import java.util.*
 
 abstract class FileSanitizer : FileProcessor() {
-    protected open val regexString: Regex = "".toRegex()
-    protected open val lineCommentSymbol: String = ""
+    abstract val regexString: Regex
+    abstract val lineCommentSymbol: String
     protected open var inBlockComment: Boolean = false
 
     private val regexCamelCase = "(?<!^)(?=[A-Z])".toRegex()
     private val regexWordSeparation = "[a-zA-Z]+".toRegex()
 
-    protected open fun handleBlockCommentEnd(line: String): String {
-        return ""
-    }
+    abstract fun handleBlockCommentEnd(line: String): String
 
-    protected open fun handleBlockCommentStart(line: String): String {
-        return ""
-    }
+    abstract fun handleBlockCommentStart(line: String): String
 
     fun removeStringLiterals(line: String): String = line.replace(regexString, "")
 
