@@ -1,6 +1,6 @@
-package fr.unililim.codelinguo.desktop.view
+package fr.unilim.codelinguo.desktop.view
 
-import fr.unililim.codelinguo.desktop.view.style.ViewStyles
+import fr.unilim.codelinguo.desktop.view.style.ViewStyles
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.word_rank.CSVWordRankDAO

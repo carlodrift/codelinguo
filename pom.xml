@@ -8,6 +8,7 @@
     <modules>
         <module>desktop</module>
         <module>common</module>
+        <module>cli</module>
     </modules>
     <groupId>fr.unilim</groupId>
     <version>1.0</version>

@@ -1,4 +1,4 @@
-package fr.unililim.codelinguo.desktop.view.utilities
+package fr.unilim.codelinguo.desktop.view.utilities
 
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.project.JsonProjectDao

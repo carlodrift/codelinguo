@@ -1,7 +1,7 @@
-package fr.unililim.codelinguo.desktop
+package fr.unilim.codelinguo.desktop
 
-import fr.unililim.codelinguo.desktop.view.ProjectView
-import fr.unililim.codelinguo.desktop.view.style.ViewStyles
+import fr.unilim.codelinguo.desktop.view.ProjectView
+import fr.unilim.codelinguo.desktop.view.style.ViewStyles
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tornadofx.App

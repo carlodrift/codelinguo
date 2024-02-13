@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>desktop</artifactId>
+    <artifactId>codelinguo.desktop</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

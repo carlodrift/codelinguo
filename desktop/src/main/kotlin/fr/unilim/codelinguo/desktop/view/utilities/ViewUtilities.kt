@@ -1,7 +1,7 @@
-package fr.unililim.codelinguo.desktop.view.utilities
+package fr.unilim.codelinguo.desktop.view.utilities
 
-import fr.unililim.codelinguo.desktop.view.MainView
-import fr.unililim.codelinguo.desktop.view.WordOccurrenceView
+import fr.unilim.codelinguo.desktop.view.MainView
+import fr.unilim.codelinguo.desktop.view.WordOccurrenceView
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO

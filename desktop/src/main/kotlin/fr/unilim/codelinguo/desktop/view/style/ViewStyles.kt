@@ -1,4 +1,4 @@
-package fr.unililim.codelinguo.desktop.view.style
+package fr.unilim.codelinguo.desktop.view.style
 
 import javafx.geometry.Pos
 import javafx.scene.Cursor

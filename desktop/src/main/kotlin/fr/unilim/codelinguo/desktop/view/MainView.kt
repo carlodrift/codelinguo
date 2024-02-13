@@ -1,7 +1,7 @@
-package fr.unililim.codelinguo.desktop.view
+package fr.unilim.codelinguo.desktop.view
 
-import fr.unililim.codelinguo.desktop.view.utilities.DataLoader
-import fr.unililim.codelinguo.desktop.view.utilities.ViewUtilities
+import fr.unilim.codelinguo.desktop.view.utilities.DataLoader
+import fr.unilim.codelinguo.desktop.view.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
