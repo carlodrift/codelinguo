@@ -45,7 +45,7 @@ class WordTableView(
         removeColumn.cellValueFactory = Callback { cellData -> ReadOnlyObjectWrapper(cellData.value) }
         removeColumn.cellFactory = Callback {
             object : TableCell<Word, Word>() {
-                private val button = Button("X").apply {
+                private val button = Button(lang.getMessage("button_X")).apply {
                     addClass(ViewStyles.removeButton)
                     action {
                         val item = tableRow.item
