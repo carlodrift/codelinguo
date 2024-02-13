@@ -135,7 +135,7 @@ class ButtonBarView(
     private fun handleGitSelection() {
         val dialog: Dialog<Pair<String, String>> = Dialog()
 
-        val openButtonType = ButtonType("Ouvrir", ButtonBar.ButtonData.OK_DONE)
+        val openButtonType = ButtonType(lang.getMessage("button_open"), ButtonBar.ButtonData.OK_DONE)
 
         dialog.dialogPane.buttonTypes.addAll(openButtonType, ButtonType.CANCEL)
 
@@ -151,13 +151,13 @@ class ButtonBarView(
         }
 
         val branchField = TextField().apply {
-            promptText = "main"
-            text = "main"
+            promptText = lang.getMessage("branch_default_name")
+            text = lang.getMessage("branch_default_name")
         }
 
-        grid.add(Label("URL :"), 0, 0)
+        grid.add(Label(lang.getMessage("url_label")), 0, 0)
         grid.add(gitUrlComboBox, 1, 0)
-        grid.add(Label("Branche :"), 0, 1)
+        grid.add(Label(lang.getMessage("branch_label")), 0, 1)
         grid.add(branchField, 1, 1)
 
         val openButton: Node = dialog.dialogPane.lookupButton(openButtonType)

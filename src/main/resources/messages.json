@@ -50,5 +50,8 @@
   "confirm_delete_content": "Voulez-vous supprimer",
   "project_name_label": "Nom du projet",
   "project_new_name": "Entrez le nom du projet",
-  "button_validate": "Valider"
+  "button_validate": "Valider",
+  "url_label": "URL :",
+  "branch_label": "Branche :",
+  "branch_default_name": "main"
 }
