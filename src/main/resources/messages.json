@@ -53,5 +53,7 @@
   "button_validate": "Valider",
   "url_label": "URL :",
   "branch_label": "Branche :",
-  "branch_default_name": "main"
+  "branch_default_name": "main",
+  "project_name_error_title": "Nom de projet invalide",
+  "project_name_error_message": "Le nom du projet ne peut pas contenir de caractères spéciaux."
 }
