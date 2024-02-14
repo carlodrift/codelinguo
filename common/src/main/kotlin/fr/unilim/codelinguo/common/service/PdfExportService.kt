@@ -5,6 +5,7 @@ import com.lowagie.text.pdf.*
 import fr.unilim.codelinguo.common.model.Word
 import java.awt.Color
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -91,11 +92,14 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addHeader(document: Document, projectName: String) {
-        val logo = Image.getInstance("common/src/main/resources/logo/logo.png").apply {
-            scaleToFit(140f, 120f)
-            alignment = Element.ALIGN_CENTER
+        val logoStream: InputStream? = this::class.java.classLoader.getResourceAsStream("logo/logo.png")
+        if (logoStream != null) {
+            val logo = Image.getInstance(logoStream.readBytes()).apply {
+                scaleToFit(140f, 120f)
+                alignment = Element.ALIGN_CENTER
+            }
+            document.add(logo)
         }
-        document.add(logo)
 
         addParagraphWithSpacing(
             document,
