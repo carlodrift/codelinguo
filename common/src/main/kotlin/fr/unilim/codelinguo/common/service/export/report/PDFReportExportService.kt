@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.service
+package fr.unilim.codelinguo.common.service.export.report
 
 import com.lowagie.text.*
 import com.lowagie.text.pdf.*
@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ReportExportService : PdfPageEventHelper() {
+class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
 
     private val footerFont = Font(Font.HELVETICA, 8f, Font.ITALIC, Color.GRAY)
     private val baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
@@ -27,7 +27,7 @@ class ReportExportService : PdfPageEventHelper() {
         )
     }
 
-    fun createCodeAnalysisReport(
+    override fun createCodeAnalysisReport(
         projectName: String,
         wordRank: Map<Word, Int>,
         glossaryRatio: Float,

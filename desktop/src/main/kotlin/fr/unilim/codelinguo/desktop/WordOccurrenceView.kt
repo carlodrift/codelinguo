@@ -2,8 +2,9 @@ package fr.unilim.codelinguo.desktop
 
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.persistence.wordrank.CSVWordRankDAO
-import fr.unilim.codelinguo.common.service.ReportExportService
+import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
+import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService
+import fr.unilim.codelinguo.common.service.export.report.ReportExportService
 import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -176,9 +177,9 @@ class WordOccurrenceView(
         }
     }
 
-    private fun createPdfReport(directory: File) {
-        val pdfExporter = ReportExportService()
-        pdfExporter.createCodeAnalysisReport(
+    private fun createReport(directory: File) {
+        val reportExporter: ReportExportService = PDFReportExportService()
+        reportExporter.createCodeAnalysisReport(
             projectName,
             mapWordRank(),
             glossaryRatio,
@@ -307,11 +308,12 @@ class WordOccurrenceView(
             when (format) {
                 "CSV" -> {
                     val wordRankMap = mapWordRank()
-                    CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+                    CSVWordRankExportService()
+                        .save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
                 }
 
-                "PDF" -> {
-                    createPdfReport(directory)
+                "Report" -> {
+                    createReport(directory)
                 }
             }
             try {
@@ -339,12 +341,12 @@ class WordOccurrenceView(
                         exportWords("CSV")
                     }
                 },
-                Button(lang.getMessage("export_pdf")).apply {
+                Button(lang.getMessage("export_report")).apply {
                     addClass(ViewStyles.downloadButtonHover)
                     maxWidth = Double.MAX_VALUE
                     action {
                         popOver.hide()
-                        exportWords("PDF")
+                        exportWords("Report")
                     }
                 }
             )

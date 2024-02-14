@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.persistence.wordrank;
+package fr.unilim.codelinguo.common.service.export.wordrank;
 
 import fr.unilim.codelinguo.common.model.Word;
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-public class CSVWordRankDAO implements WordRankDAO {
+public class CSVWordRankExportService implements WordRankExportService {
 
     @Override
     public void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName) {
