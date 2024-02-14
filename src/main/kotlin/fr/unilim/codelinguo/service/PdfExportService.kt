@@ -36,7 +36,7 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des termes", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des termes (occurence < 1 ignoré", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
@@ -44,8 +44,10 @@ class PdfExportService : PdfPageEventHelper() {
             addCell("Terme")
             addCell("Fréquence")
             wordRank.forEach { (key, value) ->
-                addCell(key.token)
-                addCell(value.toString())
+                if (value > 1) {
+                    addCell(key.token)
+                    addCell(value.toString())
+                }
             }
         }
 
