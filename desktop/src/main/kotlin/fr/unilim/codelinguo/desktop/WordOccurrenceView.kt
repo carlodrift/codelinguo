@@ -4,6 +4,7 @@ import fr.unilim.codelinguo.desktop.style.ViewStyles
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.wordrank.CSVWordRankDAO
+import fr.unilim.codelinguo.common.service.PdfExportService
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -33,6 +34,7 @@ class WordOccurrenceView(
     private val projectName: String,
     private val fileName: String
 ) : Fragment() {
+
 
     private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
@@ -160,8 +162,14 @@ class WordOccurrenceView(
         }
     }
 
+    private fun createPdfReport() {
+        val pdfExporter = PdfExportService()
+        pdfExporter.createCodeAnalysisReport("rapport_analyse_$projectName.pdf", projectName, mapWordRank(), glossaryRatio * 100)
+    }
+
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
+        createPdfReport()
         readonlyColumn(lang.getMessage("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
@@ -284,9 +292,8 @@ class WordOccurrenceView(
         }
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
-            val wordRankMap = wordRankList.associate { it.key to it.value }
-            CSVWordRankDAO()
-                .save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+            val wordRankMap = mapWordRank()
+            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
@@ -294,4 +301,6 @@ class WordOccurrenceView(
             information(lang.getMessage("export_done"))
         }
     }
+
+    private fun mapWordRank() = wordRankList.associate { it.key to it.value }
 }
