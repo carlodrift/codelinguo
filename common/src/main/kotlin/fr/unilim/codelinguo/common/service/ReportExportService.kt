@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class PdfExportService : PdfPageEventHelper() {
+class ReportExportService : PdfPageEventHelper() {
 
     private val footerFont = Font(Font.HELVETICA, 8f, Font.ITALIC, Color.GRAY)
     private val baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)

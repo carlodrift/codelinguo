@@ -3,7 +3,7 @@ package fr.unilim.codelinguo.desktop
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.wordrank.CSVWordRankDAO
-import fr.unilim.codelinguo.common.service.PdfExportService
+import fr.unilim.codelinguo.common.service.ReportExportService
 import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -177,7 +177,7 @@ class WordOccurrenceView(
     }
 
     private fun createPdfReport(directory: File) {
-        val pdfExporter = PdfExportService()
+        val pdfExporter = ReportExportService()
         pdfExporter.createCodeAnalysisReport(
             projectName,
             mapWordRank(),
