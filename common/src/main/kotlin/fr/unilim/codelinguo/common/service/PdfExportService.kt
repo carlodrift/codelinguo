@@ -9,6 +9,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class PdfExportService : PdfPageEventHelper() {
 
@@ -27,13 +28,21 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     fun createCodeAnalysisReport(
-        fileName: String,
         projectName: String,
         wordRank: Map<Word, Int>,
-        glossaryRatio: Float
+        glossaryRatio: Float,
+        fileName: String,
+        directory: String
     ) {
+        val dir = File(directory)
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        val formattedFileName = String.format(Locale.US, "%s_%s_report_%.2f.pdf", projectName, fileName, glossaryRatio * 100)
+        val fullPath = File(dir, formattedFileName)
         val document = Document(PageSize.A4)
-        val writer = PdfWriter.getInstance(document, FileOutputStream(fileName))
+        val writer = PdfWriter.getInstance(document, FileOutputStream(fullPath))
         writer.pageEvent = this
         document.open()
 

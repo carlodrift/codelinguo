@@ -179,10 +179,11 @@ class WordOccurrenceView(
     private fun createPdfReport(directory: File) {
         val pdfExporter = PdfExportService()
         pdfExporter.createCodeAnalysisReport(
-            directory.absolutePath + File.separator + "rapport_analyse_$projectName.pdf",
             projectName,
             mapWordRank(),
-            glossaryRatio * 100
+            glossaryRatio,
+            fileName,
+            directory.absolutePath
         )
     }
 
