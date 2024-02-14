@@ -81,7 +81,7 @@ class PdfExportService : PdfPageEventHelper() {
             add(" termes différents et un total de ")
             add(totalFileCountChunk)
             add(" fichiers.")
-            font = Font(baseFont, 12f) // Set the general font for the paragraph
+            font = Font(baseFont, 12f)
             spacingBefore = 20f
             spacingAfter = 20f
         }
