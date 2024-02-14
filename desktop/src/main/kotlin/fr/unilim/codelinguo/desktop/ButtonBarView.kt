@@ -1,8 +1,5 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
-import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
-import fr.unilim.codelinguo.desktop.utilities.ViewUtilities.openWordOccurrenceView
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.context.PrimaryContext
@@ -14,6 +11,9 @@ import fr.unilim.codelinguo.common.persistence.directory.JsonDirectoryDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.recentgiturl.JsonRecentGitURLDAO
 import fr.unilim.codelinguo.common.service.WordAnalyticsService
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities.openWordOccurrenceView
 import javafx.application.Platform
 import javafx.collections.ObservableList
 import javafx.geometry.Insets

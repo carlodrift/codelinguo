@@ -1,9 +1,9 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
-import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.service.CompletionService
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField

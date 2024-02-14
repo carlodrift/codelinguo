@@ -1,13 +1,13 @@
 package fr.unilim.codelinguo.desktop.utilities
 
-import fr.unilim.codelinguo.desktop.MainView
-import fr.unilim.codelinguo.desktop.WordOccurrenceView
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.project.JsonProjectDao
 import fr.unilim.codelinguo.common.persistence.project.ProjectDao
 import fr.unilim.codelinguo.common.service.CompletionService
+import fr.unilim.codelinguo.desktop.MainView
+import fr.unilim.codelinguo.desktop.WordOccurrenceView
 import javafx.collections.ObservableList
 import javafx.geometry.Side
 import javafx.scene.control.ContextMenu

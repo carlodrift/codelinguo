@@ -1,11 +1,11 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.utilities.DataLoader
-import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.service.CompletionService
+import fr.unilim.codelinguo.desktop.utilities.DataLoader
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import javafx.scene.control.TableView
 import tornadofx.*
 

@@ -1,4 +1,5 @@
 package fr.unilim.codelinguo.common.service
+
 import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import fr.unilim.codelinguo.common.model.Word
@@ -16,19 +17,31 @@ class PdfExportService : PdfPageEventHelper() {
 
     override fun onEndPage(writer: PdfWriter, document: Document) {
         val footer = Phrase("Page ${document.pageNumber}", footerFont)
-        ColumnText.showTextAligned(writer.directContent, Element.ALIGN_CENTER, footer,
+        ColumnText.showTextAligned(
+            writer.directContent, Element.ALIGN_CENTER, footer,
             (document.pageSize.right - document.pageSize.left) / 2 + document.pageSize.left,
-            document.pageSize.bottom + 10, 0f)
+            document.pageSize.bottom + 10, 0f
+        )
     }
 
-    fun createCodeAnalysisReport(fileName: String, projectName : String, wordRank : Map<Word, Int>, glossaryRatio : Float) {
+    fun createCodeAnalysisReport(
+        fileName: String,
+        projectName: String,
+        wordRank: Map<Word, Int>,
+        glossaryRatio: Float
+    ) {
         val document = Document(PageSize.A4)
         val writer = PdfWriter.getInstance(document, FileOutputStream(fileName))
         writer.pageEvent = this
         document.open()
 
         addHeader(document, projectName)
-        addParagraphWithSpacing(document, "Résumé de l'analyse", titleFont, "Ce document présente un résumé des résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes.")
+        addParagraphWithSpacing(
+            document,
+            "Résumé de l'analyse",
+            titleFont,
+            "Ce document présente un résumé des résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes."
+        )
         addGlobalAnalysis(document, glossaryRatio, wordRank)
         addTermsFrequency(document, wordRank)
 
@@ -57,7 +70,8 @@ class PdfExportService : PdfPageEventHelper() {
     private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
         val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio), Font(baseFont, 12f, Font.BOLD))
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
-        val totalFileCountChunk = Chunk(wordRank.keys.map { it.fileName }.toSet().size.toString(), Font(baseFont, 12f, Font.BOLD))
+        val totalFileCountChunk =
+            Chunk(wordRank.keys.map { it.fileName }.toSet().size.toString(), Font(baseFont, 12f, Font.BOLD))
 
         val paragraph = Paragraph().apply {
             add("Le glossaire que vous avez utilisé est respecté à ")
@@ -83,16 +97,45 @@ class PdfExportService : PdfPageEventHelper() {
         }
         document.add(logo)
 
-        addParagraphWithSpacing(document, "Rapport d'analyse de CodeLinguo", coloredFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
-        addParagraphWithSpacing(document, "Projet : $projectName", titleFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
+        addParagraphWithSpacing(
+            document,
+            "Rapport d'analyse de CodeLinguo",
+            coloredFont,
+            null,
+            alignment = Element.ALIGN_CENTER,
+            spacingAfter = 20f
+        )
+        addParagraphWithSpacing(
+            document,
+            "Projet : $projectName",
+            titleFont,
+            null,
+            alignment = Element.ALIGN_CENTER,
+            spacingAfter = 20f
+        )
 
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-        addParagraphWithSpacing(document, "Généré le $date", titleFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 30f)
+        addParagraphWithSpacing(
+            document,
+            "Généré le $date",
+            titleFont,
+            null,
+            alignment = Element.ALIGN_CENTER,
+            spacingAfter = 30f
+        )
 
         document.newPage()
     }
 
-    private fun addParagraphWithSpacing(document: Document, title: String, font: Font, text: String? = null, spacingBefore: Float = 0f, spacingAfter: Float = 0f, alignment: Int = Element.ALIGN_LEFT) {
+    private fun addParagraphWithSpacing(
+        document: Document,
+        title: String,
+        font: Font,
+        text: String? = null,
+        spacingBefore: Float = 0f,
+        spacingAfter: Float = 0f,
+        alignment: Int = Element.ALIGN_LEFT
+    ) {
         val paragraph = Paragraph(title, font).apply {
             this.spacingBefore = spacingBefore
             this.spacingAfter = spacingAfter

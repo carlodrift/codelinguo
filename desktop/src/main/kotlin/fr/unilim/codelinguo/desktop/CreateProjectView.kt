@@ -1,8 +1,8 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
+import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
