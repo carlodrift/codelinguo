@@ -81,7 +81,7 @@ class WordAnalyticsServiceTest {
     fun testWordRatio() {
         val reader: IRead = DummyReader(listOf(Word("Robot"), Word("Joueur")))
         Assertions.assertThat(wordAnalyticsService!!.wordRatio(Word("Robot"), reader.read("")))
-            .isEqualTo(50.00f) // tester avec une liste de mot qui contient juste Robot
+            .isEqualTo(50.00f)
     }
 
     @Test
