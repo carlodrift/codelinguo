@@ -7,7 +7,7 @@ import java.io.File
 open class JavaFileSanitizer : FileSanitizer() {
 
     override val regexString = "\".*\"".toRegex()
-    override val reservedKeywords = loadReservedKeywords("java")
+    override val reservedKeywords = loadReservedKeywords("java", "sanitizer")
     override val lineCommentSymbol = "//"
 
     companion object {

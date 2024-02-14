@@ -17,7 +17,7 @@ import java.util.*
 
 
 class JavaFileParser : FileProcessor() {
-    override val reservedKeywords = loadReservedKeywords("advanced_java")
+    override val reservedKeywords = loadReservedKeywords("java", "parser")
 
     override fun processFile(path: String): List<Word> {
         val file = File(path)
