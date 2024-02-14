@@ -55,5 +55,7 @@
   "branch_label": "Branche :",
   "branch_default_name": "main",
   "project_name_error_title": "Nom de projet invalide",
-  "project_name_error_message": "Le nom du projet ne peut pas contenir de caractères spéciaux."
+  "project_name_error_message": "Le nom du projet ne peut pas contenir de caractères spéciaux.",
+  "export_csv": "Tableau CSV",
+  "export_pdf": "Rapport PDF"
 }

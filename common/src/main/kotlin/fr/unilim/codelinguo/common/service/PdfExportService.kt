@@ -91,7 +91,7 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addHeader(document: Document, projectName: String) {
-        val logo = Image.getInstance("src/main/resources/logo/logo.png").apply {
+        val logo = Image.getInstance("common/src/main/resources/logo/logo.png").apply {
             scaleToFit(140f, 120f)
             alignment = Element.ALIGN_CENTER
         }

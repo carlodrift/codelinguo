@@ -3,7 +3,7 @@ package fr.unilim.codelinguo.common.model.process
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.keyword.KeywordDao
 import fr.unilim.codelinguo.common.persistence.keyword.TxtKeywordDao
-import org.jetbrains.kotlin.konan.file.File
+import java.io.File
 
 abstract class FileProcessor {
 

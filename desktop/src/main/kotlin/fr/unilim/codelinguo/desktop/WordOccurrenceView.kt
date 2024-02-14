@@ -16,6 +16,7 @@ import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.stage.DirectoryChooser
@@ -23,6 +24,7 @@ import javafx.util.Duration
 import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.awt.Desktop
+import java.io.File
 import java.util.*
 
 
@@ -155,17 +157,29 @@ class WordOccurrenceView(
         return wordToFileNames.mapValues { (_, fileNames) -> fileNames.distinct().joinToString("\n") }
     }
 
+    private val generalExportButton = button(lang.getMessage("button_export")) {
+        addClass(ViewStyles.downloadButtonHover)
+    }
 
     init {
         this.whenDocked {
             currentStage?.isResizable = false
         }
+
+        val exportPopOver = setupExportPopOver()
+        generalExportButton.action {
+            if (!exportPopOver.isShowing) {
+                exportPopOver.show(generalExportButton)
+            } else {
+                exportPopOver.hide()
+            }
+        }
     }
 
-    private fun createPdfReport() {
+    private fun createPdfReport(directory: File) {
         val pdfExporter = PdfExportService()
         pdfExporter.createCodeAnalysisReport(
-            "rapport_analyse_$projectName.pdf",
+            directory.absolutePath + File.separator + "rapport_analyse_$projectName.pdf",
             projectName,
             mapWordRank(),
             glossaryRatio * 100
@@ -174,7 +188,6 @@ class WordOccurrenceView(
 
     private val generalView = tableview(wordRankList) {
         addClass(ViewStyles.customTableView)
-        createPdfReport()
         readonlyColumn(lang.getMessage("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
             cellFormat { wordEntry ->
@@ -255,13 +268,6 @@ class WordOccurrenceView(
         }
     }
 
-    private val exportButton = button(lang.getMessage("button_export")) {
-        addClass(ViewStyles.downloadButtonHover)
-        action {
-            exportWords()
-        }
-    }
-
     override val root = borderpane {
         minWidth = 600.0
         minHeight = 400.0
@@ -280,7 +286,7 @@ class WordOccurrenceView(
             }
 
             hbox(spacing = 10.0) {
-                add(exportButton)
+                add(generalExportButton)
                 add(closeButton)
             }
         }
@@ -291,14 +297,22 @@ class WordOccurrenceView(
         }
     }
 
-    private fun exportWords() {
+    private fun exportWords(format: String) {
         val directoryChooser = DirectoryChooser().apply {
             title = lang.getMessage("choose_destination")
         }
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
-            val wordRankMap = mapWordRank()
-            CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+            when (format) {
+                "CSV" -> {
+                    val wordRankMap = mapWordRank()
+                    CSVWordRankDAO().save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+                }
+
+                "PDF" -> {
+                    createPdfReport(directory)
+                }
+            }
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
@@ -308,4 +322,34 @@ class WordOccurrenceView(
     }
 
     private fun mapWordRank() = wordRankList.associate { it.key to it.value }
+
+    private fun setupExportPopOver(): PopOver {
+        val popOver = PopOver()
+        popOver.arrowLocation = PopOver.ArrowLocation.TOP_RIGHT
+
+        val vbox = VBox(10.0).apply {
+            padding = Insets(10.0)
+            children.addAll(
+                Button(lang.getMessage("export_csv")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        exportWords("CSV")
+                    }
+                },
+                Button(lang.getMessage("export_pdf")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        exportWords("PDF")
+                    }
+                }
+            )
+        }
+
+        popOver.contentNode = vbox
+        return popOver
+    }
 }
