@@ -4,6 +4,7 @@ import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import fr.unilim.codelinguo.common.model.Word
 import java.awt.Color
+import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.time.LocalDate
@@ -92,7 +93,7 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addHeader(document: Document, projectName: String) {
-        val logoStream: InputStream? = this::class.java.classLoader.getResourceAsStream("logo/logo.png")
+        val logoStream: InputStream? = this::class.java.classLoader.getResourceAsStream("logo" + File.separator + "logo.png")
         if (logoStream != null) {
             val logo = Image.getInstance(logoStream.readBytes()).apply {
                 scaleToFit(140f, 120f)
