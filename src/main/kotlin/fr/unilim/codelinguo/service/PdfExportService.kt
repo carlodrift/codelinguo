@@ -36,7 +36,7 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des termes (occurence < 1 ignoré", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des termes (occurence < 2 ignoré)", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
@@ -55,12 +55,24 @@ class PdfExportService : PdfPageEventHelper() {
     }
 
     private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
-        val fGlossaryRatio = String.format("%.2f%%", glossaryRatio)
-        val totalWordCount = wordRank.values.count()
-        val totalFileCount = wordRank.keys.map { it.fileName }.toSet().size
+        val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio), Font(baseFont, 12f, Font.BOLD))
+        val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
+        val totalFileCountChunk = Chunk(wordRank.keys.map { it.fileName }.toSet().size.toString(), Font(baseFont, 12f, Font.BOLD))
 
-        addParagraphWithSpacing(document, "Analyse globale", titleFont, "Le glossaire que vous avez utilisé est respecté à $fGlossaryRatio. Votre code comporte $totalWordCount termes différents et un total de $totalFileCount fichiers.", 20f, 20f)
+        val paragraph = Paragraph().apply {
+            add("Le glossaire que vous avez utilisé est respecté à ")
+            add(fGlossaryRatioChunk)
+            add(". Votre code comporte ")
+            add(totalWordCountChunk)
+            add(" termes différents et un total de ")
+            add(totalFileCountChunk)
+            add(" fichiers.")
+            font = Font(baseFont, 12f) // Set the general font for the paragraph
+            spacingBefore = 20f
+            spacingAfter = 20f
+        }
 
+        document.add(paragraph)
         document.newPage()
     }
 
@@ -72,7 +84,7 @@ class PdfExportService : PdfPageEventHelper() {
         document.add(logo)
 
         addParagraphWithSpacing(document, "Rapport d'analyse de CodeLinguo", coloredFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
-        addParagraphWithSpacing(document, "Projet: $projectName", titleFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
+        addParagraphWithSpacing(document, "Projet : $projectName", titleFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
 
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
         addParagraphWithSpacing(document, "Généré le $date", titleFont, null, alignment = Element.ALIGN_CENTER, spacingAfter = 30f)
