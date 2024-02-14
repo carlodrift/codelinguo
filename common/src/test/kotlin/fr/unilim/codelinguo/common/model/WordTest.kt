@@ -50,7 +50,11 @@ class WordTest {
         val word = Word()
         val primaryContext: Context = PrimaryContext(Word("testContext"))
         val secondaryContext: Context = SecondaryContext(Word("testContext"))
-        assertThat(primaryContext.priority).isEqualTo(2.0f) // l'importante pour contexte principal
+        word.context = listOf(
+            PrimaryContext(Word("primaryContext")),
+            SecondaryContext(Word("secondaryContext"))
+        )
+        assertThat(primaryContext.priority).isEqualTo(2.0f)
         assertThat(secondaryContext.priority).isEqualTo(1.0f)
     }
 }
