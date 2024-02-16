@@ -5,3 +5,27 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "dev"
+
+  - package-ecosystem: "maven"
+    directory: "/cli"
+    schedule:
+      interval: "daily"
+    target-branch: "dev"
+
+  - package-ecosystem: "maven"
+    directory: "/common"
+    schedule:
+      interval: "daily"
+    target-branch: "dev"
+
+  - package-ecosystem: "maven"
+    directory: "/desktop"
+    schedule:
+      interval: "daily"
+    target-branch: "dev"
+
+  - package-ecosystem: "gradle"
+    directory: "/intellij-plugin"
+    schedule:
+      interval: "daily"
+    target-branch: "dev"
