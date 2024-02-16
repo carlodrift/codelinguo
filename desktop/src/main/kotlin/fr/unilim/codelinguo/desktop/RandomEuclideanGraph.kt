@@ -1,10 +1,10 @@
-import org.graphstream.graph.Graph
 import org.graphstream.graph.implementations.SingleGraph
+import org.graphstream.ui.layout.springbox.implementations.SpringBox
 
 object RandomEuclideanGraph {
     fun createGraphWithDynamicStyles(wordOccurrences: Map<String, Int>, wordContexts: Map<String, String?>?) {
         System.setProperty("org.graphstream.ui", "swing")
-        val graph: Graph = SingleGraph("ExampleGraph")
+        val graph = SingleGraph("ExampleGraph")
 
         val css = """
             node {
@@ -14,12 +14,14 @@ object RandomEuclideanGraph {
                 stroke-mode: plain;
                 stroke-color: black;
                 stroke-width: 2px;
-                shadow-offset: 4px, -4px;
+                shadow-mode: plain;
+                shadow-color: #A9A9A9;
+                shadow-width: 3px;
+                shadow-offset: 0px, 0px;
                 text-mode: normal;
-                text-background-mode: rounded-box;
-                text-background-color: #FFFFFF;
+                text-background-mode: none; 
                 text-padding: 5px, 4px;
-                text-offset: 0px, 6px;
+                text-offset: 0px, 30px;
                 text-size: 14px;
             }
             node.important {
@@ -38,35 +40,42 @@ object RandomEuclideanGraph {
         """.trimIndent()
         graph.setAttribute("ui.stylesheet", css)
 
-        val maxSize = 125.0
+        val contextNodes = mutableMapOf<String, org.graphstream.graph.Node>()
 
-        val contextsAdded = mutableSetOf<String>()
+        val layout = SpringBox()
+        graph.addSink(layout)
+        layout.addAttributeSink(graph)
+
+        Thread {
+            layout.compute()
+        }.start()
+
+
         wordContexts?.values?.distinct()?.forEach { context ->
-            if (!contextsAdded.contains(context)) {
+            if (context != null && !contextNodes.containsKey(context)) {
                 val contextNode = graph.addNode(context)
                 contextNode.setAttribute("ui.label", context)
                 contextNode.setAttribute("ui.class", "important")
-                contextNode.setAttribute("ui.size", maxSize)
-                if (context != null) {
-                    contextsAdded.add(context)
-                }
+                contextNodes[context] = contextNode
             }
         }
 
         wordOccurrences.forEach { (word, count) ->
             val wordNode = graph.addNode(word)
             wordNode.setAttribute("ui.label", word)
-            wordNode.setAttribute("ui.size", calculateNodeSize(count, wordOccurrences))
+            val nodeSize = calculateNodeSize(count, wordOccurrences)
+            wordNode.setAttribute("ui.size", nodeSize)
+            val textOffsetX = nodeSize / 2 + 5
+            wordNode.setAttribute("ui.style", "text-offset: $textOffsetX, 15px;")
 
             wordContexts?.get(word)?.let { context ->
-                if (contextsAdded.contains(context)) {
+                contextNodes[context]?.let { contextNode ->
                     val edgeId = "$word-$context"
-                    if (graph.getEdge(edgeId) == null) {
-                        graph.addEdge(edgeId, word, context)
-                    }
+                    graph.addEdge(edgeId, wordNode, contextNode).setAttribute("layout.weight", 4.0)
                 }
             }
         }
+
 
         graph.display()
     }
@@ -74,14 +83,14 @@ object RandomEuclideanGraph {
     private fun calculateNodeSize(count: Int, wordOccurrences: Map<String, Int>): Double {
         val maxOccurrence = wordOccurrences.values.maxOrNull()?.toDouble() ?: 1.0
         val minOccurrence = wordOccurrences.values.minOrNull()?.toDouble() ?: 1.0
-        val maxSize = 125.0
-        val minSize = 20.0
+        val maxSize = 20.0
+        val minSize = 10.0
         val sizeRange = maxSize - minSize
         val occurrenceRange = maxOccurrence - minOccurrence
         return if (occurrenceRange > 0) {
-            minSize + (((count - minOccurrence) / occurrenceRange) * sizeRange)
+            minSize + ((count - minOccurrence) / occurrenceRange) * sizeRange
         } else {
-            minSize
+            maxSize
         }
     }
 }
