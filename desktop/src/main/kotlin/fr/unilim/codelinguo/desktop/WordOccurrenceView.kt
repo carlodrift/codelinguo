@@ -274,8 +274,6 @@ class WordOccurrenceView(
     }
 
 
-
-
     override val root = borderpane {
         minWidth = 600.0
         minHeight = 400.0

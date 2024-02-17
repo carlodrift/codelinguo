@@ -1,5 +1,10 @@
 import org.graphstream.graph.implementations.SingleGraph
-import org.graphstream.ui.layout.springbox.implementations.SpringBox
+import org.graphstream.ui.layout.springbox.implementations.LinLog
+import org.graphstream.ui.swing_viewer.SwingViewer
+import org.graphstream.ui.swing_viewer.ViewPanel
+import org.graphstream.ui.view.Viewer
+import javax.swing.JFrame
+
 
 object RandomEuclideanGraph {
     fun createGraphWithDynamicStyles(wordOccurrences: Map<String, Int>, wordContexts: Map<String, String?>?) {
@@ -42,14 +47,16 @@ object RandomEuclideanGraph {
 
         val contextNodes = mutableMapOf<String, org.graphstream.graph.Node>()
 
-        val layout = SpringBox()
+        val layout = LinLog(false)
+        graph.addSink(layout)
+        layout.addAttributeSink(graph)
+
         graph.addSink(layout)
         layout.addAttributeSink(graph)
 
         Thread {
             layout.compute()
         }.start()
-
 
         wordContexts?.values?.distinct()?.forEach { context ->
             if (context != null && !contextNodes.containsKey(context)) {
@@ -76,8 +83,23 @@ object RandomEuclideanGraph {
             }
         }
 
+        val viewer = SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD)
+        viewer.enableAutoLayout()
 
-        graph.display()
+        val viewPanel = viewer.addDefaultView(false) as ViewPanel
+
+        viewPanel.addMouseWheelListener { e ->
+            val camera = viewPanel.camera
+            val zoomFactor = if (e.wheelRotation < 0) 1.1 else 0.9
+            camera.viewPercent *= zoomFactor
+        }
+
+
+        val frame = JFrame("Graph Frame")
+        frame.contentPane.add(viewPanel)
+        frame.setSize(800, 600)
+        frame.setLocationRelativeTo(null)
+        frame.isVisible = true
     }
 
     private fun calculateNodeSize(count: Int, wordOccurrences: Map<String, Int>): Double {
