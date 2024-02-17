@@ -4,6 +4,11 @@ import org.graphstream.ui.swing_viewer.SwingViewer
 import org.graphstream.ui.swing_viewer.ViewPanel
 import org.graphstream.ui.view.Viewer
 import javax.swing.JFrame
+import java.awt.Cursor
+import java.awt.Point
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+
 
 
 object RandomEuclideanGraph {
@@ -85,7 +90,6 @@ object RandomEuclideanGraph {
 
         val viewer = SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD)
         viewer.enableAutoLayout()
-
         val viewPanel = viewer.addDefaultView(false) as ViewPanel
 
         viewPanel.addMouseWheelListener { e ->
@@ -94,7 +98,41 @@ object RandomEuclideanGraph {
             camera.viewPercent *= zoomFactor
         }
 
+        // Navigation (panning) avec le bouton de la molette pressé
+        var dragStartPoint: Point? = null
+        viewPanel.addMouseListener(object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                if (e.button == MouseEvent.BUTTON2) { // Bouton du milieu
+                    dragStartPoint = e.point
+                    viewPanel.cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)
+                }
+            }
 
+            override fun mouseReleased(e: MouseEvent) {
+                if (e.button == MouseEvent.BUTTON2) {
+                    dragStartPoint = null
+                    viewPanel.cursor = Cursor.getDefaultCursor()
+                }
+            }
+        })
+
+        viewPanel.addMouseMotionListener(object : java.awt.event.MouseMotionAdapter() {
+            override fun mouseDragged(e: MouseEvent) {
+                if (dragStartPoint != null) {
+                    val dragEndPoint = e.point
+                    val dx = (dragEndPoint.x - dragStartPoint!!.x) * 0.1
+                    val dy = (dragEndPoint.y - dragStartPoint!!.y) * 0.1
+
+                    val camera = viewPanel.camera
+                    camera.setViewCenter(camera.viewCenter.x - dx * camera.viewPercent, camera.viewCenter.y + dy * camera.viewPercent, 0.0)
+                    camera.viewPercent = camera.viewPercent
+
+                    dragStartPoint = e.point
+                }
+            }
+        })
+
+        // Configuration de la fenêtre JFrame
         val frame = JFrame("Graph Frame")
         frame.contentPane.add(viewPanel)
         frame.setSize(800, 600)
