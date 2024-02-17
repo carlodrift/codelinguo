@@ -26,13 +26,9 @@ object RandomEuclideanGraph {
             node {
                 size-mode: dyn-size;
                 fill-mode: gradient-radial;
-                fill-color: #f6f6f6, #f6f6f6;
                 stroke-mode: plain;
                 stroke-color: black;
-                stroke-width: 2px;
-                shadow-mode: plain;
-                shadow-color: #A9A9A9;
-                shadow-width: 3px;
+                stroke-width: 1px;
                 shadow-offset: 0px, 0px;
                 text-mode: normal;
                 text-background-mode: none; 
@@ -47,7 +43,6 @@ object RandomEuclideanGraph {
 
             node.important {
                 fill-color: #1aec4d, #1aec4d;
-                size: 30px, 30px;
             }
             
             node.default {
@@ -178,7 +173,7 @@ object RandomEuclideanGraph {
     private fun calculateNodeSize(count: Int, wordOccurrences: Map<String, Int>): Double {
         val maxOccurrence = wordOccurrences.values.maxOrNull()?.toDouble() ?: 1.0
         val minOccurrence = wordOccurrences.values.minOrNull()?.toDouble() ?: 1.0
-        val maxSize = 20.0
+        val maxSize = 30.0
         val minSize = 10.0
         val sizeRange = maxSize - minSize
         val occurrenceRange = maxOccurrence - minOccurrence
