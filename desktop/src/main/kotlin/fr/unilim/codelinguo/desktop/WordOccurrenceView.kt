@@ -41,6 +41,11 @@ class WordOccurrenceView(
         addClass(ViewStyles.clickDetailLabel)
     }
 
+    private val wordsInGlossary: Set<String?> = wordRank.keys
+        .filter { word -> wordsInListNotInGlossary.none { it.token == word.token } }
+        .map { it.token }
+        .toSet()
+
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
         val fileOccurrencesMap = wordRank.filterKeys { it.token == word.token }
         val totalOccurrences = fileOccurrencesMap.values.sum()
@@ -262,14 +267,14 @@ class WordOccurrenceView(
                     wordItem.token?.let { token ->
                         val contextString = wordItem.context
                             ?.filterIsInstance<PrimaryContext>()
-                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() } // Assuming `word` is non-null here
+                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() }
 
                         token to contextString
                     }
                 }
                 ?.toMap()
 
-            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts)
+            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts, wordsInGlossary)
         }
     }
 

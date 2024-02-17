@@ -12,15 +12,20 @@ import java.awt.event.MouseEvent
 
 
 object RandomEuclideanGraph {
-    fun createGraphWithDynamicStyles(wordOccurrences: Map<String, Int>, wordContexts: Map<String, String?>?) {
+    fun createGraphWithDynamicStyles(
+        wordOccurrences: Map<String, Int>,
+        wordContexts: Map<String, String?>?,
+        wordsInGlossary: Set<String?>
+    ) {
         System.setProperty("org.graphstream.ui", "swing")
         val graph = SingleGraph("ExampleGraph")
+
 
         val css = """
             node {
                 size-mode: dyn-size;
                 fill-mode: gradient-radial;
-                fill-color: #36cc32, #36cc32;
+                fill-color: #f6f6f6, #f6f6f6;
                 stroke-mode: plain;
                 stroke-color: black;
                 stroke-width: 2px;
@@ -34,12 +39,18 @@ object RandomEuclideanGraph {
                 text-offset: 0px, 30px;
                 text-size: 14px;
             }
-            node.important {
-                fill-color: #f6f6f6, #f6f6f6;
+            node.context {
+                fill-color: #ffae42, #ffae42; 
                 size: 30px, 30px;
             }
+
+            node.important {
+                fill-color: #1aec4d, #1aec4d;
+                size: 30px, 30px;
+            }
+            
             node.default {
-                fill-color: #f6f6f6, #f6f6f6;
+                fill-color: #f6f6f6, #f6f6f6; 
             }
             edge {
                 fill-color: #D3D3D3;
@@ -59,15 +70,11 @@ object RandomEuclideanGraph {
         graph.addSink(layout)
         layout.addAttributeSink(graph)
 
-        Thread {
-            layout.compute()
-        }.start()
-
         wordContexts?.values?.distinct()?.forEach { context ->
             if (context != null && !contextNodes.containsKey(context)) {
                 val contextNode = graph.addNode(context)
                 contextNode.setAttribute("ui.label", context)
-                contextNode.setAttribute("ui.class", "important")
+                contextNode.setAttribute("ui.class", "context")
                 contextNodes[context] = contextNode
             }
         }
@@ -79,6 +86,12 @@ object RandomEuclideanGraph {
             wordNode.setAttribute("ui.size", nodeSize)
             val textOffsetX = nodeSize / 2 + 5
             wordNode.setAttribute("ui.style", "text-offset: $textOffsetX, 15px;")
+            val cssClass = when {
+                word in wordsInGlossary -> "important"
+                wordContexts?.keys?.contains(word) == true -> "context"
+                else -> "default"
+            }
+            wordNode.setAttribute("ui.class", cssClass)
 
             wordContexts?.get(word)?.let { context ->
                 contextNodes[context]?.let { contextNode ->
@@ -131,6 +144,11 @@ object RandomEuclideanGraph {
                 }
             }
         })
+
+        Thread {
+            Thread.sleep(3000)
+            viewer.disableAutoLayout()
+        }.start()
 
         // Configuration de la fenêtre JFrame
         val frame = JFrame("Graph Frame")
