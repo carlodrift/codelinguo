@@ -3,12 +3,13 @@ import org.graphstream.ui.layout.springbox.implementations.LinLog
 import org.graphstream.ui.swing_viewer.SwingViewer
 import org.graphstream.ui.swing_viewer.ViewPanel
 import org.graphstream.ui.view.Viewer
-import javax.swing.JFrame
-import java.awt.Cursor
-import java.awt.Point
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-
+import javax.swing.BorderFactory
+import javax.swing.JFrame
+import javax.swing.JLabel
+import javax.swing.JPanel
 
 
 object RandomEuclideanGraph {
@@ -111,11 +112,10 @@ object RandomEuclideanGraph {
             camera.viewPercent *= zoomFactor
         }
 
-        // Navigation (panning) avec le bouton de la molette pressé
         var dragStartPoint: Point? = null
         viewPanel.addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                if (e.button == MouseEvent.BUTTON2) { // Bouton du milieu
+                if (e.button == MouseEvent.BUTTON2) {
                     dragStartPoint = e.point
                     viewPanel.cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)
                 }
@@ -146,16 +146,33 @@ object RandomEuclideanGraph {
         })
 
         Thread {
-            Thread.sleep(3000)
+            Thread.sleep(5000)
             viewer.disableAutoLayout()
         }.start()
 
-        // Configuration de la fenêtre JFrame
-        val frame = JFrame("Graph Frame")
-        frame.contentPane.add(viewPanel)
-        frame.setSize(800, 600)
-        frame.setLocationRelativeTo(null)
-        frame.isVisible = true
+        val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING)).apply {
+            border = BorderFactory.createTitledBorder("Legend")
+
+            add(JLabel("Contexte principal").apply {
+                foreground = Color.ORANGE
+            })
+
+            add(JLabel("Termes du Glossaire").apply {
+                foreground = Color(26, 201, 77) // RGB for #1aec4d
+            })
+
+            add(JLabel("Termes du Code").apply {
+                foreground = Color.LIGHT_GRAY
+            })
+        }
+
+        JFrame("Graph Frame").apply {
+            contentPane.add(viewPanel)
+            setSize(800, 600)
+            setLocationRelativeTo(null)
+            contentPane.add(legendPanel, BorderLayout.SOUTH)
+            isVisible = true
+        }
     }
 
     private fun calculateNodeSize(count: Int, wordOccurrences: Map<String, Int>): Double {
