@@ -1,9 +1,12 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.model.context.PrimaryContext
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.persistence.wordrank.CSVWordRankDAO
+import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
+import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService
+import fr.unilim.codelinguo.common.service.export.report.ReportExportService
+import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -15,6 +18,7 @@ import javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.text.FontWeight
 import javafx.scene.text.TextAlignment
 import javafx.stage.DirectoryChooser
@@ -22,8 +26,9 @@ import javafx.util.Duration
 import org.controlsfx.control.PopOver
 import tornadofx.*
 import java.awt.Desktop
+import java.io.File
 import java.util.*
-import fr.unilim.codelinguo.common.model.context.PrimaryContext
+
 
 class WordOccurrenceView(
     private val wordRank: Map<Word, Int>,
@@ -32,10 +37,10 @@ class WordOccurrenceView(
     private val lang: LangDAO,
     private val projectName: String,
     private val fileName: String,
+    private val rawWordRank: Map<Word, Int>,
     private val wordTableView: TableView<Word>?
 ) : Fragment() {
 
-    private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
     private val clickDetailLabel = label(lang.getMessage("click_detail_label")) {
         addClass(ViewStyles.clickDetailLabel)
@@ -45,6 +50,29 @@ class WordOccurrenceView(
         .filter { word -> wordsInListNotInGlossary.none { it.token == word.token } }
         .map { it.token }
         .toSet()
+
+    private val detailButton = button(lang.getMessage("Detail")) {
+        addClass(ViewStyles.downloadButtonHover)
+        action {
+            val wordOccurrences = wordRank
+                .mapNotNull { it.key.token?.let { token -> token to it.value } }
+                .toMap()
+
+            val wordContexts = wordTableView?.items
+                ?.mapNotNull { wordItem ->
+                    wordItem.token?.let { token ->
+                        val contextString = wordItem.context
+                            ?.filterIsInstance<PrimaryContext>()
+                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() }
+
+                        token to contextString
+                    }
+                }
+                ?.toMap()
+
+            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts, wordsInGlossary)
+        }
+    }
 
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
         val fileOccurrencesMap = wordRank.filterKeys { it.token == word.token }
@@ -138,35 +166,37 @@ class WordOccurrenceView(
         }
     }
 
-    private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
-        aggregatedWordMap.map { (token, fileNames) ->
-            val word = Word(token).apply { fileName = fileNames }
-            val count = wordRank.filterKeys { it.token == token }.values.sum()
-            object : Map.Entry<Word, Int> {
-                override val key: Word = word
-                override val value: Int = count
-            }
-        }.sortedByDescending { it.value }
-    )
-
-    private fun aggregateWords(words: Set<Word>): Map<String, String> {
-        val wordToFileNames = mutableMapOf<String, MutableList<String>>()
-
-        for (word in words) {
-            wordToFileNames.getOrPut(word.token ?: "") { mutableListOf() }.add(word.fileName ?: "Unknown")
-        }
-
-        return wordToFileNames.mapValues { (_, fileNames) -> fileNames.distinct().joinToString("\n") }
+    private val generalExportButton = button(lang.getMessage("button_export")) {
+        addClass(ViewStyles.downloadButtonHover)
     }
-
 
     init {
         this.whenDocked {
             currentStage?.isResizable = false
         }
+
+        val exportPopOver = setupExportPopOver()
+        generalExportButton.action {
+            if (!exportPopOver.isShowing) {
+                exportPopOver.show(generalExportButton)
+            } else {
+                exportPopOver.hide()
+            }
+        }
     }
 
-    private val generalView = tableview(wordRankList) {
+    private fun createReport(directory: File) {
+        val reportExporter: ReportExportService = PDFReportExportService()
+        reportExporter.createCodeAnalysisReport(
+            projectName,
+            wordRank,
+            glossaryRatio,
+            fileName,
+            directory.absolutePath
+        )
+    }
+
+    private val generalView = tableview(FXCollections.observableArrayList(wordRank.entries.toList())) {
         addClass(ViewStyles.customTableView)
         readonlyColumn(lang.getMessage("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
@@ -184,7 +214,7 @@ class WordOccurrenceView(
                 }
 
                 val customTooltip = PopOver().apply {
-                    contentNode = showFileNamesWindow(wordEntry, wordRank)
+                    contentNode = showFileNamesWindow(wordEntry, rawWordRank)
                     arrowLocation = PopOver.ArrowLocation.LEFT_TOP
                     isDetachable = false
                     isAutoHide = true
@@ -248,37 +278,6 @@ class WordOccurrenceView(
         }
     }
 
-    private val exportButton = button(lang.getMessage("button_export")) {
-        addClass(ViewStyles.downloadButtonHover)
-        action {
-            exportWords()
-        }
-    }
-
-    private val detailButton = button(lang.getMessage("Detail")) {
-        addClass(ViewStyles.downloadButtonHover)
-        action {
-            val wordOccurrences = wordRankList
-                .mapNotNull { it.key.token?.let { token -> token to it.value } }
-                .toMap()
-
-            val wordContexts = wordTableView?.items
-                ?.mapNotNull { wordItem ->
-                    wordItem.token?.let { token ->
-                        val contextString = wordItem.context
-                            ?.filterIsInstance<PrimaryContext>()
-                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() }
-
-                        token to contextString
-                    }
-                }
-                ?.toMap()
-
-            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts, wordsInGlossary)
-        }
-    }
-
-
     override val root = borderpane {
         minWidth = 600.0
         minHeight = 400.0
@@ -298,7 +297,7 @@ class WordOccurrenceView(
 
             hbox(spacing = 10.0) {
                 add(detailButton)
-                add(exportButton)
+                add(generalExportButton)
                 add(closeButton)
             }
         }
@@ -309,20 +308,57 @@ class WordOccurrenceView(
         }
     }
 
-    private fun exportWords() {
+    private fun exportWords(format: String) {
         val directoryChooser = DirectoryChooser().apply {
             title = lang.getMessage("choose_destination")
         }
         val selectedDirectory = directoryChooser.showDialog(currentWindow)
         selectedDirectory?.let { directory ->
-            val wordRankMap = wordRankList.associate { it.key to it.value }
-            CSVWordRankDAO()
-                .save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+            when (format) {
+                "CSV" -> {
+                    CSVWordRankExportService()
+                        .save(directory.absolutePath, wordRank, glossaryRatio, projectName, fileName)
+                }
+
+                "Report" -> {
+                    createReport(directory)
+                }
+            }
             try {
                 Desktop.getDesktop().open(directory)
             } catch (ignored: Exception) {
             }
             information(lang.getMessage("export_done"))
         }
+    }
+
+    private fun setupExportPopOver(): PopOver {
+        val popOver = PopOver()
+        popOver.arrowLocation = PopOver.ArrowLocation.TOP_RIGHT
+
+        val vbox = VBox(10.0).apply {
+            padding = Insets(10.0)
+            children.addAll(
+                Button(lang.getMessage("export_csv")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        exportWords("CSV")
+                    }
+                },
+                Button(lang.getMessage("export_report")).apply {
+                    addClass(ViewStyles.downloadButtonHover)
+                    maxWidth = Double.MAX_VALUE
+                    action {
+                        popOver.hide()
+                        exportWords("Report")
+                    }
+                }
+            )
+        }
+
+        popOver.contentNode = vbox
+        return popOver
     }
 }

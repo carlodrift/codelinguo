@@ -3,7 +3,6 @@ package fr.unilim.codelinguo.common.persistence.recentgiturl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import fr.unilim.codelinguo.common.persistence.directory.DirectoryDao;
 
 import java.io.File;
 import java.io.FileReader;
@@ -24,7 +23,7 @@ public class JsonRecentGitURLDAO implements RecentGitURLDAO {
 
     public JsonRecentGitURLDAO() {
         String userHome = System.getProperty("user.home");
-        File directory = new File(userHome, DirectoryDao.DIRECTORY_STORE);
+        File directory = new File(userHome, JsonRecentGitURLDAO.DIRECTORY_STORE);
         if (!directory.exists()) {
             directory.mkdirs();
         }

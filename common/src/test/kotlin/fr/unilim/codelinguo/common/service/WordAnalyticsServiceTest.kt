@@ -81,7 +81,7 @@ class WordAnalyticsServiceTest {
     fun testWordRatio() {
         val reader: IRead = DummyReader(listOf(Word("Robot"), Word("Joueur")))
         Assertions.assertThat(wordAnalyticsService!!.wordRatio(Word("Robot"), reader.read("")))
-            .isEqualTo(50.00f) // tester avec une liste de mot qui contient juste Robot
+            .isEqualTo(50.00f)
     }
 
     @Test
@@ -90,7 +90,7 @@ class WordAnalyticsServiceTest {
         val expected = HashMap<Word, Int>()
         expected[Word("Robot")] = 2
         expected[Word("Joueur")] = 1
-        Assertions.assertThat(wordAnalyticsService!!.wordRank(reader.read(""))).isEqualTo(expected)
+        Assertions.assertThat(wordAnalyticsService!!.rawWordRank(reader.read(""))).isEqualTo(expected)
     }
 
     companion object {

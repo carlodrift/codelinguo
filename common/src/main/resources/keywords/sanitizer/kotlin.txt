@@ -70,3 +70,6 @@ vararg
 when
 where
 while
+string
+void
+stream

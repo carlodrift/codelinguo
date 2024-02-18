@@ -17,6 +17,28 @@ class WordAnalyticsService {
     }
 
     fun wordRank(words: List<Word>?): Map<Word, Int> {
+        if (words.isNullOrEmpty()) return emptyMap()
+
+        val wordDetails = mutableMapOf<String, Pair<MutableSet<String>, Int>>()
+        words.forEach { word ->
+            val token = word.token ?: ""
+            val fileName = word.fileName ?: "Unknown"
+            wordDetails[token] = wordDetails[token]?.let {
+                it.first.add(fileName)
+                it.first to it.second + 1
+            } ?: (mutableSetOf(fileName) to 1)
+        }
+
+        val rankedWords = wordDetails.map { (token, details) ->
+            Word(token).apply {
+                fileName = details.first.joinToString("\n")
+            } to details.second
+        }.sortedByDescending { it.second }
+
+        return rankedWords.associate { it.first to it.second }
+    }
+
+    fun rawWordRank(words: List<Word>?): Map<Word, Int> {
         val wordCount: MutableMap<Word, Int> = HashMap()
         if (words != null) {
             for (word in words) {

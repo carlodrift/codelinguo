@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.model.sanitize
+package fr.unilim.codelinguo.common.model.process
 
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.process.parser.JavaFileParser
@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 
-class FileSanitizerTest {
+class FileProcessorTest {
 
     private fun createTempFileWithLines(prefix: String, extension: String, lines: List<String>): String {
         val tempFile = Files.createTempFile(prefix, extension).toFile()

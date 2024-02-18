@@ -1,11 +1,11 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
-import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.context.PrimaryContext
 import fr.unilim.codelinguo.common.model.context.SecondaryContext
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
+import fr.unilim.codelinguo.desktop.style.ViewStyles
+import fr.unilim.codelinguo.desktop.utilities.ViewUtilities
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.collections.ObservableList
 import javafx.scene.control.Button

@@ -8,7 +8,7 @@ open class JavascriptFileSanitizer : ScriptingFileSanitizer() {
     }
 
     override val regexString = """".*?"|'.*?'""".toRegex()
-    override val reservedKeywords = loadReservedKeywords("javascript")
+    override val reservedKeywords = loadReservedKeywords("javascript", "sanitizer")
     override var lineCommentSymbol = "//"
 
     override fun handleBlockCommentStart(line: String): String {

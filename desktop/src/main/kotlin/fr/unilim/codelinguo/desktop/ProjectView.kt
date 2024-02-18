@@ -1,11 +1,11 @@
 package fr.unilim.codelinguo.desktop
 
-import fr.unilim.codelinguo.desktop.style.ViewStyles
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.persistence.project.JsonProjectDao
 import fr.unilim.codelinguo.common.persistence.project.ProjectDao
+import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos

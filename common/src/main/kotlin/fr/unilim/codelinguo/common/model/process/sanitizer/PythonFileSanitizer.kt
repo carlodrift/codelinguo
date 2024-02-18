@@ -9,7 +9,7 @@ class PythonFileSanitizer : ScriptingFileSanitizer() {
 
     override val regexString =
         "$BLOCK_COMMENT.*?$BLOCK_COMMENT|$ALTERNATE_BLOCK_COMMENT.*?$ALTERNATE_BLOCK_COMMENT|\".*?\"|'.*?'".toRegex()
-    override val reservedKeywords = loadReservedKeywords("python")
+    override val reservedKeywords = loadReservedKeywords("python", "sanitizer")
     override var lineCommentSymbol = "#"
 
     override fun handleBlockCommentStart(line: String): String {

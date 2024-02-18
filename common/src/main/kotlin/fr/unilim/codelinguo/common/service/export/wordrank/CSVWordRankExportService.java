@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.persistence.wordrank;
+package fr.unilim.codelinguo.common.service.export.wordrank;
 
 import fr.unilim.codelinguo.common.model.Word;
 import fr.unilim.codelinguo.common.persistence.lang.JsonLangDao;
@@ -11,17 +11,23 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-public class CSVWordRankDAO implements WordRankDAO {
+public class CSVWordRankExportService implements WordRankExportService {
 
     @Override
-    public void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName) {
+    public String save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName) {
         File dir = new File(directory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         String score = String.format(Locale.US, "%.2f", glossaryRatio * 100);
-        File file = new File(dir, projectName + "_" + fileName + "_wordRank_" + score + ".csv");
+
+        File file;
+        if (projectName.equals(fileName)) {
+            file = new File(dir, fileName + "_wordRank_" + score + ".csv");
+        } else {
+            file = new File(dir, projectName + "_" + fileName + "_wordRank_" + score + ".csv");
+        }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             LangDAO lang = new JsonLangDao();
@@ -36,5 +42,7 @@ public class CSVWordRankDAO implements WordRankDAO {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return file.getAbsolutePath();
     }
 }
