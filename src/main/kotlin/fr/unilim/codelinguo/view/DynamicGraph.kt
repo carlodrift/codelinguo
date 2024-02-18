@@ -1,9 +1,9 @@
 package fr.unilim.codelinguo.view
 
-import kotlinx.serialization.Serializable
 import org.graphstream.graph.implementations.SingleGraph
 import org.graphstream.graph.*
 import kotlin.math.log10
+import kotlinx.serialization.Serializable
 
 class DynamicGraph(private val data: List<WordContext>) {
 
@@ -71,9 +71,13 @@ class DynamicGraph(private val data: List<WordContext>) {
     }
 }
 
+@Serializable
 data class WordContext(val word: Word, val context: List<Context>)
 
+@Serializable
 data class Word(val token: String)
+
+@Serializable
 data class Context(val word: Word, val priority: Float)
 
 @Serializable
