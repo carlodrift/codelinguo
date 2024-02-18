@@ -101,6 +101,7 @@ class ButtonBarView(
             val analysisWords = FileReader().read(filePaths)
             val analytics = WordAnalyticsService()
             val wordRank = analytics.wordRank(analysisWords)
+            val rawWordRank = analytics.rawWordRank(analysisWords)
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
@@ -109,7 +110,7 @@ class ButtonBarView(
             } else {
                 lastOpenedDirectory?.name ?: ""
             }
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, rawWordRank)
         }
     }
 
@@ -125,10 +126,11 @@ class ButtonBarView(
             val analysisWords = FileReader().read(file.toString())
             val analytics = WordAnalyticsService()
             val wordRank = analytics.wordRank(analysisWords)
+            val rawWordRank = analytics.rawWordRank(analysisWords)
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, file.name)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, file.name, rawWordRank)
         }
     }
 
@@ -191,6 +193,7 @@ class ButtonBarView(
 
             val analytics = WordAnalyticsService()
             val wordRank = analytics.wordRank(wordsFromGit)
+            val rawWordRank = analytics.rawWordRank(wordsFromGit)
             val wordsInListNotInGlossary = analytics.wordsInListNotInGlossary(
                 wordRank.keys.map { it },
                 Glossary(words)
@@ -199,7 +202,7 @@ class ButtonBarView(
 
             val fileName = gitUrl.substringAfterLast("/").substringBefore(".")
             Platform.runLater {
-                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName)
+                openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, rawWordRank)
             }
 
             JsonRecentGitURLDAO().add(gitUrl)

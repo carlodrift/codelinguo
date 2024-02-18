@@ -28,9 +28,10 @@ object ViewUtilities {
         glossaryRatio: Float,
         lang: LangDAO,
         projectName: String,
-        fileName: String
+        fileName: String,
+        rawWordRank: Map<Word, Int>
     ) {
-        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, projectName, fileName)
+        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, projectName, fileName, rawWordRank)
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
 

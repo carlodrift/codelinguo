@@ -13,11 +13,6 @@ class Word(var token: String?) {
 
     constructor() : this(null)
 
-
-    override fun toString(): String {
-        return "$token"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -46,5 +41,7 @@ class Word(var token: String?) {
         return result
     }
 
-
+    override fun toString(): String {
+        return "Word(token=$token, fileName=$fileName, synonyms=$synonyms, related=$related, antonyms=$antonyms, context=$context, definition=$definition)"
+    }
 }

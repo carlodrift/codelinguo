@@ -90,7 +90,7 @@ class WordAnalyticsServiceTest {
         val expected = HashMap<Word, Int>()
         expected[Word("Robot")] = 2
         expected[Word("Joueur")] = 1
-        Assertions.assertThat(wordAnalyticsService!!.wordRank(reader.read(""))).isEqualTo(expected)
+        Assertions.assertThat(wordAnalyticsService!!.rawWordRank(reader.read(""))).isEqualTo(expected)
     }
 
     companion object {

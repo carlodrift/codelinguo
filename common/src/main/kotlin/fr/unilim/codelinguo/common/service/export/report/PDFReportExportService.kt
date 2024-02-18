@@ -32,7 +32,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         wordRank: Map<Word, Int>,
         glossaryRatio: Float,
         fileName: String,
-        directory: String
+        directory: String,
     ): String {
         val dir = File(directory)
         if (!dir.exists()) {
@@ -107,7 +107,8 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addHeader(document: Document, projectName: String) {
-        val logoStream: InputStream? = this::class.java.classLoader.getResourceAsStream("logo" + File.separator + "logo.png")
+        val logoStream: InputStream? =
+            this::class.java.classLoader.getResourceAsStream("logo" + File.separator + "logo.png")
         if (logoStream != null) {
             val logo = Image.getInstance(logoStream.readBytes()).apply {
                 scaleToFit(140f, 120f)
@@ -153,7 +154,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         text: String? = null,
         spacingBefore: Float = 0f,
         spacingAfter: Float = 0f,
-        alignment: Int = Element.ALIGN_LEFT
+        alignment: Int = Element.ALIGN_LEFT,
     ) {
         val paragraph = Paragraph(title, font).apply {
             this.spacingBefore = spacingBefore
