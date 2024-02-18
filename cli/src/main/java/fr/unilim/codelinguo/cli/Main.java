@@ -58,7 +58,7 @@ public class Main implements Callable<Integer> {
                 String csvPath = new CSVWordRankExportService().save(
                         System.getProperty("user.dir"),
                         wordRank,
-                        -1,
+                        0,
                         pathFile.getName(),
                         pathFile.getName()
                 );
@@ -69,7 +69,7 @@ public class Main implements Callable<Integer> {
                 String pdfPath = new PDFReportExportService().createCodeAnalysisReport(
                         pathFile.getName(),
                         wordRank,
-                        -1,
+                        0,
                         pathFile.getName(),
                         System.getProperty("user.dir")
                 );
