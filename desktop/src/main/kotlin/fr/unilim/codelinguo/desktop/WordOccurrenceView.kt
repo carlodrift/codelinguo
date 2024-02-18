@@ -35,11 +35,10 @@ class WordOccurrenceView(
     private val glossaryRatio: Float,
     private val lang: LangDAO,
     private val projectName: String,
-    private val fileName: String
+    private val fileName: String,
+    private val rawWordRank: Map<Word, Int>
 ) : Fragment() {
 
-
-    private val aggregatedWordMap = aggregateWords(wordRank.keys)
 
     private val clickDetailLabel = label(lang.getMessage("click_detail_label")) {
         addClass(ViewStyles.clickDetailLabel)
@@ -137,27 +136,6 @@ class WordOccurrenceView(
         }
     }
 
-    private val wordRankList = FXCollections.observableArrayList<Map.Entry<Word, Int>>(
-        aggregatedWordMap.map { (token, fileNames) ->
-            val word = Word(token).apply { fileName = fileNames }
-            val count = wordRank.filterKeys { it.token == token }.values.sum()
-            object : Map.Entry<Word, Int> {
-                override val key: Word = word
-                override val value: Int = count
-            }
-        }.sortedByDescending { it.value }
-    )
-
-    private fun aggregateWords(words: Set<Word>): Map<String, String> {
-        val wordToFileNames = mutableMapOf<String, MutableList<String>>()
-
-        for (word in words) {
-            wordToFileNames.getOrPut(word.token ?: "") { mutableListOf() }.add(word.fileName ?: "Unknown")
-        }
-
-        return wordToFileNames.mapValues { (_, fileNames) -> fileNames.distinct().joinToString("\n") }
-    }
-
     private val generalExportButton = button(lang.getMessage("button_export")) {
         addClass(ViewStyles.downloadButtonHover)
     }
@@ -181,14 +159,14 @@ class WordOccurrenceView(
         val reportExporter: ReportExportService = PDFReportExportService()
         reportExporter.createCodeAnalysisReport(
             projectName,
-            mapWordRank(),
+            wordRank,
             glossaryRatio,
             fileName,
             directory.absolutePath
         )
     }
 
-    private val generalView = tableview(wordRankList) {
+    private val generalView = tableview(FXCollections.observableArrayList(wordRank.entries.toList())) {
         addClass(ViewStyles.customTableView)
         readonlyColumn(lang.getMessage("wordoccurrenceview_word") + " ⇅", Map.Entry<Word, Int>::key) {
             prefWidth = 300.0
@@ -206,7 +184,7 @@ class WordOccurrenceView(
                 }
 
                 val customTooltip = PopOver().apply {
-                    contentNode = showFileNamesWindow(wordEntry, wordRank)
+                    contentNode = showFileNamesWindow(wordEntry, rawWordRank)
                     arrowLocation = PopOver.ArrowLocation.LEFT_TOP
                     isDetachable = false
                     isAutoHide = true
@@ -307,9 +285,8 @@ class WordOccurrenceView(
         selectedDirectory?.let { directory ->
             when (format) {
                 "CSV" -> {
-                    val wordRankMap = mapWordRank()
                     CSVWordRankExportService()
-                        .save(directory.absolutePath, wordRankMap, glossaryRatio, projectName, fileName)
+                        .save(directory.absolutePath, wordRank, glossaryRatio, projectName, fileName)
                 }
 
                 "Report" -> {
@@ -323,8 +300,6 @@ class WordOccurrenceView(
             information(lang.getMessage("export_done"))
         }
     }
-
-    private fun mapWordRank() = wordRankList.associate { it.key to it.value }
 
     private fun setupExportPopOver(): PopOver {
         val popOver = PopOver()

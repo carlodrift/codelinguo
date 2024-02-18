@@ -30,7 +30,7 @@ import javax.swing.table.JTableHeader;
 import java.util.List;
 import java.util.Map;
 
-public class Panel implements ToolWindowFactory {
+public class Main implements ToolWindowFactory {
 
     private DefaultTableModel model;
     private Project currentProject;
@@ -65,19 +65,19 @@ public class Panel implements ToolWindowFactory {
         project.getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerListener() {
             @Override
             public void beforeDocumentSaving(@NotNull Document document) {
-                SwingUtilities.invokeLater(Panel.this::updateTableModel);
+                SwingUtilities.invokeLater(Main.this::updateTableModel);
             }
         });
 
         project.getMessageBus().connect().subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileEditorManagerListener() {
             @Override
             public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-                SwingUtilities.invokeLater(Panel.this::updateTableModel);
+                SwingUtilities.invokeLater(Main.this::updateTableModel);
             }
 
             @Override
             public void selectionChanged(@NotNull FileEditorManagerEvent event) {
-                SwingUtilities.invokeLater(Panel.this::updateTableModel);
+                SwingUtilities.invokeLater(Main.this::updateTableModel);
             }
         });
     }

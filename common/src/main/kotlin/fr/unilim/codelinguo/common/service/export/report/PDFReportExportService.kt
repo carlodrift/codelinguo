@@ -32,14 +32,17 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         wordRank: Map<Word, Int>,
         glossaryRatio: Float,
         fileName: String,
-        directory: String
-    ) {
+        directory: String,
+    ): String {
         val dir = File(directory)
         if (!dir.exists()) {
             dir.mkdirs()
         }
-
-        val formattedFileName = String.format(Locale.US, "%s_%s_report_%.2f.pdf", projectName, fileName, glossaryRatio * 100)
+        val formattedFileName: String = if (projectName == fileName) {
+            String.format(Locale.US, "%s_report_%.2f.pdf", projectName, glossaryRatio * 100)
+        } else {
+            String.format(Locale.US, "%s_%s_report_%.2f.pdf", projectName, fileName, glossaryRatio * 100)
+        }
         val fullPath = File(dir, formattedFileName)
         val document = Document(PageSize.A4)
         val writer = PdfWriter.getInstance(document, FileOutputStream(fullPath))
@@ -57,6 +60,8 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         addTermsFrequency(document, wordRank)
 
         document.close()
+
+        return fullPath.absolutePath
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
@@ -102,7 +107,8 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addHeader(document: Document, projectName: String) {
-        val logoStream: InputStream? = this::class.java.classLoader.getResourceAsStream("logo" + File.separator + "logo.png")
+        val logoStream: InputStream? =
+            this::class.java.classLoader.getResourceAsStream("logo" + File.separator + "logo.png")
         if (logoStream != null) {
             val logo = Image.getInstance(logoStream.readBytes()).apply {
                 scaleToFit(140f, 120f)
@@ -148,7 +154,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         text: String? = null,
         spacingBefore: Float = 0f,
         spacingAfter: Float = 0f,
-        alignment: Int = Element.ALIGN_LEFT
+        alignment: Int = Element.ALIGN_LEFT,
     ) {
         val paragraph = Paragraph(title, font).apply {
             this.spacingBefore = spacingBefore

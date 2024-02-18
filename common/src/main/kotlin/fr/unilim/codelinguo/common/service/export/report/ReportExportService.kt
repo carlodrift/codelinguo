@@ -8,6 +8,6 @@ interface ReportExportService {
         wordRank: Map<Word, Int>,
         glossaryRatio: Float,
         fileName: String,
-        directory: String
-    )
+        directory: String,
+    ): String
 }

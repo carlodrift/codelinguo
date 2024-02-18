@@ -6,6 +6,5 @@ import java.util.Map;
 
 public interface WordRankExportService {
 
-    void save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName);
-
+    String save(String directory, Map<Word, Integer> wordRank, float glossaryRatio, String projectName, String fileName);
 }
