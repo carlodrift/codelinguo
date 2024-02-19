@@ -3,6 +3,7 @@ package fr.unilim.codelinguo.common.service.export.report
 import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.service.WordAnalyticsService
 import java.awt.Color
 import java.io.File
 import java.io.FileOutputStream
@@ -118,7 +119,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
 
         val totalFileCountChunk = Chunk(
-            wordRank.flatMap { it.key.fileName?.split("\n").orEmpty() }.toHashSet().size.toString(),
+            WordAnalyticsService().filesList(wordRank).size.toString(),
             Font(baseFont, 12f, Font.BOLD)
         )
 
