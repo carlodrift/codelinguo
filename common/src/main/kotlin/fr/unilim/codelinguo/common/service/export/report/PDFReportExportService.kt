@@ -66,7 +66,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des mots (occurrence < 2 ignoré)", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des termes (occurrence < 2 ignoré)", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
@@ -74,7 +74,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
 
             val headerFont = Font(baseFont, 12f, Font.BOLD)
 
-            val motHeader = PdfPCell(Phrase("Mot", headerFont)).apply {
+            val termHeader = PdfPCell(Phrase("Terme", headerFont)).apply {
                 backgroundColor = Color.LIGHT_GRAY
                 horizontalAlignment = Element.ALIGN_CENTER
                 verticalAlignment = Element.ALIGN_MIDDLE
@@ -88,7 +88,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
                 setPadding(5f)
             }
 
-            addCell(motHeader)
+            addCell(termHeader)
             addCell(occurrenceHeader)
 
             wordRank.forEach { (key, value) ->
