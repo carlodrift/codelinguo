@@ -8,10 +8,7 @@ import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import javax.swing.BorderFactory
-import javax.swing.JFrame
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 
 object RandomEuclideanGraph {
@@ -105,9 +102,20 @@ object RandomEuclideanGraph {
         viewPanel.setFocusable(true)
         viewPanel.requestFocusInWindow()
 
+        val resetButton = JButton("Reset View").apply {
+            this.font = Font("Arial", Font.BOLD, 12)
+            this.background = Color.LIGHT_GRAY
+            this.foreground = Color.BLACK
+
+            addActionListener {
+                viewPanel.camera.setViewCenter(0.0, 0.0, 0.0)
+                viewPanel.camera.viewPercent = 1.0
+            }
+        }
+
         viewPanel.addKeyListener(object : KeyAdapter() {
             override fun keyPressed(e: KeyEvent) {
-                val moveDelta = 0.1 // Ajustez cette valeur selon les besoins
+                val moveDelta = 0.1
                 val camera = viewPanel.camera
                 val center = camera.viewCenter
 
@@ -170,14 +178,14 @@ object RandomEuclideanGraph {
         }.start()
 
         val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING)).apply {
-            border = BorderFactory.createTitledBorder("Legend")
+            border = BorderFactory.createTitledBorder("Légende")
 
             add(JLabel("Contexte principal").apply {
                 foreground = Color.ORANGE
             })
 
-            add(JLabel("Termes du Glossaire").apply {
-                foreground = Color(26, 201, 77) // RGB for #1aec4d
+            add(JLabel("Termes du code correspondant au glossaire").apply {
+                foreground = Color(26, 201, 77)
             })
 
             add(JLabel("Termes du Code").apply {
@@ -186,6 +194,10 @@ object RandomEuclideanGraph {
         }
 
         JFrame("Graph Frame").apply {
+            val controlPanel = JPanel().apply {
+                add(resetButton)
+            }
+            contentPane.add(controlPanel, BorderLayout.NORTH)
             contentPane.add(viewPanel)
             setSize(800, 600)
             setLocationRelativeTo(null)
