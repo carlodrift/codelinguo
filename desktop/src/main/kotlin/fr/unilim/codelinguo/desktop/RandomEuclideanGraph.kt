@@ -4,6 +4,8 @@ import org.graphstream.ui.swing_viewer.SwingViewer
 import org.graphstream.ui.swing_viewer.ViewPanel
 import org.graphstream.ui.view.Viewer
 import java.awt.*
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.BorderFactory
@@ -100,6 +102,27 @@ object RandomEuclideanGraph {
         val viewer = SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD)
         viewer.enableAutoLayout()
         val viewPanel = viewer.addDefaultView(false) as ViewPanel
+        viewPanel.setFocusable(true)
+        viewPanel.requestFocusInWindow()
+
+        viewPanel.addKeyListener(object : KeyAdapter() {
+            override fun keyPressed(e: KeyEvent) {
+                val moveDelta = 0.1 // Ajustez cette valeur selon les besoins
+                val camera = viewPanel.camera
+                val center = camera.viewCenter
+
+                when (e.keyCode) {
+                    KeyEvent.VK_LEFT ->
+                        camera.setViewCenter(center.x - moveDelta, center.y, center.z)
+                    KeyEvent.VK_RIGHT ->
+                        camera.setViewCenter(center.x + moveDelta, center.y, center.z)
+                    KeyEvent.VK_UP ->
+                        camera.setViewCenter(center.x, center.y + moveDelta, center.z)
+                    KeyEvent.VK_DOWN ->
+                        camera.setViewCenter(center.x, center.y - moveDelta, center.z)
+                }
+            }
+        })
 
         viewPanel.addMouseWheelListener { e ->
             val camera = viewPanel.camera
@@ -110,14 +133,14 @@ object RandomEuclideanGraph {
         var dragStartPoint: Point? = null
         viewPanel.addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                if (e.button == MouseEvent.BUTTON2 || e.button == MouseEvent.BUTTON1) {
+                if (e.button == MouseEvent.BUTTON2) {
                     dragStartPoint = e.getPoint()
                     viewPanel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR))
                 }
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                if (e.button == MouseEvent.BUTTON2 || e.button == MouseEvent.BUTTON1) {
+                if (e.button == MouseEvent.BUTTON2) {
                     dragStartPoint = null
                     viewPanel.setCursor(Cursor.getDefaultCursor())
                 }
