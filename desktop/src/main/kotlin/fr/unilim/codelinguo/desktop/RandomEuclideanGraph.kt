@@ -104,14 +104,14 @@ object RandomEuclideanGraph {
 
         val resetButton = JButton("Reset View").apply {
             this.font = Font("Arial", Font.BOLD, 12)
-            this.background = Color.LIGHT_GRAY
-            this.foreground = Color.BLACK
+            this.background = Color.WHITE
 
             addActionListener {
                 viewPanel.camera.setViewCenter(0.0, 0.0, 0.0)
                 viewPanel.camera.viewPercent = 1.0
             }
         }
+
 
         viewPanel.addKeyListener(object : KeyAdapter() {
             override fun keyPressed(e: KeyEvent) {
@@ -177,31 +177,27 @@ object RandomEuclideanGraph {
             viewer.disableAutoLayout()
         }.start()
 
-        val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING)).apply {
-            border = BorderFactory.createTitledBorder("Légende")
 
-            add(JLabel("Contexte principal").apply {
-                foreground = Color.ORANGE
-            })
-
-            add(JLabel("Termes du code correspondant au glossaire").apply {
-                foreground = Color(26, 201, 77)
-            })
-
-            add(JLabel("Termes du Code").apply {
-                foreground = Color.LIGHT_GRAY
-            })
-        }
 
         JFrame("Graph Frame").apply {
-            val controlPanel = JPanel().apply {
-                add(resetButton)
+            val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING, 30, 10)).apply {
+                border = BorderFactory.createEmptyBorder()
+                add(Box.createHorizontalStrut(-30))
+                add(JLabel("Contexte principal").apply { foreground = Color(255,174,66) })
+                add(JLabel("Termes du code correspondant au glossaire").apply { foreground = Color(26, 201, 77) })
+                add(JLabel("Termes du Code").apply { foreground = Color.BLACK })
             }
-            contentPane.add(controlPanel, BorderLayout.NORTH)
-            contentPane.add(viewPanel)
+
+            val bottomPanel = JPanel(BorderLayout()).apply {
+                add(legendPanel, BorderLayout.WEST)
+                add(resetButton, BorderLayout.EAST)
+            }
+
+            contentPane.add(viewPanel, BorderLayout.CENTER)
+            contentPane.add(bottomPanel, BorderLayout.SOUTH)
+
             setSize(800, 600)
             setLocationRelativeTo(null)
-            contentPane.add(legendPanel, BorderLayout.SOUTH)
             isVisible = true
         }
     }
