@@ -164,7 +164,7 @@ class WordOccurrenceView(
 
     private fun createPdfReport() {
         val pdfExporter = PdfExportService();
-        pdfExporter.createCodeAnalysisReport("rapport_analyse_$projectName.pdf", projectName, mapWordRank())
+        pdfExporter.createCodeAnalysisReport("rapport_analyse_$projectName.pdf", projectName, mapWordRank(), glossaryRatio * 100)
     }
 
     private val generalView = tableview(wordRankList) {
