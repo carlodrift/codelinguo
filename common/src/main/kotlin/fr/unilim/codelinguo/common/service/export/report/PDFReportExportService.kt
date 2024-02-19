@@ -65,13 +65,13 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des termes (occurence < 2 ignoré)", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des mots (occurence < 2 ignoré)", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
             setWidths(floatArrayOf(2f, 1f))
-            addCell("Terme")
-            addCell("Fréquence")
+            addCell("Mot")
+            addCell("Occurrence")
             wordRank.forEach { (key, value) ->
                 if (value > 1) {
                     addCell(key.token)
@@ -86,8 +86,11 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
         val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio), Font(baseFont, 12f, Font.BOLD))
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
-        val totalFileCountChunk =
-            Chunk(wordRank.keys.map { it.fileName }.toSet().size.toString(), Font(baseFont, 12f, Font.BOLD))
+
+        val totalFileCountChunk = Chunk(
+            wordRank.flatMap { it.key.fileName?.split("\n").orEmpty() }.toHashSet().size.toString(),
+            Font(baseFont, 12f, Font.BOLD)
+        )
 
         val paragraph = Paragraph().apply {
             add("Le glossaire que vous avez utilisé est respecté à ")
@@ -134,7 +137,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             spacingAfter = 20f
         )
 
-        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         addParagraphWithSpacing(
             document,
             "Généré le $date",
