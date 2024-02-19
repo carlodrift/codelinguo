@@ -110,16 +110,16 @@ object RandomEuclideanGraph {
         var dragStartPoint: Point? = null
         viewPanel.addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                if (e.button == MouseEvent.BUTTON2) {
-                    dragStartPoint = e.point
-                    viewPanel.cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)
+                if (e.button == MouseEvent.BUTTON2 || e.button == MouseEvent.BUTTON1) {
+                    dragStartPoint = e.getPoint()
+                    viewPanel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR))
                 }
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                if (e.button == MouseEvent.BUTTON2) {
+                if (e.button == MouseEvent.BUTTON2 || e.button == MouseEvent.BUTTON1) {
                     dragStartPoint = null
-                    viewPanel.cursor = Cursor.getDefaultCursor()
+                    viewPanel.setCursor(Cursor.getDefaultCursor())
                 }
             }
         })
@@ -139,6 +139,7 @@ object RandomEuclideanGraph {
                 }
             }
         })
+
 
         Thread {
             Thread.sleep(5000)
