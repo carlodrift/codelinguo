@@ -65,17 +65,47 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des mots (occurence < 2 ignoré)", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des mots (occurrence < 2 ignoré)", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
             setWidths(floatArrayOf(2f, 1f))
-            addCell("Mot")
-            addCell("Occurrence")
+
+            val headerFont = Font(baseFont, 12f, Font.BOLD)
+
+            val motHeader = PdfPCell(Phrase("Mot", headerFont)).apply {
+                backgroundColor = Color.LIGHT_GRAY
+                horizontalAlignment = Element.ALIGN_CENTER
+                verticalAlignment = Element.ALIGN_MIDDLE
+                setPadding(5f)
+            }
+
+            val occurrenceHeader = PdfPCell(Phrase("Occurrence", headerFont)).apply {
+                backgroundColor = Color.LIGHT_GRAY
+                horizontalAlignment = Element.ALIGN_CENTER
+                verticalAlignment = Element.ALIGN_MIDDLE
+                setPadding(5f)
+            }
+
+            addCell(motHeader)
+            addCell(occurrenceHeader)
+
             wordRank.forEach { (key, value) ->
                 if (value > 1) {
-                    addCell(key.token)
-                    addCell(value.toString())
+                    val motCell = PdfPCell(Phrase(key.token)).apply {
+                        horizontalAlignment = Element.ALIGN_LEFT
+                        verticalAlignment = Element.ALIGN_MIDDLE
+                        paddingLeft = 5f
+                        setPadding(5f)
+                    }
+                    addCell(motCell)
+
+                    val occurrenceCell = PdfPCell(Phrase(value.toString())).apply {
+                        horizontalAlignment = Element.ALIGN_CENTER
+                        verticalAlignment = Element.ALIGN_MIDDLE
+                        setPadding(5f)
+                    }
+                    addCell(occurrenceCell)
                 }
             }
         }
