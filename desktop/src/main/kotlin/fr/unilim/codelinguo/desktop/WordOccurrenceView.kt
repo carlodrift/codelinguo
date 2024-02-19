@@ -2,9 +2,10 @@ package fr.unilim.codelinguo.desktop
 
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
+import fr.unilim.codelinguo.common.service.WordAnalyticsService
 import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService
 import fr.unilim.codelinguo.common.service.export.report.ReportExportService
+import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
 import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -36,7 +37,7 @@ class WordOccurrenceView(
     private val lang: LangDAO,
     private val projectName: String,
     private val fileName: String,
-    private val rawWordRank: Map<Word, Int>
+    private val rawWordRank: Map<Word, Int>,
 ) : Fragment() {
 
 
@@ -222,21 +223,66 @@ class WordOccurrenceView(
             padding = box(20.px)
         }
 
-        text {
-            val percentageText = String.format("%.2f%%", glossaryRatio * 100)
-            text = percentageText
-            style {
-                fontSize = 50.px
-                fontWeight = FontWeight.EXTRA_BOLD
-                fill = c("#0078D7")
+        vbox {
+            alignment = Pos.CENTER
+            spacing = 0.0
+
+            text {
+                val percentageText = String.format("%.2f%%", glossaryRatio * 100)
+                text = percentageText
+                style {
+                    fontSize = 50.px
+                    fontWeight = FontWeight.EXTRA_BOLD
+                    fill = c("#0078D7")
+                }
+            }
+
+            label {
+                text = lang.getMessage("glossary_ratio")
+                style {
+                    fontSize = 20.px
+                    fontWeight = FontWeight.BOLD
+                    padding = box((7).px, 0.px, 0.px, 0.px)
+                }
             }
         }
 
-        label {
-            text = lang.getMessage("glossary_ratio")
-            style {
-                fontSize = 20.px
-                fontWeight = FontWeight.BOLD
+        hbox {
+            spacing = 10.0
+            alignment = Pos.CENTER
+
+            vbox {
+                alignment = Pos.CENTER
+                text(WordAnalyticsService().filesList(wordRank).size.toString()) {
+                    style {
+                        fontSize = 30.px
+                        fontWeight = FontWeight.EXTRA_BOLD
+                        fill = c("#145a91")
+                    }
+                }
+                label("fichiers analysés") {
+                    style {
+                        fontSize = 15.px
+                        fontWeight = FontWeight.BOLD
+                    }
+                }
+            }
+
+            vbox {
+                alignment = Pos.CENTER
+                text(wordRank.size.toString()) {
+                    style {
+                        fontSize = 30.px
+                        fontWeight = FontWeight.EXTRA_BOLD
+                        fill = c("#145a91")
+                    }
+                }
+                label("termes trouvés") {
+                    style {
+                        fontSize = 15.px
+                        fontWeight = FontWeight.BOLD
+                    }
+                }
             }
         }
     }
