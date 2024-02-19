@@ -17,6 +17,11 @@ import java.util.*
 
 
 class JavaFileParser : FileProcessor() {
+    companion object {
+        private val UPPER_CASE_SPLIT_REGEX = "(?<!^)(?=[A-Z])".toRegex()
+        private val locale = Locale.getDefault()
+    }
+
     override val reservedKeywords = loadReservedKeywords("java", "parser")
 
     override fun processFile(path: String): List<Word> {
@@ -140,21 +145,21 @@ class JavaFileParser : FileProcessor() {
     }
 
     private fun splitIdentifierIntoWords(identifier: String): List<String> {
-        if (reservedKeywords.contains(identifier.lowercase(Locale.getDefault()))) {
+        if (reservedKeywords.contains(identifier.lowercase(locale))) {
             return emptyList()
         }
 
-        if (identifier.uppercase(Locale.getDefault()) == identifier) {
+        if (identifier.uppercase(locale) == identifier) {
             return identifier.split('_')
                 .filter { it.isNotEmpty() }
-                .map { it.lowercase(Locale.getDefault()) }
+                .map { it.lowercase(locale) }
                 .filter { it.length > 2 && it.all { char -> char.isLetter() } && !reservedKeywords.contains(it) }
         }
 
         val cleanedIdentifier = identifier.filter { it.isLetter() }
 
-        val words = cleanedIdentifier.split("(?<!^)(?=[A-Z])".toRegex())
-            .map { it.lowercase(Locale.getDefault()) }
+        val words = cleanedIdentifier.split(UPPER_CASE_SPLIT_REGEX)
+            .map { it.lowercase(locale) }
 
         return words.filter { it.length > 2 && it.all { char -> char.isLetter() } && !reservedKeywords.contains(it) }
     }
