@@ -7,6 +7,7 @@ import fr.unilim.codelinguo.common.model.process.sanitizer.HtmlFileSanitizer
 import fr.unilim.codelinguo.common.model.process.sanitizer.JavascriptFileSanitizer
 import fr.unilim.codelinguo.common.model.process.sanitizer.KotlinFileSanitizer
 import fr.unilim.codelinguo.common.model.process.sanitizer.PythonFileSanitizer
+import kotlinx.coroutines.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -20,18 +21,26 @@ class FileReader : IRead {
         ".html" to HtmlFileSanitizer()
     )
 
-    override fun read(path: String): List<Word> {
+    override fun read(path: String): List<Word> = runBlocking {
         val file = File(path)
         if (file.isDirectory) {
-            return file.walk()
+            file.walk()
                 .filter { isPathValidForProcessing(it.toPath()) }
-                .flatMap { readOne(it.path).asSequence() }
                 .toList()
+                .parallelMap { readOne(it.path) }
+                .flatten()
+        } else {
+            if (isPathValidForProcessing(file.toPath())) readOne(path) else emptyList()
         }
-        return if (isPathValidForProcessing(file.toPath())) readOne(path) else emptyList()
     }
 
-    override fun read(paths: List<String>): List<Word> = paths.flatMap { read(it) }
+    override fun read(paths: List<String>): List<Word> = runBlocking {
+        paths.parallelMap { read(it) }.flatten()
+    }
+
+    private suspend fun <A, B> Iterable<A>.parallelMap(f: suspend (A) -> B): List<B> = coroutineScope {
+        map { async(Dispatchers.IO) { f(it) } }.awaitAll()
+    }
 
     override fun readOne(path: String): List<Word> {
         val extension = fileSanitizers.keys.find { path.endsWith(it) } ?: return emptyList()
