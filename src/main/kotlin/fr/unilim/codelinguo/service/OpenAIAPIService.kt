@@ -1,46 +1,44 @@
-import okhttp3.MediaType.Companion.toMediaType
+import fr.unilim.codelinguo.model.Word
+import com.cjcrafter.openai.chat.*
+import com.cjcrafter.openai.chat.ChatMessage.Companion.toSystemMessage
+import com.cjcrafter.openai.chat.ChatMessage.Companion.toUserMessage
+import com.cjcrafter.openai.openAI
+import io.github.cdimascio.dotenv.dotenv
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.IOException
+import java.net.http.HttpClient
+import java.util.concurrent.TimeUnit
 
-class OpenAIAPIService(private val apiKey: String) {
+class OpenAIAPIService() {
     companion object {
-        private const val BASE_URL = "https://api.openai.com/v1/completions"
-        private const val DEFAULT_MODEL = "text-davinci-003"
-        private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
-        private const val TEMPERATURE = 0.5
-        private const val MAX_TOKENS = 60
-        private const val TOP_P = 1.0
-        private const val FREQUENCY_PENALTY = 0.0
-        private const val PRESENCE_PENALTY = 0.0
+        private const val DEFAULT_MODEL = "gpt-3.5-turbo" // gpt-4-0125-preview
     }
 
-    private val client: OkHttpClient = OkHttpClient();
+    private fun getApiKey(): String {
+        val dotenv = dotenv()
+        return dotenv["OPEN_AI_API_KEY"]
+    }
 
-    fun sendRequest(prompt: String, model: String = DEFAULT_MODEL): String? {
-        val requestBody = """
-            {
-                "model": "$model",
-                "prompt": "$prompt",
-                "temperature": $TEMPERATURE,
-                "max_tokens": $MAX_TOKENS,
-                "top_p": $TOP_P,
-                "frequency_penalty": $FREQUENCY_PENALTY,
-                "presence_penalty": $PRESENCE_PENALTY
-            }
-        """.trimIndent().toRequestBody(JSON_MEDIA_TYPE)
 
-        val request = Request.Builder()
-            .url(BASE_URL)
-            .addHeader("Authorization", "Bearer $apiKey")
-            .post(requestBody)
-            .build()
+    private val customHttpClient = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)  // Customize as needed
+        .readTimeout(30, TimeUnit.SECONDS)     // Customize as needed
+        .writeTimeout(15, TimeUnit.SECONDS)    // Customize as needed
+        .build()
 
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-            return response.body?.string()
+    fun sendRequest(prompt: String, data : String): String? {
+        val openai = openAI {
+            apiKey(getApiKey())
+            client(customHttpClient)
         }
+
+        val request = chatRequest {
+            model(DEFAULT_MODEL)
+            addMessage(prompt.toSystemMessage())
+            addMessage(data.toUserMessage())
+        }
+
+        return openai.createChatCompletion(request)[0].message.content
     }
+
+
 }
