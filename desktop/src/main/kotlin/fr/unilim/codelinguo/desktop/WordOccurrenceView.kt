@@ -28,6 +28,7 @@ import tornadofx.*
 import java.awt.Desktop
 import java.io.File
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class WordOccurrenceView(
@@ -38,6 +39,7 @@ class WordOccurrenceView(
     private val projectName: String,
     private val fileName: String,
     private val rawWordRank: Map<Word, Int>,
+    private val glossaryCoverageRatio: Float,
 ) : Fragment() {
 
 
@@ -279,6 +281,23 @@ class WordOccurrenceView(
                     }
                 }
                 label("termes trouvés") {
+                    style {
+                        fontSize = 15.px
+                        fontWeight = FontWeight.BOLD
+                    }
+                }
+            }
+
+            vbox {
+                alignment = Pos.CENTER
+                text("${(glossaryCoverageRatio * 100).roundToInt()}%") {
+                    style {
+                        fontSize = 30.px
+                        fontWeight = FontWeight.EXTRA_BOLD
+                        fill = c("#145a91")
+                    }
+                }
+                label("de couverture du glossaire") {
                     style {
                         fontSize = 15.px
                         fontWeight = FontWeight.BOLD

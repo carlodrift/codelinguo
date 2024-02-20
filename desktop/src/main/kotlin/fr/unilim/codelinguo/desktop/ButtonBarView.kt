@@ -105,12 +105,13 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+            val glossaryCoverageRatio = analytics.glossaryCoverageRatio(analysisWords, Glossary(words))
             val fileName = if (selectedFiles.size == 1) {
                 selectedFiles.first().name
             } else {
                 lastOpenedDirectory?.name ?: ""
             }
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, rawWordRank)
+            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, rawWordRank, glossaryCoverageRatio)
         }
     }
 
@@ -130,6 +131,7 @@ class ButtonBarView(
             val wordsInListNotInGlossary =
                 analytics.wordsInListNotInGlossary(wordRank.keys.toList().map { it }, Glossary(words))
             val glossaryRatio = analytics.glossaryRatio(analysisWords, Glossary(words))
+            val glossaryCoverageRatio = analytics.glossaryCoverageRatio(analysisWords, Glossary(words))
             openWordOccurrenceView(
                 wordRank,
                 wordsInListNotInGlossary,
@@ -137,7 +139,8 @@ class ButtonBarView(
                 lang,
                 name,
                 file.name,
-                rawWordRank
+                rawWordRank,
+                glossaryCoverageRatio
             )
         }
     }
@@ -207,6 +210,7 @@ class ButtonBarView(
                 Glossary(words)
             )
             val glossaryRatio = analytics.glossaryRatio(wordsFromGit, Glossary(words))
+            val glossaryCoverageRatio = analytics.glossaryCoverageRatio(wordsFromGit, Glossary(words))
 
             val fileName = gitUrl.substringAfterLast("/").substringBefore(".")
             Platform.runLater {
@@ -217,7 +221,8 @@ class ButtonBarView(
                     lang,
                     name,
                     fileName,
-                    rawWordRank
+                    rawWordRank,
+                    glossaryCoverageRatio
                 )
             }
 

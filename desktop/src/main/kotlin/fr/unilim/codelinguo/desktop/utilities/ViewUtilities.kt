@@ -32,6 +32,7 @@ object ViewUtilities {
         projectName: String,
         fileName: String,
         rawWordRank: Map<Word, Int>,
+        glossaryCoverageRatio: Float
     ) {
         val view = WordOccurrenceView(
             wordRank,
@@ -40,7 +41,8 @@ object ViewUtilities {
             lang,
             projectName,
             fileName,
-            rawWordRank
+            rawWordRank,
+            glossaryCoverageRatio
         )
         view.openWindow(owner = null, escapeClosesWindow = true)
     }

@@ -2,8 +2,8 @@ package fr.unilim.codelinguo.common.service
 
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
-import java.util.regex.Pattern
 import java.text.Normalizer
+import java.util.regex.Pattern
 
 class WordAnalyticsService {
     fun isWordPresent(words: List<Word?>?, word: Word?): Boolean {
@@ -55,12 +55,21 @@ class WordAnalyticsService {
     }
 
     fun glossaryRatio(words: List<Word?>, glossary: Glossary): Float {
-        if (words.isNullOrEmpty()) {
+        if (words.isEmpty()) {
             return 0.0f
         }
         val glossaryWords = glossary.words.map { it.token }.toSet()
         val count = words.count { it?.token in glossaryWords }
         return count.toFloat() / words.size
+    }
+
+    fun glossaryCoverageRatio(words: List<Word?>, glossary: Glossary): Float {
+        if (glossary.words.isEmpty()) {
+            return 0.0f
+        }
+        val normalizedFoundWords = words.mapNotNull { it?.token?.let(this::normalizeString) }.toSet()
+        val count = glossary.words.count { it.token?.let(this::normalizeString) in normalizedFoundWords }
+        return count.toFloat() / glossary.words.size
     }
 
     private fun normalizeString(input: String): String {
