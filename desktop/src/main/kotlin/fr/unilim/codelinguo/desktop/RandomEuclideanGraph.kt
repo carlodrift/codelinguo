@@ -131,29 +131,6 @@ object RandomEuclideanGraph {
             }
         }
 
-
-        viewPanel.addKeyListener(object : KeyAdapter() {
-            override fun keyPressed(e: KeyEvent) {
-                val moveDelta = 0.1
-                val camera = viewPanel.camera
-                val center = camera.viewCenter
-
-                when (e.keyCode) {
-                    KeyEvent.VK_LEFT ->
-                        camera.setViewCenter(center.x - moveDelta, center.y, center.z)
-
-                    KeyEvent.VK_RIGHT ->
-                        camera.setViewCenter(center.x + moveDelta, center.y, center.z)
-
-                    KeyEvent.VK_UP ->
-                        camera.setViewCenter(center.x, center.y + moveDelta, center.z)
-
-                    KeyEvent.VK_DOWN ->
-                        camera.setViewCenter(center.x, center.y - moveDelta, center.z)
-                }
-            }
-        })
-
         viewPanel.addMouseWheelListener { e ->
             val camera = viewPanel.camera
             val zoomFactor = if (e.wheelRotation < 0) 1.1 else 0.9
@@ -196,7 +173,6 @@ object RandomEuclideanGraph {
                 }
             }
         })
-
 
         Thread {
             Thread.sleep(5000)
