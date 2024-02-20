@@ -1,0 +1,1 @@
+jpackage --input target/ --name CodeLinguo --main-jar CodeLinguo.jar --main-class fr.unilim.codelinguo.desktop.MainKt --icon src/main/resources/logo/logo.ico --type msi --win-shortcut --win-menu --win-menu-group CodeLinguo

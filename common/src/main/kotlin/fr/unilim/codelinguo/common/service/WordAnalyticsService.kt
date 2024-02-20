@@ -1,0 +1,74 @@
+package fr.unilim.codelinguo.common.service
+
+import fr.unilim.codelinguo.common.model.Glossary
+import fr.unilim.codelinguo.common.model.Word
+
+class WordAnalyticsService {
+    fun isWordPresent(words: List<Word?>?, word: Word?): Boolean {
+        return words!!.contains(word)
+    }
+
+    fun wordRatio(word: Word?, words: List<Word>?): Float {
+        if (words.isNullOrEmpty()) {
+            return 0.0f
+        }
+        val count = words.stream().filter { w: Word -> w == word }.count()
+        return count.toFloat() / words.size * 100
+    }
+
+    fun wordRank(words: List<Word>?): Map<Word, Int> {
+        if (words.isNullOrEmpty()) return emptyMap()
+
+        val wordDetails = mutableMapOf<String, Pair<MutableSet<String>, Int>>()
+        words.forEach { word ->
+            val token = word.token ?: ""
+            val fileName = word.fileName ?: "Unknown"
+            wordDetails[token] = wordDetails[token]?.let {
+                it.first.add(fileName)
+                it.first to it.second + 1
+            } ?: (mutableSetOf(fileName) to 1)
+        }
+
+        val rankedWords = wordDetails.map { (token, details) ->
+            Word(token).apply {
+                fileName = details.first.joinToString("\n")
+            } to details.second
+        }.sortedByDescending { it.second }
+
+        return rankedWords.associate { it.first to it.second }
+    }
+
+    fun rawWordRank(words: List<Word>?): Map<Word, Int> {
+        val wordCount: MutableMap<Word, Int> = HashMap()
+        if (words != null) {
+            for (word in words) {
+                wordCount[word] = wordCount.getOrDefault(word, 0) + 1
+            }
+        }
+        return wordCount.entries.sortedByDescending { it.value }.associate { it.toPair() }
+    }
+
+    fun filesList(wordRank: Map<Word, Int>): Set<String> {
+        return wordRank.flatMap { it.key.fileName?.split("\n").orEmpty() }.toHashSet()
+    }
+
+    fun glossaryRatio(words: List<Word?>, glossary: Glossary): Float {
+        if (words.isNullOrEmpty()) {
+            return 0.0f
+        }
+        val glossaryWords = glossary.words.map { it.token }.toSet()
+        val count = words.count { it?.token in glossaryWords }
+        return count.toFloat() / words.size
+    }
+
+    fun wordsInGlossaryNotInList(words: List<Word?>, glossary: Glossary): List<Word> {
+        val wordTokens = words.mapNotNull { it?.token }.toSet()
+        return glossary.words.filter { it.token !in wordTokens }
+    }
+
+    fun wordsInListNotInGlossary(words: List<Word?>, glossary: Glossary): List<Word> {
+        val glossaryWordTokens = glossary.words.map { it.token }.toSet()
+        return words.filterNotNull().filter { it.token !in glossaryWordTokens }
+    }
+
+}
