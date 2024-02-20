@@ -12,3 +12,5 @@ update
 select
 set
 println
+assertthat
+isequalto

@@ -3,6 +3,7 @@ package fr.unilim.codelinguo.common.service.export.report
 import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.service.WordAnalyticsService
 import java.awt.Color
 import java.io.File
 import java.io.FileOutputStream
@@ -65,17 +66,47 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des termes (occurence < 2 ignoré)", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Fréquence des termes (occurrence < 2 ignoré)", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
             setWidths(floatArrayOf(2f, 1f))
-            addCell("Terme")
-            addCell("Fréquence")
+
+            val headerFont = Font(baseFont, 12f, Font.BOLD)
+
+            val termHeader = PdfPCell(Phrase("Terme", headerFont)).apply {
+                backgroundColor = Color.LIGHT_GRAY
+                horizontalAlignment = Element.ALIGN_CENTER
+                verticalAlignment = Element.ALIGN_MIDDLE
+                setPadding(5f)
+            }
+
+            val occurrenceHeader = PdfPCell(Phrase("Occurrence", headerFont)).apply {
+                backgroundColor = Color.LIGHT_GRAY
+                horizontalAlignment = Element.ALIGN_CENTER
+                verticalAlignment = Element.ALIGN_MIDDLE
+                setPadding(5f)
+            }
+
+            addCell(termHeader)
+            addCell(occurrenceHeader)
+
             wordRank.forEach { (key, value) ->
                 if (value > 1) {
-                    addCell(key.token)
-                    addCell(value.toString())
+                    val motCell = PdfPCell(Phrase(key.token)).apply {
+                        horizontalAlignment = Element.ALIGN_LEFT
+                        verticalAlignment = Element.ALIGN_MIDDLE
+                        paddingLeft = 5f
+                        setPadding(5f)
+                    }
+                    addCell(motCell)
+
+                    val occurrenceCell = PdfPCell(Phrase(value.toString())).apply {
+                        horizontalAlignment = Element.ALIGN_CENTER
+                        verticalAlignment = Element.ALIGN_MIDDLE
+                        setPadding(5f)
+                    }
+                    addCell(occurrenceCell)
                 }
             }
         }
@@ -86,8 +117,11 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
         val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio), Font(baseFont, 12f, Font.BOLD))
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
-        val totalFileCountChunk =
-            Chunk(wordRank.keys.map { it.fileName }.toSet().size.toString(), Font(baseFont, 12f, Font.BOLD))
+
+        val totalFileCountChunk = Chunk(
+            WordAnalyticsService().filesList(wordRank).size.toString(),
+            Font(baseFont, 12f, Font.BOLD)
+        )
 
         val paragraph = Paragraph().apply {
             add("Le glossaire que vous avez utilisé est respecté à ")
@@ -134,7 +168,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             spacingAfter = 20f
         )
 
-        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         addParagraphWithSpacing(
             document,
             "Généré le $date",

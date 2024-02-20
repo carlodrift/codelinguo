@@ -48,6 +48,10 @@ class WordAnalyticsService {
         return wordCount.entries.sortedByDescending { it.value }.associate { it.toPair() }
     }
 
+    fun filesList(wordRank: Map<Word, Int>): Set<String> {
+        return wordRank.flatMap { it.key.fileName?.split("\n").orEmpty() }.toHashSet()
+    }
+
     fun glossaryRatio(words: List<Word?>, glossary: Glossary): Float {
         if (words.isNullOrEmpty()) {
             return 0.0f
