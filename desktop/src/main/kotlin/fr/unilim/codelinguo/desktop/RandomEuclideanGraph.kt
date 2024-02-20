@@ -13,7 +13,7 @@ import java.util.regex.Pattern
 import javax.swing.*
 
 fun normalizeString(input: String): String {
-    val normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD)
+    val normalizedString = Normalizer.normalize(input.trim(), Normalizer.Form.NFD)
     val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
     return pattern.matcher(normalizedString).replaceAll("")
 }
@@ -83,7 +83,13 @@ object RandomEuclideanGraph {
         layout.addAttributeSink(graph)
 
         wordContexts?.values?.distinct()?.forEach { context ->
+            var context: String? = context
             if (context != null && !contextNodes.containsKey(context)) {
+                if (graph.getNode(context) != null) {
+                    while (graph.getNode(context) != null) {
+                        context += " "
+                    }
+                }
                 val contextNode = graph.addNode(context)
                 contextNode.setAttribute("ui.label", context)
                 contextNode.setAttribute("ui.class", "context")
@@ -92,6 +98,12 @@ object RandomEuclideanGraph {
         }
 
         wordOccurrences.forEach { (word, count) ->
+            var word: String? = word
+            if (graph.getNode(word) != null) {
+                while (graph.getNode(word) != null) {
+                    word += " "
+                }
+            }
             val wordNode = graph.addNode(word)
             wordNode.setAttribute("ui.label", word)
             val nodeSize = calculateNodeSize(count, wordOccurrences)
@@ -108,7 +120,9 @@ object RandomEuclideanGraph {
             wordContexts?.get(word)?.let { context ->
                 contextNodes[context]?.let { contextNode ->
                     val edgeId = "$word-$context"
-                    graph.addEdge(edgeId, wordNode, contextNode).setAttribute("layout.weight", 4.0)
+                    if (graph.getEdge(edgeId) == null) {
+                        graph.addEdge(edgeId, wordNode, contextNode).setAttribute("layout.weight", 4.0)
+                    }
                 }
             }
         }
