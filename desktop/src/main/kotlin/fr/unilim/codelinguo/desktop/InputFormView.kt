@@ -14,7 +14,7 @@ class InputFormView(
     private val lexicoCompletionService: CompletionService,
     private val tokenCompletionService: CompletionService,
     private val lang: LangDAO,
-    private val activeContextMenus: MutableMap<TextField, ContextMenu> = mutableMapOf()
+    private val activeContextMenus: MutableMap<TextField, ContextMenu> = mutableMapOf(),
 ) : View() {
 
     val tokenInput: TextField = textfield {

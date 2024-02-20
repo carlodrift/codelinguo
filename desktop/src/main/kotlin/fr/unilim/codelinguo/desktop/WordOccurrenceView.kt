@@ -3,9 +3,9 @@ package fr.unilim.codelinguo.desktop
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.context.PrimaryContext
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
-import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
 import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService
 import fr.unilim.codelinguo.common.service.export.report.ReportExportService
+import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService
 import fr.unilim.codelinguo.desktop.style.ViewStyles
 import javafx.collections.FXCollections
 import javafx.geometry.Insets
@@ -38,7 +38,7 @@ class WordOccurrenceView(
     private val projectName: String,
     private val fileName: String,
     private val rawWordRank: Map<Word, Int>,
-    private val wordTableView: TableView<Word>?
+    private val wordTableView: TableView<Word>?,
 ) : Fragment() {
 
 
@@ -51,7 +51,7 @@ class WordOccurrenceView(
         .map { it.token }
         .toSet()
 
-    private val detailButton = button(lang.getMessage("Detail")) {
+    private val detailButton = button(lang.getMessage("Graphe")) {
         addClass(ViewStyles.downloadButtonHover)
         action {
             val wordOccurrences = wordRank

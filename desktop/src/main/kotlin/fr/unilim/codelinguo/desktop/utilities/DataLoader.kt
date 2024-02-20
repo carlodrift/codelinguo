@@ -12,7 +12,7 @@ object DataLoader {
         contextCompletionService: CompletionService,
         lexicoCompletionService: CompletionService,
         tokenCompletionService: CompletionService,
-        projectName: String
+        projectName: String,
     ) {
         val projectDao: ProjectDao = JsonProjectDao()
         val projects = projectDao.retrieve()

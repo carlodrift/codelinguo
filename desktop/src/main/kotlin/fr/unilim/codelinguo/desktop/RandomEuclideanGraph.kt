@@ -17,7 +17,7 @@ object RandomEuclideanGraph {
     fun createGraphWithDynamicStyles(
         wordOccurrences: Map<String, Int>,
         wordContexts: Map<String, String?>?,
-        wordsInGlossary: Set<String?>
+        wordsInGlossary: Set<String?>,
     ) {
         System.setProperty("org.graphstream.ui", "swing")
         val graph = SingleGraph("ExampleGraph")
@@ -124,10 +124,13 @@ object RandomEuclideanGraph {
                 when (e.keyCode) {
                     KeyEvent.VK_LEFT ->
                         camera.setViewCenter(center.x - moveDelta, center.y, center.z)
+
                     KeyEvent.VK_RIGHT ->
                         camera.setViewCenter(center.x + moveDelta, center.y, center.z)
+
                     KeyEvent.VK_UP ->
                         camera.setViewCenter(center.x, center.y + moveDelta, center.z)
+
                     KeyEvent.VK_DOWN ->
                         camera.setViewCenter(center.x, center.y - moveDelta, center.z)
                 }
@@ -165,7 +168,11 @@ object RandomEuclideanGraph {
                     val dy = (dragEndPoint.y - dragStartPoint!!.y) * 0.1
 
                     val camera = viewPanel.camera
-                    camera.setViewCenter(camera.viewCenter.x - dx * camera.viewPercent, camera.viewCenter.y + dy * camera.viewPercent, 0.0)
+                    camera.setViewCenter(
+                        camera.viewCenter.x - dx * camera.viewPercent,
+                        camera.viewCenter.y + dy * camera.viewPercent,
+                        0.0
+                    )
                     camera.viewPercent = camera.viewPercent
 
                     dragStartPoint = e.point
@@ -185,7 +192,7 @@ object RandomEuclideanGraph {
             val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING, 30, 10)).apply {
                 border = BorderFactory.createEmptyBorder()
                 add(Box.createHorizontalStrut(-30))
-                add(JLabel("Contexte principal").apply { foreground = Color(255,174,66) })
+                add(JLabel("Contexte principal").apply { foreground = Color(255, 174, 66) })
                 add(JLabel("Termes du code correspondant au glossaire").apply { foreground = Color(26, 201, 77) })
                 add(JLabel("Termes du Code").apply { foreground = Color.BLACK })
             }
