@@ -104,7 +104,7 @@ object RandomEuclideanGraph {
         viewPanel.setFocusable(true)
         viewPanel.requestFocusInWindow()
 
-        val resetButton = JButton("Reset View").apply {
+        val resetButton = JButton("Réinitialiser").apply {
             this.font = Font("Arial", Font.BOLD, 12)
             this.background = Color.WHITE
 
