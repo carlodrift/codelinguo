@@ -382,18 +382,13 @@ class WordOccurrenceView(
 
     private fun requestApiKey(onApiKeyReceived: (String) -> Unit) {
         val dialog = TextInputDialog().apply {
-            title = "API Key Required"
-            headerText = "Enter your OpenAI API Key"
-            contentText = "API Key:"
+            headerText = "Une analyse personnalisée peut être effectuée en utilisant l'API OpenAI."
+            contentText = "Clé API (facultatif) : "
         }
 
         val result = dialog.showAndWait()
         result.ifPresent { apiKey ->
-            if (apiKey.isNotBlank()) {
-                onApiKeyReceived(apiKey)
-            } else {
-                println("API Key was not provided or was blank.")
-            }
+            onApiKeyReceived(apiKey)
         }
     }
 }

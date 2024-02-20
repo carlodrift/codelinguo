@@ -224,6 +224,9 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             "En tant qu'expert en développement de logiciels, avec une spécialisation en assurance de la qualité du code, votre mission consiste à effectuer une analyse sur des données fournies par une application qui compare un glossaire contenant le contexte métier souhaité pour l'application et les termes métiers réellement trouvé dans l'application. Les données contiennent quels termes ont été trouvés, dans quels fichiers et en quelle quantité. Ton but à toi sera d'effectuer une analyse critique sur ces données fournies, des statistiques qui pourraient intéresser l'utilisateur afin d'améliorer la qualité de son code"
         val data = convertToStringRepresentation(wordRank)?.joinToString("\n")
         val response = data?.let { service.sendRequest(prompt, it, apiKey) }
+        if (response == null) {
+            return
+        }
         addParagraphWithSpacing(
             document,
             "Analyse de ChatGPT",

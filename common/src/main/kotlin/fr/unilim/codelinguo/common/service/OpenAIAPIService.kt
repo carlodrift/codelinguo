@@ -14,25 +14,27 @@ class OpenAIAPIService {
 
 
     private val customHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.MINUTES)
-        .readTimeout(30, TimeUnit.MINUTES)
-        .writeTimeout(15, TimeUnit.MINUTES)
+        .connectTimeout(1, TimeUnit.MINUTES)
+        .readTimeout(3, TimeUnit.MINUTES)
+        .writeTimeout(2, TimeUnit.MINUTES)
         .build()
 
     fun sendRequest(prompt: String, data: String, apiKey: String): String? {
-        val openai = openAI {
-            apiKey(apiKey)
-            client(customHttpClient)
-        }
+        try {
+            val openai = openAI {
+                apiKey(apiKey)
+                client(customHttpClient)
+            }
 
-        val request = chatRequest {
-            model(DEFAULT_MODEL)
-            addMessage(prompt.toSystemMessage())
-            addMessage(data.toUserMessage())
-        }
+            val request = chatRequest {
+                model(DEFAULT_MODEL)
+                addMessage(prompt.toSystemMessage())
+                addMessage(data.toUserMessage())
+            }
 
-        return openai.createChatCompletion(request)[0].message.content
+            return openai.createChatCompletion(request)[0].message.content
+        } catch (e: Exception) {
+            return null
+        }
     }
-
-
 }
