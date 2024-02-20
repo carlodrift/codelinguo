@@ -40,6 +40,7 @@ class ProjectView : View() {
     }
 
     private fun loadProjects() {
+        projectDao.delete("Démo")
         projectsList.clear()
         projectsList.addAll(projectDao.retrieve())
 

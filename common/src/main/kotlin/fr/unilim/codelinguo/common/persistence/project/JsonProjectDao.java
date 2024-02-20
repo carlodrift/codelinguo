@@ -101,11 +101,7 @@ public class JsonProjectDao implements ProjectDao {
     public void delete(String name) {
         File projectFile = new File(this.directory, name + JsonProjectDao.FILE_EXTENSION);
         if (projectFile.exists()) {
-            if (!projectFile.delete()) {
-                System.err.println("Failed to delete the project: " + name);
-            }
-        } else {
-            System.err.println("Project not found: " + name);
+            projectFile.delete();
         }
     }
 }
