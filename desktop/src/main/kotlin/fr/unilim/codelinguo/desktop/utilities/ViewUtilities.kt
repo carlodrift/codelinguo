@@ -29,8 +29,8 @@ object ViewUtilities {
         projectName: String,
         fileName: String,
         rawWordRank: Map<Word, Int>,
-        glossaryCoverageRatio: Float
-        wordTableView: TableView<Word>?,
+        glossaryCoverageRatio: Float,
+        wordTableView: TableView<Word>?
     ) {
         val view = WordOccurrenceView(
             wordRank,
