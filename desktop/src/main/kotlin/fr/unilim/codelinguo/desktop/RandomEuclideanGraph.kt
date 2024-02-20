@@ -205,13 +205,13 @@ object RandomEuclideanGraph {
 
 
 
-        JFrame("Graph Frame").apply {
+        JFrame("Graphe").apply {
             val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING, 30, 10)).apply {
                 border = BorderFactory.createEmptyBorder()
                 add(Box.createHorizontalStrut(-30))
                 add(JLabel("Contexte principal").apply { foreground = Color(255, 174, 66) })
-                add(JLabel("Termes du code correspondant au glossaire").apply { foreground = Color(26, 201, 77) })
-                add(JLabel("Termes du Code").apply { foreground = Color.BLACK })
+                add(JLabel("Termes dans le glossaire").apply { foreground = Color(26, 201, 77) })
+                add(JLabel("Termes hors glossaire").apply { foreground = Color.BLACK })
             }
 
             val bottomPanel = JPanel(BorderLayout()).apply {
