@@ -1,6 +1,7 @@
 package fr.unilim.codelinguo.desktop
 
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.model.context.PrimaryContext
 import fr.unilim.codelinguo.common.persistence.lang.LangDAO
 import fr.unilim.codelinguo.common.service.WordAnalyticsService
 import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService
@@ -40,11 +41,40 @@ class WordOccurrenceView(
     private val fileName: String,
     private val rawWordRank: Map<Word, Int>,
     private val glossaryCoverageRatio: Float,
+    private val wordTableView: TableView<Word>?,
 ) : Fragment() {
 
 
     private val clickDetailLabel = label(lang.getMessage("click_detail_label")) {
         addClass(ViewStyles.clickDetailLabel)
+    }
+
+    private val wordsInGlossary: Set<String?> = wordRank.keys
+        .filter { word -> wordsInListNotInGlossary.none { it.token == word.token } }
+        .map { it.token }
+        .toSet()
+
+    private val detailButton = button(lang.getMessage("Graphe")) {
+        addClass(ViewStyles.downloadButtonHover)
+        action {
+            val wordOccurrences = wordRank
+                .mapNotNull { it.key.token?.let { token -> token to it.value } }
+                .toMap()
+
+            val wordContexts = wordTableView?.items
+                ?.mapNotNull { wordItem ->
+                    wordItem.token?.let { token ->
+                        val contextString = wordItem.context
+                            ?.filterIsInstance<PrimaryContext>()
+                            ?.joinToString { primaryContext -> primaryContext.word.token.toString() }
+
+                        token to contextString
+                    }
+                }
+                ?.toMap()
+
+            RandomEuclideanGraph.createGraphWithDynamicStyles(wordOccurrences, wordContexts, wordsInGlossary)
+        }
     }
 
     private fun showFileNamesWindow(word: Word, wordRank: Map<Word, Int>): Node {
@@ -333,6 +363,7 @@ class WordOccurrenceView(
             }
 
             hbox(spacing = 10.0) {
+                add(detailButton)
                 add(generalExportButton)
                 add(closeButton)
             }

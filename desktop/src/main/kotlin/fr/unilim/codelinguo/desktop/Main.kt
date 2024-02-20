@@ -19,5 +19,6 @@ class MainApp : App(ProjectView::class, ViewStyles::class) {
 }
 
 fun main(args: Array<String>) {
+    System.setProperty("sun.java2d.uiScale", "1.0")
     launch<MainApp>(args)
 }

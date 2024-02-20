@@ -111,7 +111,17 @@ class ButtonBarView(
             } else {
                 lastOpenedDirectory?.name ?: ""
             }
-            openWordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, name, fileName, rawWordRank, glossaryCoverageRatio)
+            openWordOccurrenceView(
+                wordRank,
+                wordsInListNotInGlossary,
+                glossaryRatio,
+                lang,
+                name,
+                fileName,
+                rawWordRank,
+                glossaryCoverageRatio,
+                wordTableView
+            )
         }
     }
 
@@ -140,7 +150,8 @@ class ButtonBarView(
                 name,
                 file.name,
                 rawWordRank,
-                glossaryCoverageRatio
+                glossaryCoverageRatio,
+                wordTableView
             )
         }
     }
@@ -222,7 +233,8 @@ class ButtonBarView(
                     name,
                     fileName,
                     rawWordRank,
-                    glossaryCoverageRatio
+                    glossaryCoverageRatio,
+                    wordTableView
                 )
             }
 

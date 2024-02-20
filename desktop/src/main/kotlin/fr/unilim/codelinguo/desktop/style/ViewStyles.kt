@@ -139,8 +139,6 @@ class ViewStyles : Stylesheet() {
         }
 
 
-
-
         customTableView {
             backgroundColor += c("#E5E5E5")
             borderWidth += box(1.px)

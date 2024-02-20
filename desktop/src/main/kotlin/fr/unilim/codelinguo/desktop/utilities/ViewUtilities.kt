@@ -10,10 +10,7 @@ import fr.unilim.codelinguo.desktop.MainView
 import fr.unilim.codelinguo.desktop.WordOccurrenceView
 import javafx.collections.ObservableList
 import javafx.geometry.Side
-import javafx.scene.control.ContextMenu
-import javafx.scene.control.MenuItem
-import javafx.scene.control.TextField
-import javafx.scene.control.TextInputControl
+import javafx.scene.control.*
 
 object ViewUtilities {
     fun updateJsonFile(words: ObservableList<Word>, name: String) {
@@ -33,6 +30,7 @@ object ViewUtilities {
         fileName: String,
         rawWordRank: Map<Word, Int>,
         glossaryCoverageRatio: Float
+        wordTableView: TableView<Word>?,
     ) {
         val view = WordOccurrenceView(
             wordRank,
@@ -42,7 +40,8 @@ object ViewUtilities {
             projectName,
             fileName,
             rawWordRank,
-            glossaryCoverageRatio
+            glossaryCoverageRatio,
+            wordTableView
         )
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
