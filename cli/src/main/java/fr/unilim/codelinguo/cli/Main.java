@@ -3,7 +3,6 @@ package fr.unilim.codelinguo.cli;
 import fr.unilim.codelinguo.common.model.Word;
 import fr.unilim.codelinguo.common.model.reader.FileReader;
 import fr.unilim.codelinguo.common.service.WordAnalyticsService;
-import fr.unilim.codelinguo.common.service.export.report.PDFReportExportService;
 import fr.unilim.codelinguo.common.service.export.wordrank.CSVWordRankExportService;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -29,15 +28,12 @@ public class Main implements Callable<Integer> {
     @Option(names = {"--no-csv"}, description = "Do not create a CSV file.")
     private boolean noCsv = false;
 
-    @Option(names = {"--no-pdf"}, description = "Do not create a PDF file.")
-    private boolean noPdf = false;
-
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);
         System.exit(exitCode);
     }
 
-    private static void processPath(String path, int numberOfResults, boolean noCsv, boolean noPdf) {
+    private static void processPath(String path, int numberOfResults, boolean noCsv) {
         try {
             File pathFile = new File(path);
             if (!pathFile.exists()) {
@@ -63,17 +59,6 @@ public class Main implements Callable<Integer> {
                         pathFile.getName()
                 );
                 System.out.println("CSV file has been saved to: " + csvPath);
-            }
-
-            if (!noPdf) {
-                String pdfPath = new PDFReportExportService().createCodeAnalysisReport(
-                        pathFile.getName(),
-                        wordRank,
-                        0,
-                        pathFile.getName(),
-                        System.getProperty("user.dir")
-                );
-                System.out.println("PDF file has been saved to: " + pdfPath);
             }
 
             LinkedHashMap<Word, Integer> sortedWordRank = wordRank.entrySet().stream()
@@ -103,7 +88,7 @@ public class Main implements Callable<Integer> {
             return 0;
         }
 
-        Main.processPath(this.inputFilePath, this.numberOfResults, this.noCsv, this.noPdf);
+        Main.processPath(this.inputFilePath, this.numberOfResults, this.noCsv);
         return 0;
     }
 }
