@@ -58,7 +58,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             document,
             "Résumé de l'analyse",
             titleFont,
-            "Ce document présente un résumé des résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes."
+            "Ce document présente un résumé les résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes."
         )
         addGlobalAnalysis(document, glossaryRatio, wordRank)
         if (apiKey.isNotEmpty()) {
@@ -72,7 +72,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addTermsFrequency(document: Document, wordRank: Map<Word, Int>) {
-        addParagraphWithSpacing(document, "Fréquence des termes (occurrence < 2 ignoré)", titleFont, null, 20f, 10f)
+        addParagraphWithSpacing(document, "Termes principaux", titleFont, null, 20f, 10f)
 
         val table = PdfPTable(2).apply {
             widthPercentage = 100f
@@ -121,7 +121,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
     }
 
     private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
-        val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio), Font(baseFont, 12f, Font.BOLD))
+        val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio * 100), Font(baseFont, 12f, Font.BOLD))
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
 
         val totalFileCountChunk = Chunk(
@@ -130,9 +130,9 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         )
 
         val paragraph = Paragraph().apply {
-            add("Le glossaire que vous avez utilisé est respecté à ")
             add(fGlossaryRatioChunk)
-            add(". Votre code comporte ")
+            add(" des termes trouvés sont aussi dans le glossaire.")
+            add("Votre code comporte ")
             add(totalWordCountChunk)
             add(" termes différents et un total de ")
             add(totalFileCountChunk)
