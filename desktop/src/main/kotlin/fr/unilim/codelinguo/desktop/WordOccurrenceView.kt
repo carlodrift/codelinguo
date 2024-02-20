@@ -186,14 +186,15 @@ class WordOccurrenceView(
         }
     }
 
-    private fun createReport(directory: File) {
+    private fun createReport(directory: File, apiKey: String) {
         val reportExporter: ReportExportService = PDFReportExportService()
         reportExporter.createCodeAnalysisReport(
             projectName,
             wordRank,
             glossaryRatio,
             fileName,
-            directory.absolutePath
+            directory.absolutePath,
+            apiKey
         )
     }
 
@@ -354,7 +355,7 @@ class WordOccurrenceView(
         }
     }
 
-    private fun exportWords(format: String) {
+    private fun exportWords(format: String, apiKey: String = "") {
         val directoryChooser = DirectoryChooser().apply {
             title = lang.getMessage("choose_destination")
         }
@@ -367,7 +368,7 @@ class WordOccurrenceView(
                 }
 
                 "Report" -> {
-                    createReport(directory)
+                    createReport(directory, apiKey)
                 }
             }
             try {
@@ -398,7 +399,9 @@ class WordOccurrenceView(
                     maxWidth = Double.MAX_VALUE
                     action {
                         popOver.hide()
-                        exportWords("Report")
+                        requestApiKey { apiKey ->
+                            exportWords("Report", apiKey)
+                        }
                     }
                 }
             )
@@ -406,5 +409,17 @@ class WordOccurrenceView(
 
         popOver.contentNode = vbox
         return popOver
+    }
+
+    private fun requestApiKey(onApiKeyReceived: (String) -> Unit) {
+        val dialog = TextInputDialog().apply {
+            headerText = "Une analyse personnalisée peut être effectuée en utilisant l'API OpenAI."
+            contentText = "Clé API (facultatif) : "
+        }
+
+        val result = dialog.showAndWait()
+        result.ifPresent { apiKey ->
+            onApiKeyReceived(apiKey)
+        }
     }
 }

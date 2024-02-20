@@ -2,6 +2,8 @@ package fr.unilim.codelinguo.common.service
 
 import fr.unilim.codelinguo.common.model.Glossary
 import fr.unilim.codelinguo.common.model.Word
+import java.util.regex.Pattern
+import java.text.Normalizer
 
 class WordAnalyticsService {
     fun isWordPresent(words: List<Word?>?, word: Word?): Boolean {
@@ -61,14 +63,19 @@ class WordAnalyticsService {
         return count.toFloat() / words.size
     }
 
+    private fun normalizeString(input: String): String {
+        val normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD)
+        val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+        return pattern.matcher(normalizedString).replaceAll("")
+    }
+
     fun wordsInGlossaryNotInList(words: List<Word?>, glossary: Glossary): List<Word> {
-        val wordTokens = words.mapNotNull { it?.token }.toSet()
-        return glossary.words.filter { it.token !in wordTokens }
+        val wordTokens = words.mapNotNull { it?.token?.let { token -> normalizeString(token) } }.toSet()
+        return glossary.words.filter { it.token?.let { it1 -> normalizeString(it1) } !in wordTokens }
     }
 
     fun wordsInListNotInGlossary(words: List<Word?>, glossary: Glossary): List<Word> {
-        val glossaryWordTokens = glossary.words.map { it.token }.toSet()
-        return words.filterNotNull().filter { it.token !in glossaryWordTokens }
+        val glossaryWordTokens = glossary.words.map { it.token?.let { it1 -> normalizeString(it1) } }.toSet()
+        return words.filterNotNull().filter { it.token?.let { it1 -> normalizeString(it1) } !in glossaryWordTokens }
     }
-
 }

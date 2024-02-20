@@ -9,5 +9,6 @@ interface ReportExportService {
         glossaryRatio: Float,
         fileName: String,
         directory: String,
+        apiKey: String,
     ): String
 }

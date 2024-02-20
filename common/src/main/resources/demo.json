@@ -327,6 +327,375 @@
         }
       ],
       "definition": "Action d\u0027insérer un jeton"
+    },
+    {
+      "token": "nouvelle",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Nouvelle partie"
+    },
+    {
+      "token": "menu",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Éléments du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Menu du jeu"
+    },
+    {
+      "token": "partie",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Une partie de jeu"
+    },
+    {
+      "token": "quitter",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Abandon du jeu"
+    },
+    {
+      "token": "pleine",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Quand une colonne est complète"
+    },
+    {
+      "token": "choix",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Décision de placement"
+    },
+    {
+      "token": "vérifier",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Vérifications de partie"
+    },
+    {
+      "token": "terminée",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Fin de partie"
+    },
+    {
+      "token": "joueur",
+      "synonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "related": [],
+      "antonyms": [
+        {
+          "token": "",
+          "synonyms": [],
+          "related": [],
+          "antonyms": []
+        }
+      ],
+      "context": [
+        {
+          "word": {
+            "token": "Règles du jeu",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 2.0
+        },
+        {
+          "word": {
+            "token": "",
+            "synonyms": [],
+            "related": [],
+            "antonyms": []
+          },
+          "priority": 1.0
+        }
+      ],
+      "definition": "Joueur de la partie"
     }
   ],
   "name": "Démo"
