@@ -10,8 +10,15 @@ import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.text.Normalizer
+import java.util.regex.Pattern
 import javax.swing.*
 
+fun normalizeString(input: String): String {
+    val normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD)
+    val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+    return pattern.matcher(normalizedString).replaceAll("")
+}
 
 object RandomEuclideanGraph {
     fun createGraphWithDynamicStyles(
@@ -19,6 +26,16 @@ object RandomEuclideanGraph {
         wordContexts: Map<String, String?>?,
         wordsInGlossary: Set<String?>,
     ) {
+        val wordOccurrences = wordOccurrences.mapKeys { (key, _) ->
+            normalizeString(key)
+        }
+
+        val wordContexts = wordContexts?.mapKeys { (key, _) ->
+            normalizeString(key)
+        }
+
+        val wordsInGlossary = wordsInGlossary.mapNotNull { it?.let(::normalizeString) }.toSet()
+
         System.setProperty("org.graphstream.ui", "swing")
         val graph = SingleGraph("ExampleGraph")
 
