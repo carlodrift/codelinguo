@@ -37,6 +37,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         fileName: String,
         directory: String,
         apiKey: String,
+        glossaryCoverageRatio: Float
     ): String {
         val dir = File(directory)
         if (!dir.exists()) {
@@ -60,7 +61,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             titleFont,
             "Ce document présente un résumé les résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes."
         )
-        addGlobalAnalysis(document, glossaryRatio, wordRank)
+        addGlobalAnalysis(document, glossaryRatio, wordRank, glossaryCoverageRatio)
         if (apiKey.isNotEmpty()) {
             addChatGPTSummary(document, wordRank, apiKey)
         }
@@ -120,8 +121,9 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         document.add(table)
     }
 
-    private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>) {
+    private fun addGlobalAnalysis(document: Document, glossaryRatio: Float, wordRank: Map<Word, Int>, glossaryCoverageRatio: Float) {
         val fGlossaryRatioChunk = Chunk(String.format("%.2f%%", glossaryRatio * 100), Font(baseFont, 12f, Font.BOLD))
+        val fGlossaryCoverageRatioChunk = Chunk(String.format("%.2f%%", glossaryCoverageRatio * 100), Font(baseFont, 12f, Font.BOLD))
         val totalWordCountChunk = Chunk(wordRank.values.count().toString(), Font(baseFont, 12f, Font.BOLD))
 
         val totalFileCountChunk = Chunk(
@@ -132,7 +134,9 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         val paragraph = Paragraph().apply {
             add(fGlossaryRatioChunk)
             add(" des termes trouvés sont aussi dans le glossaire.")
-            add("Votre code comporte ")
+            add("Votre glossaire est couvert à ")
+            add(fGlossaryCoverageRatioChunk)
+            add(". Votre code comporte ")
             add(totalWordCountChunk)
             add(" termes différents et un total de ")
             add(totalFileCountChunk)

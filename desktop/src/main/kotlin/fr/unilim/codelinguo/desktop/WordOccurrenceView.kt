@@ -166,7 +166,8 @@ class WordOccurrenceView(
             glossaryRatio,
             fileName,
             directory.absolutePath,
-            apiKey
+            apiKey,
+            glossaryCoverageRatio
         )
     }
 
