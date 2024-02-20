@@ -29,16 +29,24 @@ object ViewUtilities {
         lang: LangDAO,
         projectName: String,
         fileName: String,
-        rawWordRank: Map<Word, Int>
+        rawWordRank: Map<Word, Int>,
     ) {
-        val view = WordOccurrenceView(wordRank, wordsInListNotInGlossary, glossaryRatio, lang, projectName, fileName, rawWordRank)
+        val view = WordOccurrenceView(
+            wordRank,
+            wordsInListNotInGlossary,
+            glossaryRatio,
+            lang,
+            projectName,
+            fileName,
+            rawWordRank
+        )
         view.openWindow(owner = null, escapeClosesWindow = true)
     }
 
     fun updateAutoCompletion(
         textField: TextField,
         completionService: CompletionService,
-        activeContextMenus: MutableMap<TextField, ContextMenu>
+        activeContextMenus: MutableMap<TextField, ContextMenu>,
     ) {
         val suggestions = completionService.suggestCompletions(textField.text)
         if (textField.text.isBlank()) {
@@ -51,7 +59,7 @@ object ViewUtilities {
     private fun showSuggestions(
         textField: TextField,
         suggestions: Set<String>,
-        activeContextMenus: MutableMap<TextField, ContextMenu>
+        activeContextMenus: MutableMap<TextField, ContextMenu>,
     ) {
         var contextMenu = activeContextMenus[textField]
 

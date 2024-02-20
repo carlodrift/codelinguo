@@ -18,7 +18,7 @@ import tornadofx.*
 class WordTableView(
     private val words: ObservableList<Word>,
     private val lang: LangDAO,
-    name: String
+    name: String,
 ) : View() {
     var wordTableView: TableView<Word> by singleAssign()
 
