@@ -1,3 +1,5 @@
+package fr.unilim.codelinguo.desktop
+
 import org.graphstream.graph.implementations.SingleGraph
 import org.graphstream.ui.layout.springbox.implementations.LinLog
 import org.graphstream.ui.swing_viewer.SwingViewer
