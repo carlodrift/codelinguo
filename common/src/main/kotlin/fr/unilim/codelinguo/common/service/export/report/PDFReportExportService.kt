@@ -11,6 +11,8 @@ import java.io.InputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.stream.Collectors
+import fr.unilim.codelinguo.common.service.OpenAIAPIService
 
 class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
 
@@ -34,6 +36,7 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
         glossaryRatio: Float,
         fileName: String,
         directory: String,
+        apiKey: String
     ): String {
         val dir = File(directory)
         if (!dir.exists()) {
@@ -58,6 +61,9 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             "Ce document présente un résumé des résultats de l'analyse de code effectuée par CodeLinguo. Les détails des problèmes détectés, ainsi que les recommandations, sont présentés dans les sections suivantes."
         )
         addGlobalAnalysis(document, glossaryRatio, wordRank)
+        if (apiKey.isNotEmpty()) {
+            addChatGPTSummary(document, wordRank, apiKey)
+        }
         addTermsFrequency(document, wordRank)
 
         document.close()
@@ -203,5 +209,20 @@ class PDFReportExportService : PdfPageEventHelper(), ReportExportService {
             }
             document.add(paragraphText)
         }
+    }
+
+    private fun convertToStringRepresentation(wordRank: Map<Word, Int>, ): MutableList<String>? {
+        return wordRank.entries.stream()
+            .map { entry: Map.Entry<Word, Int> -> entry.key.token + "," + entry.value }
+            .collect(Collectors.toList())
+    }
+    private fun addChatGPTSummary(document: Document, wordRank: Map<Word, Int>, apiKey: String) {
+        val service = OpenAIAPIService();
+
+        val prompt = "En tant qu'expert en développement de logiciels, avec une spécialisation en assurance de la qualité du code, votre mission consiste à effectuer une analyse sur des données fournies par une application qui compare un glossaire contenant le contexte métier souhaité pour l'application et les termes métiers réellement trouvé dans l'application. Les données contiennent quels termes ont été trouvés, dans quels fichiers et en quelle quantité. Ton but à toi sera d'effectuer une analyse critique sur ces données fournies, des statistiques qui pourraient intéresser l'utilisateur afin d'améliorer la qualité de son code"
+        val data = convertToStringRepresentation(wordRank)?.joinToString("\n")
+        val response = data?.let { service.sendRequest(prompt, it, apiKey) }
+        addParagraphWithSpacing(document, "Analyse de ChatGPT", titleFont, response, alignment = Element.ALIGN_CENTER, spacingAfter = 20f)
+
     }
 }
