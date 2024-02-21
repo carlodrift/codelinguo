@@ -23,19 +23,19 @@ object RandomEuclideanGraph {
     private lateinit var viewer: SwingViewer
 
     fun createGraphWithDynamicStyles(
-        wordOccurrences: Map<String, Int>,
-        wordContexts: Map<String, String?>?,
-        wordsInGlossary: Set<String?>,
+        rawWordOccurrences: Map<String, Int>,
+        rawWordContexts: Map<String, String?>?,
+        rawWordsInGlossary: Set<String?>,
     ) {
-        val wordOccurrences = wordOccurrences.mapKeys { (key, _) ->
+        val wordOccurrences = rawWordOccurrences.mapKeys { (key, _) ->
             normalizeString(key)
         }
 
-        val wordContexts = wordContexts?.mapKeys { (key, _) ->
+        val wordContexts = rawWordContexts?.mapKeys { (key, _) ->
             normalizeString(key)
         }
 
-        val wordsInGlossary = wordsInGlossary.mapNotNull { it?.let(::normalizeString) }.toSet()
+        val wordsInGlossary = rawWordsInGlossary.mapNotNull { it?.let(::normalizeString) }.toSet()
 
         System.setProperty("org.graphstream.ui", "swing")
         graph = SingleGraph("Graphe")
@@ -85,8 +85,8 @@ object RandomEuclideanGraph {
         graph.addSink(layout)
         layout.addAttributeSink(graph)
 
-        wordContexts?.values?.distinct()?.forEach { context ->
-            var context: String? = context
+        wordContexts?.values?.distinct()?.forEach { rawContext ->
+            var context: String? = rawContext
             if (context != null && !contextNodes.containsKey(context)) {
                 if (graph.getNode(context) != null) {
                     while (graph.getNode(context) != null) {
@@ -100,8 +100,8 @@ object RandomEuclideanGraph {
             }
         }
 
-        wordOccurrences.forEach { (word, count) ->
-            var word: String? = word
+        wordOccurrences.forEach { (rawWord, count) ->
+            var word: String? = rawWord
             if (graph.getNode(word) != null) {
                 while (graph.getNode(word) != null) {
                     word += " "
