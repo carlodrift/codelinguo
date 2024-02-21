@@ -19,6 +19,8 @@ fun normalizeString(input: String): String {
 }
 
 object RandomEuclideanGraph {
+    lateinit var graph: SingleGraph
+
     fun createGraphWithDynamicStyles(
         wordOccurrences: Map<String, Int>,
         wordContexts: Map<String, String?>?,
@@ -35,7 +37,7 @@ object RandomEuclideanGraph {
         val wordsInGlossary = wordsInGlossary.mapNotNull { it?.let(::normalizeString) }.toSet()
 
         System.setProperty("org.graphstream.ui", "swing")
-        val graph = SingleGraph("ExampleGraph")
+        graph = SingleGraph("Graphe")
 
 
         val css = """
@@ -197,9 +199,21 @@ object RandomEuclideanGraph {
             val legendPanel = JPanel(FlowLayout(FlowLayout.LEADING, 30, 10)).apply {
                 border = BorderFactory.createEmptyBorder()
                 add(Box.createHorizontalStrut(-30))
-                add(JLabel("Contexte principal").apply { foreground = Color(255, 174, 66) })
-                add(JLabel("Termes dans le glossaire").apply { foreground = Color(26, 201, 77) })
-                add(JLabel("Termes hors glossaire").apply { foreground = Color.BLACK })
+                add(JToggleButton("Contexte principal").apply {
+                    foreground = Color(255, 174, 66)
+                    isSelected = true
+                    addActionListener { toggleVisibility("context", isSelected) }
+                })
+                add(JToggleButton("Termes dans le glossaire").apply {
+                    foreground = Color(26, 201, 77)
+                    isSelected = true
+                    addActionListener { toggleVisibility("important", isSelected) }
+                })
+                add(JToggleButton("Termes hors glossaire").apply {
+                    foreground = Color.BLACK
+                    isSelected = true
+                    addActionListener { toggleVisibility("default", isSelected) }
+                })
             }
 
             val bottomPanel = JPanel(BorderLayout()).apply {
@@ -227,6 +241,19 @@ object RandomEuclideanGraph {
             minSize + ((count - minOccurrence) / occurrenceRange) * sizeRange
         } else {
             maxSize
+        }
+    }
+
+    private fun toggleVisibility(className: String, visible: Boolean) {
+        graph.nodes().forEach { node ->
+            val nodeClass = node.getAttribute("ui.class")
+            if (nodeClass == className) {
+                if (visible) {
+                    node.removeAttribute("ui.hide")
+                } else {
+                    node.setAttribute("ui.hide", true)
+                }
+            }
         }
     }
 }
