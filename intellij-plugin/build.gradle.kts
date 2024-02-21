@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.22"
     id("java")
-    id("org.jetbrains.intellij") version "1.17.1"
+    id("org.jetbrains.intellij") version "1.17.2"
 }
 
 group = "fr.unilim"
