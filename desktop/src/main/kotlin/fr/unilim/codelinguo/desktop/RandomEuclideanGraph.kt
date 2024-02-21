@@ -19,7 +19,8 @@ fun normalizeString(input: String): String {
 }
 
 object RandomEuclideanGraph {
-    lateinit var graph: SingleGraph
+    private lateinit var graph: SingleGraph
+    private lateinit var viewer: SwingViewer
 
     fun createGraphWithDynamicStyles(
         wordOccurrences: Map<String, Int>,
@@ -129,7 +130,7 @@ object RandomEuclideanGraph {
             }
         }
 
-        val viewer = SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD)
+        viewer = SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD)
         viewer.enableAutoLayout()
         val viewPanel = viewer.addDefaultView(false) as ViewPanel
         viewPanel.setFocusable(true)
@@ -255,5 +256,12 @@ object RandomEuclideanGraph {
                 }
             }
         }
+        updateLayout()
     }
+
+    private fun updateLayout() {
+        viewer.disableAutoLayout()
+        viewer.enableAutoLayout()
+    }
+
 }
