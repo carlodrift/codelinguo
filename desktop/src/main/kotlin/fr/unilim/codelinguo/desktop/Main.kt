@@ -6,11 +6,20 @@ import javafx.stage.Stage
 import tornadofx.App
 import tornadofx.launch
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 
 class MainApp : App(ProjectView::class, ViewStyles::class) {
     override fun start(stage: Stage) {
         with(stage) {
-            icons += Image(File.separator + "logo" + File.separator + "logo.png")
+            try {
+                val imagePath = File.separator + "logo" + File.separator + "logot.png"
+                val image = Image(FileInputStream(imagePath))
+                icons += image
+            } catch (ignored: FileNotFoundException) {
+            } catch (ignored: IllegalArgumentException) {
+            }
+
             isResizable = false
             isMaximized = false
         }
