@@ -18,6 +18,8 @@ public class GitRepoDownloader {
                     .setURI(repoUrl)
                     .setDirectory(tempDir.toFile())
                     .setBranch(branch)
+                    .setCloneAllBranches(false)
+                    .setDepth(1)
                     .call();
             return tempDir;
         } catch (Exception e) {
