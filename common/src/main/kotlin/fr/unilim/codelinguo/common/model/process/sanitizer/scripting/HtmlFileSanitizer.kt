@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.model.process.sanitizer
+package fr.unilim.codelinguo.common.model.process.sanitizer.scripting
 
 import fr.unilim.codelinguo.common.model.Word
 import java.io.File

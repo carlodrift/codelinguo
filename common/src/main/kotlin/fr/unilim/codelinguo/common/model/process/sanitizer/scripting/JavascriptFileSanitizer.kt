@@ -1,4 +1,4 @@
-package fr.unilim.codelinguo.common.model.process.sanitizer
+package fr.unilim.codelinguo.common.model.process.sanitizer.scripting
 
 open class JavascriptFileSanitizer : ScriptingFileSanitizer() {
 

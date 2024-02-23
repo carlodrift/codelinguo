@@ -1,13 +1,12 @@
-package fr.unilim.codelinguo.common.model.process.sanitizer
+package fr.unilim.codelinguo.common.model.process.sanitizer.jvm
 
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.model.process.sanitizer.FileSanitizer
 import java.io.File
 
 
-open class JavaFileSanitizer : FileSanitizer() {
+abstract class JVMFileSanitizer : FileSanitizer() {
 
-    override val regexString = "\".*\"".toRegex()
-    override val reservedKeywords = loadReservedKeywords("java", "sanitizer")
     override val lineCommentSymbol = "//"
 
     companion object {

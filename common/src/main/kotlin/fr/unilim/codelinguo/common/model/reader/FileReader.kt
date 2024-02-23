@@ -3,10 +3,11 @@ package fr.unilim.codelinguo.common.model.reader
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.process.FileProcessor
 import fr.unilim.codelinguo.common.model.process.parser.JavaFileParser
-import fr.unilim.codelinguo.common.model.process.sanitizer.HtmlFileSanitizer
-import fr.unilim.codelinguo.common.model.process.sanitizer.JavascriptFileSanitizer
-import fr.unilim.codelinguo.common.model.process.sanitizer.KotlinFileSanitizer
-import fr.unilim.codelinguo.common.model.process.sanitizer.PythonFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.jvm.KotlinFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.jvm.ScalaFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.scripting.HtmlFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.scripting.JavascriptFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.scripting.PythonFileSanitizer
 import kotlinx.coroutines.*
 import java.io.File
 import java.nio.file.Files
@@ -18,7 +19,8 @@ class FileReader : IRead {
         ".kt" to KotlinFileSanitizer(),
         ".py" to PythonFileSanitizer(),
         ".js" to JavascriptFileSanitizer(),
-        ".html" to HtmlFileSanitizer()
+        ".html" to HtmlFileSanitizer(),
+        ".scala" to ScalaFileSanitizer(),
     )
 
     override fun read(path: String): List<Word> = runBlocking {

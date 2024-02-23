@@ -11,7 +11,7 @@ import com.github.javaparser.ast.type.TypeParameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 import fr.unilim.codelinguo.common.model.Word
 import fr.unilim.codelinguo.common.model.process.FileProcessor
-import fr.unilim.codelinguo.common.model.process.sanitizer.JavaFileSanitizer
+import fr.unilim.codelinguo.common.model.process.sanitizer.jvm.JVMFileSanitizer
 import java.io.File
 import java.util.*
 
@@ -138,7 +138,7 @@ class JavaFileParser : FileProcessor() {
 
         var result = allWords.map { Word(it) }
         if (result.isEmpty()) {
-            result = JavaFileSanitizer().processFile(path)
+            result = JVMFileSanitizer().processFile(path)
             println("JavaFileParser: falling back to JavaFileSanitizer for $path")
         }
         return result

@@ -1,6 +1,7 @@
-package fr.unilim.codelinguo.common.model.process.sanitizer
+package fr.unilim.codelinguo.common.model.process.sanitizer.scripting
 
 import fr.unilim.codelinguo.common.model.Word
+import fr.unilim.codelinguo.common.model.process.sanitizer.FileSanitizer
 import java.io.File
 
 abstract class ScriptingFileSanitizer : FileSanitizer() {
